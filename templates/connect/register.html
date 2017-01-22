@@ -1,0 +1,23 @@
+{% extends 'connect/base.html' %}
+{% load staticfiles %}
+
+{% block content %}
+    <div class="hero-unit">
+        <h1>Registration</h1>
+        <br/>
+        <div class="container">
+            {% if registered %}
+                <strong>Thank you for registering!</strong>
+                <a href="{% url 'index' %}">Return to Main Page</a><br/>
+            {% else %}
+                Please register <strong>here</strong><br/>
+                <form class="form-signin span8" id="user_form" method="post" action="{% url 'register' %}"
+                      enctype="multipart/form-data">
+                    {% csrf_token %}
+                    {{ user_form.as_p }}
+                    <input class="btn-primary" type="submit" name="submit" value="Register"/>
+                </form>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

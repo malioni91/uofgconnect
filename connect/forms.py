@@ -2,6 +2,7 @@ from django import forms
 from django.contrib.auth.models import User
 from django.utils.safestring import mark_safe
 
+
 class UserForm(forms.ModelForm):
     name = forms.CharField(label='Full Name', widget=forms.TextInput(attrs={'class': 'form-control'}))
     username = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}))
