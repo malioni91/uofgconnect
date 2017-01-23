@@ -35,3 +35,11 @@ class UserForm(forms.ModelForm):
 	if password and password != confirm_password:
 	    raise forms.ValidationError(mark_safe("Passwords do not match. Try again."))
 	return self.cleaned_data
+
+class LoginForm(forms.ModelForm):
+    username = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}))
+    password = forms.CharField(widget=forms.PasswordInput(attrs={'class':'form-control'}))
+
+    class Meta:
+        model = User
+        fields = ('username', 'password')
