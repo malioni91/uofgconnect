@@ -2,7 +2,7 @@ from django.shortcuts import render, render_to_response
 from django.template import RequestContext
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect, HttpResponse
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from connect.forms import LoginForm, UserForm
 
@@ -35,6 +35,7 @@ def register(request):
         {'user_form': user_form, 'registered': registered},
         context)
 
+
 def user_login(request):
     context = RequestContext(request)
     login_form = LoginForm()
@@ -56,3 +57,9 @@ def user_login(request):
             'connect/login.html',
             {'login_form': login_form},
             context)
+
+
+@login_required
+def user_logout(request):
+    logout(request)
+    return HttpResponse(reverse('index'))
