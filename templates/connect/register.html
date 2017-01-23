@@ -3,16 +3,15 @@
 
 {% block content %}
     <div class="hero-unit">
-        <h1>Registration</h1>
         <br/>
         <div class="container">
             {% if registered %}
                 <strong>Thank you for registering!</strong>
                 <a href="{% url 'index' %}">Return to Main Page</a><br/>
             {% else %}
-                Please register <strong>here</strong><br/>
+                <h2 class="text-center">Registration Form</h2>
                 <div class="panel panel-default register">
-                    <div class="panel-body">
+                    <div class="panel-body text-center">
                         {% if user_form.non_field_errors %}
                             <div class="alert alert-danger">
                                 {{ user_form.non_field_errors|striptags }}
@@ -36,7 +35,7 @@
                             {% endif %}
                             <div class="form-group">
                             {{ field.label_tag }}
-                                <div class="input-group">
+                                <div class="input-group text-center">
                                 {% if field.label == "Username" %}
                                 <span class="input-group-addon" id="sizing-addon2"><strong>@</strong></span>
                                 {% elif field.label == "Full Name" %}
