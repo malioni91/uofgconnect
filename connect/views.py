@@ -4,7 +4,7 @@ from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
-from connect.forms import UserForm
+from connect.forms import LoginForm, UserForm
 
 @login_required
 def index(request):
@@ -36,6 +36,7 @@ def register(request):
 
 def user_login(request):
     context = RequestContext(request)
+    login_form = LoginForm()
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
@@ -50,4 +51,7 @@ def user_login(request):
             print("Invalid login details: {0}, {1}".format(username, password))
             return HttpResponse("Invalid login details supplied.")
     else:
-        return render(request, 'index.html', {})
+        return render_to_response(
+            'connect/login.html',
+            {'login_form': login_form},
+            context)
