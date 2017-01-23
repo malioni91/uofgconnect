@@ -8,7 +8,8 @@ from connect.forms import LoginForm, UserForm
 
 @login_required
 def index(request):
-    return render(request, "connect/index.html")
+    context = RequestContext(request) # Get the context of the user request
+    return render(request, "connect/index.html", context)
 
 def landing(request):
     return render(request, "connect/landing.html")
