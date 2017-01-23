@@ -3,11 +3,15 @@ from django.template import RequestContext
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth import authenticate, login
+from django.contrib.auth.decorators import login_required
 from connect.forms import UserForm
 
-
+@login_required
 def index(request):
     return render(request, "connect/index.html")
+
+def landing(request):
+    return render(request, "connect/landing.html")
 
 
 def register(request):

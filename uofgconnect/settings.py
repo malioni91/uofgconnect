@@ -129,3 +129,7 @@ STATICFILES_DIRS = [STATIC_DIR, ]
 MEDIA_DIR = os.path.join(BASE_DIR, 'media')
 MEDIA_ROOT = MEDIA_DIR
 MEDIA_URL = '/media/'
+
+# URL to redirect not logged in users
+
+LOGIN_URL = '/connect/landing/'
