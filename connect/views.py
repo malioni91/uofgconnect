@@ -8,15 +8,13 @@ from connect.forms import LoginForm, UserForm
 
 @login_required
 def index(request):
-    context = RequestContext(request) # Get the context of the user request
-    return render(request, "connect/index.html", context)
+    return render(request, "connect/index.html")
 
 def landing(request):
     return render(request, "connect/landing.html")
 
 
 def register(request):
-    context = RequestContext(request) # Get the context of the user request
     registered = False
     if request.method == 'POST':
         user_form = UserForm(request.POST)
@@ -30,14 +28,10 @@ def register(request):
     else:
         user_form = UserForm()
 
-    return render_to_response(
-        'connect/register.html',
-        {'user_form': user_form, 'registered': registered},
-        context)
+    return render(request, 'connect/register.html', {'user_form': user_form, 'registered': registered})
 
 
 def user_login(request):
-    context = RequestContext(request)
     login_form = LoginForm()
     if request.method == 'POST':
         username = request.POST.get('username')
@@ -53,11 +47,7 @@ def user_login(request):
             print("Invalid login details: {0}, {1}".format(username, password))
             return HttpResponse("Invalid login details supplied.")
     else:
-        return render_to_response(
-            'connect/login.html',
-            {'login_form': login_form},
-            context)
-
+        return render(request, 'connect/login.html', {'login_form': login_form})
 
 @login_required
 def user_logout(request):
