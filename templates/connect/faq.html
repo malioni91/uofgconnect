@@ -1,0 +1,55 @@
+{% extends 'connect/base.html' %}
+
+{% block content %}
+<div class="container">
+    <br />
+    <br />
+    <br />
+    <div class="alert alert-warning alert-dismissible" role="alert">
+        <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        This page contains frequently asked questions. Please contact us if you cannot find an answer to your question.
+    </div>
+    <br />
+
+    <div class="panel-group" id="accordion">
+        <div class="faqHeader">General questions</div>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseOne">Can I register with my personal e-mail address?</a>
+                </h4>
+            </div>
+            <div id="collapseOne" class="panel-collapse collapse in">
+                <div class="panel-body">
+                    No. You have to register with your UofG email address. We ask for you school email in order to make sure that only UofG students can access the app.
+                </div>
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseTen">What is a ping?</a>
+                </h4>
+            </div>
+            <div id="collapseTen" class="panel-collapse collapse">
+                <div class="panel-body">
+                   A ping is a form of meeting proposal sent by a friend of yours. You can either accept or decline the his/her ping.
+                </div>
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseEleven">What is the currency used for all transactions?</a>
+                </h4>
+            </div>
+            <div id="collapseEleven" class="panel-collapse collapse">
+                <div class="panel-body">
+                    All prices for themes, templates and other items, including each seller's or buyer's account balance are in <strong>USD</strong>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+{% endblock %}

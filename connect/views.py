@@ -69,6 +69,14 @@ def user_login(request):
 def about(request):
     return render(request, 'connect/about.html')
 
+
+def faq(request):
+    return render(request, 'connect/faq.html')
+
+
+def contact(request):
+    return render(request, 'connect/contact.html')
+
 @login_required
 def user_logout(request):
     logout(request)
