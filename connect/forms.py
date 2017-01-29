@@ -51,5 +51,5 @@ class UserProfileForm(forms.ModelForm):
     #                                 widget=forms.Select(attrs={'class': 'form-control'}))
 
     class Meta:
-        model = Course
-        fields = ('course_name',)
+        model = UserProfile
+        fields = ('course',)
