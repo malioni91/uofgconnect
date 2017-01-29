@@ -15,17 +15,14 @@ html, body {
 }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+.rounded-avatar {
+	line-height: 0;
+	display: inline-block;
+	margin-bottom: -14px;
+	margin-top: -14px;
+	border: 2px solid rgba(255,255,255,0.4);
+	border-radius: 50%;
+	transition: linear 0.25s;
+	height: 50px;
+	width: 50px;
+}
