@@ -32,9 +32,9 @@ def register(request):
         profile_form = UserProfileForm(request.POST)
         if user_form.is_valid() and profile_form.is_valid():
             user = user_form.save()
-            profile = profile_form.save()
             user.set_password(user.password) # Hash the password
             user.save()
+            profile = profile_form.save(commit=False)
             profile.user = user
             profile.save()
             registered = True

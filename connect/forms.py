@@ -47,9 +47,9 @@ class LoginForm(forms.ModelForm):
         fields = ('username', 'password')
 
 class UserProfileForm(forms.ModelForm):
-    # course = forms.ModelChoiceField(label="Course", queryset=Course.objects.all(),
-    #                                 widget=forms.Select(attrs={'class': 'form-control'}))
+    course = forms.ModelChoiceField(label="Course", queryset=Course.objects.all(),
+                                    widget=forms.Select(attrs={'class': 'form-control'}))
 
     class Meta:
-        model = Course
-        fields = ('course_name',)
+        model = UserProfile
+        fields = ('course',)
