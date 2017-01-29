@@ -13,4 +13,7 @@ class Map(models.Model):
 class Course(models.Model):
     course_name = models.CharField(max_length=30)
 
+    def __str__(self):
+        return self.course_name
+
 
