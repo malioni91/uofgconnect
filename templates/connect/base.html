@@ -1,5 +1,6 @@
 <!doctype html>
 {% load staticfiles %}
+{% load gravatar %}
 <!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8" lang=""> <![endif]-->
 <!--[if IE 8]>         <html class="no-js lt-ie9" lang=""> <![endif]-->
 <!--[if gt IE 8]><!--> <html class="no-js" lang="en"> <!--<![endif]-->
@@ -41,6 +42,7 @@
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle dropdown-user" data-toggle="dropdown">
                         {{ user.first_name }}&nbsp;
+                        <img class="rounded-avatar" src="{% gravatar_url user.email 150 %}" alt="{{user.name}} avatar" />
                         <span class="caret"></span>
                     </a>
                     <ul class="dropdown-menu">
