@@ -16,4 +16,9 @@ class Course(models.Model):
     def __str__(self):
         return self.course_name
 
+class UserProfile(models.Model):
+    user = models.OneToOneField(User)
+    course = models.OneToOneField(Course)
 
+    def __str__(self):
+        return self.course_name
