@@ -2,55 +2,55 @@
   {
     "model": "connect.Course",
     "fields": {
-      "course_name": "Software Engineering"
+      "course": "Software Engineering"
     }
   },
   {
     "model": "connect.Course",
     "fields": {
-      "course_name": "Bioinformatics, Polyomics and Systems Biology"
+      "course": "Bioinformatics, Polyomics and Systems Biology"
     }
   },
   {
     "model": "connect.Course",
     "fields": {
-      "course_name": "Computer Systems Engineering"
+      "course": "Computer Systems Engineering"
     }
   },
   {
     "model": "connect.Course",
     "fields": {
-      "course_name": "Computing Science"
+      "course": "Computing Science"
     }
   },
   {
     "model": "connect.Course",
     "fields": {
-      "course_name": "Data Analytics"
+      "course": "Data Analytics"
     }
   },
   {
     "model": "connect.Course",
     "fields": {
-      "course_name": "Information Security"
+      "course": "Information Security"
     }
   },
   {
     "model": "connect.Course",
     "fields": {
-      "course_name": "Information Technology"
+      "course": "Information Technology"
     }
   },
   {
     "model": "connect.Course",
     "fields": {
-      "course_name": "Security, Intelligence and Strategic Studies"
+      "course": "Security, Intelligence and Strategic Studies"
     }
   },
   {
     "model": "connect.Course",
     "fields": {
-      "course_name": "Software Development"
+      "course": "Software Development"
     }
   }
 ]

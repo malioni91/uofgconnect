@@ -62,7 +62,9 @@
                                         {{ field }}
                                     </div>
                                 </div>
-                            {% endfor%}
+                             <p class="text-danger">{{ field.errors|striptags }}</p>
+
+                            {% endfor %}
 
                             <hr>
                         <div class="form-group">
