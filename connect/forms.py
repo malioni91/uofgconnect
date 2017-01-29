@@ -1,6 +1,8 @@
 from django import forms
 from django.contrib.auth.models import User
 from django.utils.safestring import mark_safe
+from connect.models import Course
+
 
 
 class UserForm(forms.ModelForm):
@@ -9,10 +11,11 @@ class UserForm(forms.ModelForm):
     email = forms.CharField(widget=forms.EmailInput(attrs={'class': 'form-control'}))
     password = forms.CharField(widget=forms.PasswordInput(attrs={'class':'form-control'}))
     confirm_password = forms.CharField(widget=forms.PasswordInput(attrs={'class':'form-control'}))
+    course = forms.ModelChoiceField(label="Course", queryset=Course.objects.all(), widget=forms.Select(attrs={'class':'form-control'}))
 
     class Meta:
         model = User
-        fields = ('name', 'username', 'email', 'password', 'confirm_password')
+        fields = ('name', 'username', 'email', 'password', 'confirm_password', 'course')
 
     def clean_name(self):
 	full_name = self.cleaned_data.get('name').split()

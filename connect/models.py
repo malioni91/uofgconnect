@@ -10,4 +10,7 @@ class Map(models.Model):
     latitude = models.DecimalField(max_digits=9, decimal_places=5)
     longitude = models.DecimalField(max_digits=9, decimal_places=5)
 
+class Course(models.Model):
+    course_name = models.CharField(max_length=30)
+
 
