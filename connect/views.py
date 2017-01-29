@@ -4,8 +4,9 @@ from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from connect.forms import LoginForm, UserForm, UserProfileForm
+from connect.forms import LoginForm, UserForm, UserProfileForm,EditForm
 from datetime import datetime
+from django.contrib.auth.models import User
 
 @login_required
 def index(request):
@@ -111,3 +112,54 @@ def visitor_cookie_handler(request):
 
     # Update/set the visits cookie
     request.session['visits'] = visits
+
+@login_required
+def user_edit(request):
+     userdetails = User.objects.get(username=request.user.username)
+
+     if request.method == 'POST':
+         user_edit = EditForm(request.POST)
+         if user_edit.is_valid():
+             user = user_edit.save()
+             user_password = user.set_password(user.password)
+             if user_password == userdetails.password:
+                         user = user_edit.save()
+                         user.set_password(user.password) # Hash the password
+
+         else:
+                 print user_edit.errors
+     else:
+         user_edit = EditForm(initial={'name': " ".join([userdetails.first_name, userdetails.last_name]),'username':userdetails.username, 'email':userdetails.email})
+
+
+     return render(request, 'connect/edit.html', {'user_edit': user_edit})
+
+
+ # A helper method
+def get_server_side_cookie(request, cookie, default_val=None):
+     val = request.session.get(cookie)
+     if not val:
+         val = default_val
+     return val
+
+ # Updated the function definition
+def visitor_cookie_handler(request):
+     visits = int(get_server_side_cookie(request, 'visits', '1'))
+     last_visit_cookie = get_server_side_cookie(request,
+                                                'last_visit',
+                                                 str(datetime.now()))
+
+     last_visit_time = datetime.strptime(last_visit_cookie[:-7],
+                                         '%Y-%m-%d %H:%M:%S')
+ # If it's been more than a day since the last visit...
+     if (datetime.now() - last_visit_time).days > 0:
+         visits = visits + 1
+         #update the last visit cookie now that we have updated the count
+         request.session['last_visit'] = str(datetime.now())
+     else:
+         visits = 1
+         # set the last visit cookie
+         request.session['last_visit'] = last_visit_cookie
+
+     # Update/set the visits cookie
+     request.session['visits'] = visits
