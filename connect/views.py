@@ -4,7 +4,7 @@ from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from connect.forms import LoginForm, UserForm
+from connect.forms import LoginForm, UserForm, UserProfileForm
 from datetime import datetime
 
 @login_required
@@ -29,17 +29,22 @@ def register(request):
     registered = False
     if request.method == 'POST':
         user_form = UserForm(request.POST)
-        if user_form.is_valid():
+        profile_form = UserProfileForm(request.POST)
+        if user_form.is_valid() and profile_form.is_valid():
             user = user_form.save()
+            profile = profile_form.save()
             user.set_password(user.password) # Hash the password
             user.save()
+            profile.user = user
+            profile.save()
             registered = True
         else:
-            print user_form.errors
+            print(user_form.errors, profile_form.errors)
     else:
         user_form = UserForm()
+        profile_form = UserProfileForm()
 
-    return render(request, 'connect/register.html', {'user_form': user_form, 'registered': registered})
+    return render(request, 'connect/register.html', {'user_form': user_form, 'profile_form': profile_form, 'registered': registered})
 
 
 def user_login(request):
