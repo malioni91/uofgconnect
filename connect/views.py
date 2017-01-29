@@ -65,6 +65,10 @@ def user_login(request):
     else:
         return render(request, 'connect/login.html', {'login_form': login_form})
 
+
+def about(request):
+    return render(request, 'connect/about.html')
+
 @login_required
 def user_logout(request):
     logout(request)
