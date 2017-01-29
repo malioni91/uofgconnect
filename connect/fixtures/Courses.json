@@ -1,0 +1,56 @@
+[
+  {
+    "model": "connect.Course",
+    "fields": {
+      "course_name": "Software Engineering"
+    }
+  },
+  {
+    "model": "connect.Course",
+    "fields": {
+      "course_name": "Bioinformatics, Polyomics and Systems Biology"
+    }
+  },
+  {
+    "model": "connect.Course",
+    "fields": {
+      "course_name": "Computer Systems Engineering"
+    }
+  },
+  {
+    "model": "connect.Course",
+    "fields": {
+      "course_name": "Computing Science"
+    }
+  },
+  {
+    "model": "connect.Course",
+    "fields": {
+      "course_name": "Data Analytics"
+    }
+  },
+  {
+    "model": "connect.Course",
+    "fields": {
+      "course_name": "Information Security"
+    }
+  },
+  {
+    "model": "connect.Course",
+    "fields": {
+      "course_name": "Information Technology"
+    }
+  },
+  {
+    "model": "connect.Course",
+    "fields": {
+      "course_name": "Security, Intelligence and Strategic Studies"
+    }
+  },
+  {
+    "model": "connect.Course",
+    "fields": {
+      "course_name": "Software Development"
+    }
+  }
+]
