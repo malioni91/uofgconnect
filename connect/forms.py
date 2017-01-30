@@ -29,14 +29,18 @@ class UserForm(forms.ModelForm):
             self.instance.last_name = full_name[1]
         return self.cleaned_data
 
+
     def clean(self):
         super(UserForm, self).clean()
         password = self.cleaned_data.get('password')
         confirm_password = self.cleaned_data.get('confirm_password')
+        email = self.cleaned_data.get('email')
         if not password:
             raise forms.ValidationError(mark_safe("Empty password. Try again."))
         if password and password != confirm_password:
             raise forms.ValidationError(mark_safe("Passwords do not match. Try again."))
+        if "@student.gla.ac.uk" not in email and "@gla.ac.uk" not in email:
+            raise forms.ValidationError("You email is not a valid UofG email address.")
         return self.cleaned_data
 
 class LoginForm(forms.ModelForm):
