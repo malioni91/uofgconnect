@@ -17,8 +17,8 @@ class Course(models.Model):
         return self.course
 
 class UserProfile(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    course = models.OneToOneField(Course)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    course = models.ForeignKey(Course)
 
     def __str__(self):
         return self.user.username
