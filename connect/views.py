@@ -4,7 +4,7 @@ from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from connect.forms import LoginForm, UserForm, UserProfileForm
+from connect.forms import LoginForm, UserForm, UserProfileForm, ContactForm
 from datetime import datetime
 
 @login_required
@@ -75,7 +75,11 @@ def faq(request):
 
 
 def contact(request):
-    return render(request, 'connect/contact.html')
+    form_class = ContactForm
+
+    return render(request, 'connect/contact.html', {
+        'form': form_class,
+    })
 
 @login_required
 def user_logout(request):
