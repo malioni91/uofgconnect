@@ -1,0 +1,79 @@
+{% extends 'connect/base.html' %}
+{% load staticfiles %}
+
+{% block content %}
+        <div class="container">
+            {% if registered %}
+                <div class="text-center alert alert-success">
+                    <strong>Thank you for registering!</strong>
+                    <meta http-equiv="refresh" content="2; {% url 'index' %}" />
+                    <a href="{% url 'index' %}">
+                        Please click here if you are not redirected automatically
+                    </a><br/>
+                </div>
+            {% else %}
+                <h2 class="text-center">Edit Form</h2>
+                <div class="panel panel-default register">
+                    {% if edit_form.non_field_errors and profile_form.non_field_errors%}
+                            <div class="text-center alert alert-danger">
+                                {{ edit_form.non_field_errors|striptags }}
+                                {{ profile_form.non_field_errors|striptags }}
+                            </div>
+                        {% endif %}
+                    <div class="panel-body text-center col-md-offset-4">
+                        <form class="form_horizontal" id="user_edit" method="post" action="{% url 'edit' %}"
+                              enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <div class="col-lg-6">
+                                {% for field in user_edit %}
+                                    {% if field.label == "old_password" %}
+                                    <div class="form-group">
+                                        {% for form in formset %}
+                                        {{ form.label_tag }}
+                                        <div class="input-group">
+                                            {{ form }}
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                            {% endif %}
+                            <div class="form-group">
+                            {{ field.label_tag }}
+                                <div class="input-group text-center">
+                                {% if field.label == "Username" %}
+                                <span class="input-group-addon" id="sizing-addon2"><strong>@</strong></span>
+                                {% elif field.label == "Full Name" %}
+                                <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                                {% elif field.label == "old_password" or "new_password" or field.label == "confirm_new_password"%}
+                                <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+                                {% elif field.label == "Email" %}
+                                <span class="input-group-addon"><i class="glyphicon glyphicon-envelope"></i></span>
+                                {% endif %}
+                                {{ field }}
+                                </div>
+                                <p class="text-danger">{{ field.errors|striptags }}</p>
+                            </div>
+                            {% endfor %}
+                            {% for field in edit_form %}
+                                <div class="form-group">
+                                     {{ field.label_tag }}
+                                    <div class="input-group text-center">
+                                        <span class="input-group-addon"><i class="glyphicon glyphicon-book"></i></span>
+                                        {{ field }}
+                                    </div>
+                                </div>
+                            {% endfor%}
+
+                            <hr>
+                        <div class="form-group">
+                            <input class="btn btn-success btn-lg btn-block" type="submit" name="submit" value="Edit" />
+                            <h6><strong>OR</strong></h6>
+                            <a class="btn btn-danger btn-block btn-lg" href="{% url 'landing' %}">Cancel</a>
+                       </div>
+                       </form>
+                    </div>
+                </div>
+
+            {% endif %}
+        </div>
+{% endblock %}
