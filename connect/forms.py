@@ -2,6 +2,7 @@ from django import forms
 from django.contrib.auth.models import User
 from django.utils.safestring import mark_safe
 from connect.models import Course, UserProfile
+from django.contrib.auth import authenticate
 
 
 
@@ -45,6 +46,16 @@ class LoginForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ('username', 'password')
+
+
+    def clean(self):
+        username = self.cleaned_data.get('username')
+        password = self.cleaned_data.get('password')
+        user = authenticate(username=username, password=password)
+        if not user or not user.is_active:
+            raise forms.ValidationError("Authentication failed. Please try again.")
+        return self.cleaned_data
+
 
 class UserProfileForm(forms.ModelForm):
     course = forms.ModelChoiceField(label="Course", queryset=Course.objects.all(),

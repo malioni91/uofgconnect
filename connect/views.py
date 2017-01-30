@@ -48,7 +48,8 @@ def register(request):
 
 
 def user_login(request):
-    login_form = LoginForm()
+    authenticated = False
+    login_form = LoginForm(request.POST)
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
@@ -56,14 +57,18 @@ def user_login(request):
         if user:
             if user.is_active:
                 login(request, user)
-                return HttpResponseRedirect(reverse('index'))
+                authenticated = True
+                return render(request, 'connect/index.html',
+                              {'login_form': login_form, 'authenticated': authenticated})
             else:
-                return HttpResponse("Your UofGConnect account is disabled.")
+                print(login_form.errors)
         else:
             print("Invalid login details: {0}, {1}".format(username, password))
-            return HttpResponse("Invalid login details supplied.")
     else:
-        return render(request, 'connect/login.html', {'login_form': login_form})
+        login_form = LoginForm()
+
+    return render(request, 'connect/login.html',
+                  {'login_form': login_form, 'authenticated': authenticated})
 
 
 def about(request):
