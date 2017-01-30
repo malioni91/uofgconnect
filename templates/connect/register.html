@@ -6,16 +6,17 @@
             {% if registered %}
                 <div class="text-center alert alert-success">
                     <strong>Thank you for registering!</strong>
-                    <meta http-equiv="refresh" content="2; {% url 'index' %}" />
-                    <a href="{% url 'index' %}">
+                    <meta http-equiv="refresh" content="2; {% url 'login' %}" />
+                    <a href="{% url 'login' %}">
                         Please click here if you are not redirected automatically
                     </a><br/>
                 </div>
             {% else %}
                 <h2 class="text-center">Registration Form</h2>
-                <div class="panel panel-default register">
-                    {% if user_form.non_field_errors and profile_form.non_field_errors%}
-                            <div class="text-center alert alert-danger">
+                <div class="panel panel-default register well well-lg">
+                    {% if user_form.non_field_errors or profile_form.non_field_errors %}
+                            <div class="text-center alert alert-danger alert-dismissable">
+                                <a href="#" class="close" data-dismiss="alert" aria-label="close">×</a>
                                 {{ user_form.non_field_errors|striptags }}
                                 {{ profile_form.non_field_errors|striptags }}
                             </div>

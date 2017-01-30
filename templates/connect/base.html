@@ -55,14 +55,7 @@
                 </li>
               {% else %}
             <form class="navbar-form navbar-right" role="form" method="post" action="{% url 'login' %}">
-                {% csrf_token %}
-                <div class="form-group">
-                <input type="text" name="username" placeholder="Username" class="form-control">
-                </div>
-                <div class="form-group">
-                <input type="password" name="password" placeholder="Password" class="form-control">
-                </div>
-                <button type="submit" class="btn btn-success"><span class="glyphicon glyphicon-log-in"></span> Sign in</button>
+                <a class="btn btn-success" href="{% url 'login' %}"><span class="glyphicon glyphicon-log-in"></span> Sign in</a>
                 <a class="btn btn-primary" href="{% url 'register' %}"><span class="glyphicon glyphicon-user"></span> Sign up</a>
             </form>
             {% endif %}

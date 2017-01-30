@@ -2,6 +2,7 @@ from django import forms
 from django.contrib.auth.models import User
 from django.utils.safestring import mark_safe
 from connect.models import Course, UserProfile
+from django.contrib.auth import authenticate
 
 
 
@@ -17,7 +18,7 @@ class UserForm(forms.ModelForm):
         fields = ('name', 'username', 'email', 'password', 'confirm_password')
 
     def clean_name(self):
-	full_name = self.cleaned_data.get('name').split()
+        full_name = self.cleaned_data.get('name').split()
         if len(full_name) == 1:
             self.instance.first_name = full_name[0]
         elif len(full_name) >= 3:
@@ -28,15 +29,19 @@ class UserForm(forms.ModelForm):
             self.instance.last_name = full_name[1]
         return self.cleaned_data
 
+
     def clean(self):
-	super(UserForm, self).clean()
-	password = self.cleaned_data.get('password')
-	confirm_password = self.cleaned_data.get('confirm_password')
+        super(UserForm, self).clean()
+        password = self.cleaned_data.get('password')
+        confirm_password = self.cleaned_data.get('confirm_password')
+        email = self.cleaned_data.get('email')
         if not password:
             raise forms.ValidationError(mark_safe("Empty password. Try again."))
-	if password and password != confirm_password:
-	    raise forms.ValidationError(mark_safe("Passwords do not match. Try again."))
-	return self.cleaned_data
+        if password and password != confirm_password:
+            raise forms.ValidationError(mark_safe("Passwords do not match. Try again."))
+        if "@student.gla.ac.uk" not in email and "@gla.ac.uk" not in email:
+            raise forms.ValidationError("You email is not a valid UofG email address.")
+        return self.cleaned_data
 
 class LoginForm(forms.ModelForm):
     username = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}))
@@ -45,6 +50,16 @@ class LoginForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ('username', 'password')
+
+
+    def clean(self):
+        username = self.cleaned_data.get('username')
+        password = self.cleaned_data.get('password')
+        user = authenticate(username=username, password=password)
+        if not user or not user.is_active:
+            raise forms.ValidationError("Authentication failed. Please try again.")
+        return self.cleaned_data
+
 
 class UserProfileForm(forms.ModelForm):
     course = forms.ModelChoiceField(label="Course", queryset=Course.objects.all(),
