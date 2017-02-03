@@ -41,6 +41,17 @@
             infoWindow.setPosition(pos);
             infoWindow.setContent('Your Location');
             map.setCenter(pos);
+            console.log(pos);  // print location on console
+            $.ajax({
+                "type" : "POST",
+                "dataType" : JSON,
+                "url" : "/connect/",
+                "data" : pos,
+                "success" : function(result){
+                    console.log("Sent to backend" + result)
+                    // send to backened and print on console
+                }
+            })
           }, function() {
             handleLocationError(true, infoWindow, map.getCenter());
           });
@@ -56,6 +67,9 @@
                               'Error: The Geolocation service failed.' :
                               'Error: Your browser doesn\'t support geolocation.');
       }
+
+
+
     </script>
     <script async defer
     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCwbSq-w82DHDdJhiMClA-WwPpQaGcecWI&callback=initMap">

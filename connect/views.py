@@ -4,6 +4,7 @@ from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+import json
 
 from connect.forms import LoginForm, UserForm, UserProfileForm,EditForm,ContactForm
 
@@ -209,3 +210,7 @@ def visitor_cookie_handler(request):
 
      # Update/set the visits cookie
      request.session['visits'] = visits
+
+def pos_map(request):
+    return HttpResponse(json.dumps({'key': 'value'}), mimetype="application/json")
+

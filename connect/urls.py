@@ -11,4 +11,5 @@ urlpatterns = [
     url(r'^faq/$', views.faq, name='faq'),
     url(r'^contact/$', views.contact, name='contact'),
     url(r'^edit/$', views.user_edit, name='edit'),
+    url(r'^pos_map/$', views.pos_map, name='pos_map'),
 ]
