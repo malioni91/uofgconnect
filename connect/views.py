@@ -126,24 +126,42 @@ def visitor_cookie_handler(request):
 
 @login_required
 def user_edit(request):
-     userdetails = User.objects.get(username=request.user.username)
+    userdetails = User.objects.get(username=request.user.username)
+    if request.method == 'POST':
+        user_form = EditForm(request.POST,  instance=request.user)
+        if user_form.is_valid():
+            usereditor = user_form.save()
+            print "usereditorpassword" , usereditor.password
+            print "userdetailspassword", userdetails.password
+            print userdetails.check_password(usereditor.password)
+            if userdetails.check_password(usereditor.password):
+                password1 = usereditor.password
+                print "password1" , password1
+                print "old", userdetails.password
 
-     if request.method == 'POST':
-         user_edit = EditForm(request.POST)
-         if user_edit.is_valid():
-             user = user_edit.save()
-             user_password = user.set_password(user.password)
-             if user_password == userdetails.password:
-                         user = user_edit.save()
-                         user.set_password(user.password) # Hash the password
+                username = request.POST.get('username')
+                password = request.POST.get('password')
+                passwordnew = request.POST.get('new_password')
+                print "passwordnew ", passwordnew
 
-         else:
-                 print user_edit.errors
-     else:
-         user_edit = EditForm(initial={'name': " ".join([userdetails.first_name, userdetails.last_name]),'username':userdetails.username, 'email':userdetails.email})
+                print "old", userdetails.password
+                print "passwordform", usereditor.password
 
+                print "pass", usereditor.email
+                usereditor.set_password(passwordnew)
+                print "new", usereditor.password
+                usereditor.save()
+                return render(request, 'connect/edit.html', {'user_form': user_form})
+            #else:
+                #print user_edit.errors
+        else:
+            print user_edit.errors
+    else:
+        user_form = EditForm(initial={'name': " ".join([userdetails.first_name, userdetails.last_name]),'username':userdetails.username, 'email':userdetails.email})
+        return render(request, 'connect/edit.html', {'user_form': user_form})
 
-     return render(request, 'connect/edit.html', {'user_edit': user_edit})
+    return render(request, 'connect/edit.html')
+
 
 
  # A helper method

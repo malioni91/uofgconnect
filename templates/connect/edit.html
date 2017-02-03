@@ -21,11 +21,11 @@
                             </div>
                         {% endif %}
                     <div class="panel-body text-center col-md-offset-4">
-                        <form class="form_horizontal" id="user_edit" method="post" action="{% url 'edit' %}"
+                        <form class="form_horizontal" id="user_form" method="post" action="{% url 'edit' %}"
                               enctype="multipart/form-data">
                             {% csrf_token %}
                             <div class="col-lg-6">
-                                {% for field in user_edit %}
+                                {% for field in user_form %}
                                     {% if field.label == "old_password" %}
                                     <div class="form-group">
                                         {% for form in formset %}
