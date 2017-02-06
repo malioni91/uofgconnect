@@ -85,11 +85,11 @@ class EditForm(forms.ModelForm):
     email = forms.CharField(widget=forms.EmailInput(attrs={'class': 'form-control'}))
     password= forms.CharField(widget=forms.PasswordInput(attrs={'class':'form-control'}))
     new_password = forms.CharField(widget=forms.PasswordInput(attrs={'class':'form-control'}))
-    confirm_new_password = forms.CharField(widget=forms.PasswordInput(attrs={'class':'form-control'}))
+    confirm_password = forms.CharField(widget=forms.PasswordInput(attrs={'class':'form-control'}))
 
     class Meta:
         model = User
-        fields = ('name', 'username', 'email', 'password', 'new_password', 'confirm_new_password')
+        fields = ('name', 'username', 'email', 'password', 'new_password', 'confirm_password')
 
     def clean_name(self):
         full_name = self.cleaned_data.get('name').split()
@@ -107,9 +107,9 @@ class EditForm(forms.ModelForm):
         super(EditForm, self).clean()
         password = self.cleaned_data.get('password')
         new_password = self.cleaned_data.get('new_password')
-        confirm_new_password = self.cleaned_data.get('confirm_new_password')
+        confirm_password = self.cleaned_data.get('confirm_password')
         if not password:
             raise forms.ValidationError(mark_safe("Empty password. Try again."))
-        if new_password != confirm_new_password:
+        if new_password != confirm_password:
                 raise forms.ValidationError(mark_safe("Passwords do not match. Try again."))
         return self.cleaned_data

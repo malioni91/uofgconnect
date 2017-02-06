@@ -9,6 +9,7 @@ from connect.forms import LoginForm, UserForm, UserProfileForm,EditForm,ContactF
 
 from datetime import datetime
 from django.contrib.auth.models import User
+from connect.models import UserProfile
 
 @login_required
 def index(request):
@@ -37,6 +38,7 @@ def register(request):
             user = user_form.save()
             user.set_password(user.password) # Hash the password
             user.save()
+
             profile = profile_form.save(commit=False)
             profile.user = user
             profile.save()
@@ -127,40 +129,52 @@ def visitor_cookie_handler(request):
 @login_required
 def user_edit(request):
     userdetails = User.objects.get(username=request.user.username)
+    print "lala" , request
+    usercourse = UserProfile.objects.get(user=request.user)
+    print usercourse.course
+    user_form = EditForm(request.POST,  instance=request.user)
+    #profile = UserProfile(user=request.user)
+    #print '***' , usercourse
+    profile_form = UserProfileForm(request.POST, instance=request.user.userprofile)
     if request.method == 'POST':
-        user_form = EditForm(request.POST,  instance=request.user)
-        if user_form.is_valid():
+        #print EditForm
+        #profile_form = UserProfileForm(data=request.POST)
+        if user_form.is_valid() and profile_form.is_valid():
+            #password = request.POST.get('password')
+            #print 'old_password' , old_password
             usereditor = user_form.save()
-            print "usereditorpassword" , usereditor.password
-            print "userdetailspassword", userdetails.password
-            print userdetails.check_password(usereditor.password)
             if userdetails.check_password(usereditor.password):
-                password1 = usereditor.password
-                print "password1" , password1
-                print "old", userdetails.password
-
+                #password1 = usereditor.password
                 username = request.POST.get('username')
-                password = request.POST.get('password')
+                #password = request.POST.get('password')
                 passwordnew = request.POST.get('new_password')
-                print "passwordnew ", passwordnew
-
-                print "old", userdetails.password
-                print "passwordform", usereditor.password
-
-                print "pass", usereditor.email
                 usereditor.set_password(passwordnew)
-                print "new", usereditor.password
                 usereditor.save()
-                return render(request, 'connect/edit.html', {'user_form': user_form})
-            #else:
+
+                profile = profile_form.save(commit=False)
+                profile.user = usereditor
+                profile.save()
+
+                return render(request, 'connect/edit.html', {'user_form': user_form, 'profile_form' : profile_form})
+
+            else:
+                #print 'passwordfail', userdetails.password
+                #usereditor.set_password(password)
+                usereditor.save()
+
                 #print user_edit.errors
         else:
-            print user_edit.errors
+            print(user_form.errors, profile_form.errors)
     else:
         user_form = EditForm(initial={'name': " ".join([userdetails.first_name, userdetails.last_name]),'username':userdetails.username, 'email':userdetails.email})
-        return render(request, 'connect/edit.html', {'user_form': user_form})
+        profile_form = UserProfileForm(initial={'course' : usercourse.course})
+        return render(request, 'connect/edit.html', {'user_form': user_form , 'profile_form': profile_form})
+        print 'paqss0',password
 
-    return render(request, 'connect/edit.html')
+    user_formpassword=userdetails.password
+    print 'passs1',password
+
+    return render(request, 'connect/edit.html', {'user_form': user_form , 'profile_form': profile_form})
 
 
 

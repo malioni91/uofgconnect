@@ -26,7 +26,7 @@
                             {% csrf_token %}
                             <div class="col-lg-6">
                                 {% for field in user_form %}
-                                    {% if field.label == "old_password" %}
+                                    {% if field.label == "Password" %}
                                     <div class="form-group">
                                         {% for form in formset %}
                                         {{ form.label_tag }}
@@ -44,7 +44,7 @@
                                 <span class="input-group-addon" id="sizing-addon2"><strong>@</strong></span>
                                 {% elif field.label == "Full Name" %}
                                 <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-                                {% elif field.label == "old_password" or "new_password" or field.label == "confirm_new_password"%}
+                                {% elif field.label == "password" or "New_Password" or field.label == "Confirm_password"%}
                                 <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
                                 {% elif field.label == "Email" %}
                                 <span class="input-group-addon"><i class="glyphicon glyphicon-envelope"></i></span>
@@ -63,6 +63,18 @@
                                     </div>
                                 </div>
                             {% endfor%}
+                            {% for field in profile_form %}
+                                <div class="form-group">
+                                     {{ field.label_tag }}
+                                    <div class="input-group text-center">
+                                        <span class="input-group-addon"><i class="glyphicon glyphicon-book"></i></span>
+                                        {{ field }}
+                                    </div>
+                                </div>
+                             <p class="text-danger">{{ field.errors|striptags }}</p>
+
+                            {% endfor %}
+
 
                             <hr>
                         <div class="form-group">
