@@ -35,7 +35,6 @@
       </div>
         </div>
 
-
 <!-- Google Maps page -->
         <div id="map" style="height: 100%"></div>
     <script>
@@ -69,8 +68,9 @@
                 type : "POST",
                 dataType : JSON,
                 url : "/connect/pos_map/",
+                async : true,
                 data : {
-                    csrfmiddlewaretoken: '{{ csrf_token }}',
+                    "csrfmiddlewaretoken": '{{ csrf_token }}',
                     lat: position.coords.latitude,
                     lng: position.coords.longitude
                 },
@@ -104,5 +104,4 @@
     <script async defer
     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCwbSq-w82DHDdJhiMClA-WwPpQaGcecWI&callback=initMap">
     </script>
-
 {% endblock %}
