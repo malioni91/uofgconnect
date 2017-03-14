@@ -1,16 +1,19 @@
 from django.shortcuts import render, render_to_response
 from django.template import RequestContext
 from django.core.urlresolvers import reverse
-from django.http import HttpResponseRedirect, HttpResponse
+from django.http import HttpResponseRedirect, HttpResponse, Http404
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 import json
+from django.views.decorators.csrf import ensure_csrf_cookie
 
 from connect.forms import LoginForm, UserForm, UserProfileForm,EditForm,ContactForm
 
 from datetime import datetime
 from django.contrib.auth.models import User
 from connect.models import UserProfile
+
+from django.http import JsonResponse
 
 @login_required
 def index(request):
@@ -211,6 +214,36 @@ def visitor_cookie_handler(request):
      # Update/set the visits cookie
      request.session['visits'] = visits
 
+def users(request):
+    found = False
+    try:
+        user_found = User.objects.get(email=request.GET.get('email'))
+        full_name = user_found.get_full_name()
+        found = True
+    except User.DoesNotExist:
+        full_name = ""
+
+    user = {
+        'full_name': full_name,
+        'found': found
+    }
+    return JsonResponse(user)
+
+
 def pos_map(request):
-    return HttpResponse(json.dumps({'key': 'value'}), mimetype="application/json")
+
+    try:
+        latitute = request.POST.get('lat')
+        longitude = request.POST.get('lng')
+
+        coordinates = {
+            'lat' : latitute,
+            'lon' : longitude
+        }
+
+        return HttpResponse(json.dumps(coordinates), content_type="application/json")
+    except:
+        return HttpResponse("Error in posting coordinates!")
+
+
 
