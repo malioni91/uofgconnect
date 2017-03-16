@@ -83,15 +83,16 @@ class EditForm(forms.ModelForm):
     name = forms.CharField(label='Full Name', widget=forms.TextInput(attrs={'class': 'form-control'}))
     username = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}))
     email = forms.CharField(widget=forms.EmailInput(attrs={'class': 'form-control'}))
-    old_password= forms.CharField(widget=forms.PasswordInput(attrs={'class':'form-control'}))
+    password= forms.CharField(widget=forms.PasswordInput(attrs={'class':'form-control'}))
     new_password = forms.CharField(widget=forms.PasswordInput(attrs={'class':'form-control'}))
-    confirm_new_password = forms.CharField(widget=forms.PasswordInput(attrs={'class':'form-control'}))
+    confirm_password = forms.CharField(widget=forms.PasswordInput(attrs={'class':'form-control'}))
 
     class Meta:
         model = User
-        fields = ('name', 'username', 'email', 'old_password', 'new_password', 'confirm_new_password')
+        fields = ('name', 'username', 'email', 'password', 'new_password', 'confirm_password')
 
     def clean_name(self):
+        print 'invalid12'
         full_name = self.cleaned_data.get('name').split()
         if len(full_name) == 1:
             self.instance.first_name = full_name[0]
@@ -101,16 +102,18 @@ class EditForm(forms.ModelForm):
         else:
             self.instance.first_name = full_name[0]
             self.instance.last_name = full_name[1]
-            return self.cleaned_data
+        return self.cleaned_data
 
     def clean(self):
         super(EditForm, self).clean()
-        old_password = self.cleaned_data.get('old_password')
+        password = self.cleaned_data.get('password')
         new_password = self.cleaned_data.get('new_password')
-        confirm_new_password = self.cleaned_data.get('confirm_new_password')
-        if not new_password:
+        confirm_password = self.cleaned_data.get('confirm_password')
+        email = self.cleaned_data.get('email')
+        if not password:
             raise forms.ValidationError(mark_safe("Empty password. Try again."))
-	    if new_password and new_password != confirm_new_password:
-	        raise forms.ValidationError(mark_safe("Passwords do not match. Try again."))
-	return self.cleaned_data
-
+        if new_password != confirm_password:
+                raise forms.ValidationError(mark_safe("Passwords do not match. Try again."))
+        if "@student.gla.ac.uk" not in email and "@gla.ac.uk" not in email:
+            raise forms.ValidationError("You email is not a valid UofG email address.")
+        return self.cleaned_data

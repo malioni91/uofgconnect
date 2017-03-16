@@ -9,6 +9,7 @@ from connect.forms import LoginForm, UserForm, UserProfileForm,EditForm,ContactF
 
 from datetime import datetime
 from django.contrib.auth.models import User
+from connect.models import UserProfile
 
 @login_required
 def index(request):
@@ -37,6 +38,7 @@ def register(request):
             user = user_form.save()
             user.set_password(user.password) # Hash the password
             user.save()
+
             profile = profile_form.save(commit=False)
             profile.user = user
             profile.save()
@@ -126,24 +128,57 @@ def visitor_cookie_handler(request):
 
 @login_required
 def user_edit(request):
-     userdetails = User.objects.get(username=request.user.username)
+    userdetails = User.objects.get(username=request.user.username)
+    usercourse = UserProfile.objects.get(user=request.user)
+    #print usercourse.course
+    user_form = EditForm(request.POST,  instance=request.user)
+    profile_form = UserProfileForm(request.POST, instance=request.user.userprofile)
+    if request.method == 'POST':
+        if user_form.is_valid() and profile_form.is_valid():
+            print '***********1',user_form
+            usereditor = user_form.save(commit=False)
+            if userdetails.check_password(usereditor.password):
+                print 'password should be correct *********************************'
+                username = request.POST.get('username')
+                passwordnew = request.POST.get('new_password')
+                usereditor.set_password(passwordnew)
+                usereditor.save()
+                profile = profile_form.save(commit=False)
+                profile.user = usereditor
+                profile.save()
+                user = authenticate(username=username, password=passwordnew)
+                login(request,user)
 
-     if request.method == 'POST':
-         user_edit = EditForm(request.POST)
-         if user_edit.is_valid():
-             user = user_edit.save()
-             user_password = user.set_password(user.password)
-             if user_password == userdetails.password:
-                         user = user_edit.save()
-                         user.set_password(user.password) # Hash the password
 
-         else:
-                 print user_edit.errors
-     else:
-         user_edit = EditForm(initial={'name': " ".join([userdetails.first_name, userdetails.last_name]),'username':userdetails.username, 'email':userdetails.email})
+            else:
 
+                print 'worng password *******************'
+                #user_formpassword=userdetails.password
+                print 'password:', userdetails.password
+                user_form = EditForm(initial={'name': " ".join([userdetails.first_name, userdetails.last_name]),'username':userdetails.username, 'email':userdetails.email})
+                profile_form = UserProfileForm(initial={'course' : usercourse.course})
+                print(user_form.errors, profile_form.errors)
+                return render(request, 'connect/edit.html', {'user_form': user_form , 'profile_form': profile_form})
+                print 'paqss0',password
 
-     return render(request, 'connect/edit.html', {'user_edit': user_edit})
+                #print 'passs1',user_formpassword
+                #usereditor.set_password(passwordnew)
+                #usereditor.save()
+        else:
+            #form not valid
+            print 'form not valid'
+            print(user_form.errors, profile_form.errors)
+    else:
+        user_form = EditForm(initial={'name': " ".join([userdetails.first_name, userdetails.last_name]),'username':userdetails.username, 'email':userdetails.email})
+        profile_form = UserProfileForm(initial={'course' : usercourse.course})
+        return render(request, 'connect/edit.html', {'user_form': user_form , 'profile_form': profile_form})
+        print 'paqss0',password
+
+    #user_formpassword=userdetails.password
+    #print 'passs1',user_formpassword
+
+    return render(request, 'connect/edit.html', {'user_form': user_form , 'profile_form': profile_form})
+    
 
 
  # A helper method
