@@ -3,13 +3,14 @@
 
 {% block content %}
         <div class="container">
-                <h2 class="text-center">Edit Form</h2>
-                <div class="panel panel-default register">
-                    {% if user_form.non_field_errors and profile_form.non_field_errors%}
-                            <div class="text-center alert alert-danger">
-                                {{ user_form.non_field_errors|striptags }}
-                                {{ profile_form.non_field_errors|striptags }}
-                            </div>
+            <h2 class="text-center">Edit Form</h2>
+            <div class="panel panel-default register">
+                {% if user_form.non_field_errors or profile_form.non_field_errors%}
+                    <div class="text-center alert alert-danger">
+                        <a href="#" class="close" data-dismiss="alert" aria-label="close">×</a>
+                        {{ user_form.non_field_errors|striptags }}
+                        {{ profile_form.non_field_errors|striptags }}
+                    </div>
                     {% endif %}
                     <div class="panel-body text-center col-md-offset-4">
                         <form class="form_horizontal" id="user_form" method="post" action="{% url 'edit' %}"
