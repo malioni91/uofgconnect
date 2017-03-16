@@ -92,6 +92,7 @@ class EditForm(forms.ModelForm):
         fields = ('name', 'username', 'email', 'password', 'new_password', 'confirm_password')
 
     def clean_name(self):
+        print 'invalid12'
         full_name = self.cleaned_data.get('name').split()
         if len(full_name) == 1:
             self.instance.first_name = full_name[0]
@@ -108,8 +109,11 @@ class EditForm(forms.ModelForm):
         password = self.cleaned_data.get('password')
         new_password = self.cleaned_data.get('new_password')
         confirm_password = self.cleaned_data.get('confirm_password')
+        email = self.cleaned_data.get('email')
         if not password:
             raise forms.ValidationError(mark_safe("Empty password. Try again."))
         if new_password != confirm_password:
                 raise forms.ValidationError(mark_safe("Passwords do not match. Try again."))
+        if "@student.gla.ac.uk" not in email and "@gla.ac.uk" not in email:
+            raise forms.ValidationError("You email is not a valid UofG email address.")
         return self.cleaned_data

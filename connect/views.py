@@ -129,41 +129,44 @@ def visitor_cookie_handler(request):
 @login_required
 def user_edit(request):
     userdetails = User.objects.get(username=request.user.username)
-    print "lala" , request
     usercourse = UserProfile.objects.get(user=request.user)
-    print usercourse.course
+    #print usercourse.course
     user_form = EditForm(request.POST,  instance=request.user)
-    #profile = UserProfile(user=request.user)
-    #print '***' , usercourse
     profile_form = UserProfileForm(request.POST, instance=request.user.userprofile)
     if request.method == 'POST':
-        #print EditForm
-        #profile_form = UserProfileForm(data=request.POST)
         if user_form.is_valid() and profile_form.is_valid():
-            #password = request.POST.get('password')
-            #print 'old_password' , old_password
-            usereditor = user_form.save()
+            print '***********1',user_form
+            usereditor = user_form.save(commit=False)
             if userdetails.check_password(usereditor.password):
-                #password1 = usereditor.password
+                print 'password should be correct *********************************'
                 username = request.POST.get('username')
-                #password = request.POST.get('password')
                 passwordnew = request.POST.get('new_password')
                 usereditor.set_password(passwordnew)
                 usereditor.save()
-
                 profile = profile_form.save(commit=False)
                 profile.user = usereditor
                 profile.save()
+                user = authenticate(username=username, password=passwordnew)
+                login(request,user)
 
-                return render(request, 'connect/edit.html', {'user_form': user_form, 'profile_form' : profile_form})
 
             else:
-                #print 'passwordfail', userdetails.password
-                #usereditor.set_password(password)
-                usereditor.save()
 
-                #print user_edit.errors
+                print 'worng password *******************'
+                #user_formpassword=userdetails.password
+                print 'password:', userdetails.password
+                user_form = EditForm(initial={'name': " ".join([userdetails.first_name, userdetails.last_name]),'username':userdetails.username, 'email':userdetails.email})
+                profile_form = UserProfileForm(initial={'course' : usercourse.course})
+                print(user_form.errors, profile_form.errors)
+                return render(request, 'connect/edit.html', {'user_form': user_form , 'profile_form': profile_form})
+                print 'paqss0',password
+
+                #print 'passs1',user_formpassword
+                #usereditor.set_password(passwordnew)
+                #usereditor.save()
         else:
+            #form not valid
+            print 'form not valid'
             print(user_form.errors, profile_form.errors)
     else:
         user_form = EditForm(initial={'name': " ".join([userdetails.first_name, userdetails.last_name]),'username':userdetails.username, 'email':userdetails.email})
@@ -171,11 +174,11 @@ def user_edit(request):
         return render(request, 'connect/edit.html', {'user_form': user_form , 'profile_form': profile_form})
         print 'paqss0',password
 
-    user_formpassword=userdetails.password
-    print 'passs1',password
+    #user_formpassword=userdetails.password
+    #print 'passs1',user_formpassword
 
     return render(request, 'connect/edit.html', {'user_form': user_form , 'profile_form': profile_form})
-
+    
 
 
  # A helper method
