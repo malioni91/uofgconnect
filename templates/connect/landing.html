@@ -2,28 +2,6 @@
 {% load staticfiles %}
 
 {% block content %}
-       <div id="map"></div>
-    <script>
-      // Note: This example requires that you consent to location sharing when
-      // prompted by your browser. If you see the error "The Geolocation service
-      // failed.", it means you probably did not give permission for the browser to
-      // locate you.
-
-      function initMap() {
-        var map = new google.maps.Map(document.getElementById('map'), {
-          // Initialize the map over the Uni
-          center: {lat: 55.870351, lng: -4.28509},
-          zoom: 16
-        });
-        var infoWindow = new google.maps.InfoWindow({map: map});
-          infoWindow.setPosition(pos);
-          map.setCenter(pos);
-
-      }
-
-    </script>
-    <script async defer
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCwbSq-w82DHDdJhiMClA-WwPpQaGcecWI&callback=initMap">
-    </script>
+<img src="{% static "images/GlasgowUni.jpg" %}" id="bg" alt="Picture of UofG"/>
 
 {% endblock %}

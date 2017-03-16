@@ -6,27 +6,45 @@
 
 #map {
 	margin: 0;
-	position: relative;
+	position: fixed;
 	padding: 0;
 	top: 0;
 	bottom: 0;
 	right: 0;
-	max-height: 90vh;
+	max-height: 90%;
+
 }
 
 /* Optional: Makes the sample page fill the window. */
 html, body {
 	height: 100%;
-	margin: 0px;
-  	padding: 0px
+	margin: 0;
+  	padding: 0;
 }
 
+* {
+    margin:0;
+}
+
+#bg {
+	position: fixed;
+  	top: 0;
+  	left: 0;
+
+  	/* Preserve aspet ratio */
+  	min-width: 100%;
+  	min-height: 100%;
+}
+
+#mainNav {
+
+}
 
 .rounded-avatar {
 	line-height: 0;
 	display: inline-block;
 	margin-bottom: -14px;
-	margin-top: 2px;
+	margin-top: 4px;
 	border: 2px solid rgba(255,255,255,0.4);
 	border-radius: 50%;
 	transition: linear 0.25s;
