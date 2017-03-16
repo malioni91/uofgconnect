@@ -60,12 +60,11 @@
               lat: position.coords.latitude,
               lng: position.coords.longitude
             };
-
             infoWindow.setPosition(pos);
             infoWindow.setContent('Your Location');
             map.setCenter(pos);
             $.ajax({
-                type : "POST",
+                type : "GET",
                 dataType : JSON,
                 url : "/connect/pos_map/",
                 async : true,
