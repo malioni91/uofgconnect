@@ -1,7 +1,7 @@
 {% extends 'connect/base.html' %}
 {% block content %}
     <h1>Contact Form</h1>
-    <form role="form" action="" method="post">
+    <form role="form" method="post" action="{% url 'contact' %}" enctype="multipart/form-data">
         {% csrf_token %}
         {{ form.as_p }}
         <button type="submit">Submit</button>
