@@ -231,19 +231,17 @@ def users(request):
 
 
 def pos_map(request):
-
     try:
-        latitute = request.POST.get('lat')
+        latitude = request.POST.get('lat')
         longitude = request.POST.get('lng')
 
-        coordinates = {
-            'lat' : latitute,
-            'lon' : longitude
-        }
-
-        return HttpResponse(json.dumps(coordinates), content_type="application/json")
     except:
-        return HttpResponse("Error in posting coordinates!")
+        latitude = ""
+        longitude = ""
 
+    coordinates = {
+        'lat': latitude,
+        'lon': longitude
+    }
 
-
+    return HttpResponse(json.dumps(coordinates), content_type="application/json")
