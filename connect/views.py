@@ -242,11 +242,10 @@ def pos_map(request):
         'longitude' : longitude
     }
     if request.is_ajax():
-        userdetails = UserProfile.objects.get()
-        if not userdetails.location:
+        userdetails = UserProfile.objects.get(user__username=request.user.username)
+        success =  Map.objects.filter(id=userdetails.user_id).update(**coordinates)
+        if not success:
             Map.objects.create(**coordinates)
-        else:
-            Map.objects.filter(id=userdetails.user_id).update(**coordinates)
         map_info = Map.objects.get(id=userdetails.user_id)
         userdetails.location = map_info
         userdetails.save()
