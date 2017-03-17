@@ -52,6 +52,8 @@
 
            var locations = [
                 ['Student 1', 55.873593, -4.287919],
+                ['Student 2', 55.873593, -4.287919],
+                ['Student 3', 55.873593, -4.287919],
                 ['Ron Poet', 55.873694, -4.291269],
                 ['Gerardo', 55.872462, -4.284199],
                 ['Pavlos', 55.872483, -4.281545],
@@ -160,8 +162,8 @@
 
                 google.maps.event.addListener(marker, 'click', (function (marker, i) {
                     return function () {
-                        infowindow.setContent(locations[i][0]);
-                        infowindow.open(map, marker);
+                        infoWindow.setContent(locations[i][0]);
+                        infoWindow.open(map, marker);
                     }
                 })(marker, i));
             }
