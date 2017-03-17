@@ -50,11 +50,20 @@
 
         function initMap() {
 
+           var locations = [
+                ['Student 1', 55.873593, -4.287919],
+                ['Ron Poet', 55.873694, -4.291269],
+                ['Gerardo', 55.872462, -4.284199],
+                ['Pavlos', 55.872483, -4.281545],
+
+            ];
+
 
             var map = new google.maps.Map(document.getElementById('map'), {
+
                 // Initialize the map over the Uni
                 center: {lat: 55.870351, lng: -4.28509},
-                zoom: 16,
+                zoom: 18,
                 styles: [
                     {elementType: 'geometry', stylers: [{color: '#242f3e'}]},
                     {elementType: 'labels.text.stroke', stylers: [{color: '#242f3e'}]},
@@ -141,6 +150,24 @@
 
             var infoWindow = new google.maps.InfoWindow({map: map});
 
+            var marker, i;
+
+            for (i = 0; i < locations.length; i++) {
+                marker = new google.maps.Marker({
+                    position: new google.maps.LatLng(locations[i][1], locations[i][2]),
+                    map: map
+                });
+
+                google.maps.event.addListener(marker, 'click', (function (marker, i) {
+                    return function () {
+                        infowindow.setContent(locations[i][0]);
+                        infowindow.open(map, marker);
+                    }
+                })(marker, i));
+            }
+
+
+
             // Try HTML5 geolocation.
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(function (position) {
@@ -178,12 +205,17 @@
             }
         }
 
+
+
         function handleLocationError(browserHasGeolocation, infoWindow, pos) {
             infoWindow.setPosition(pos);
             infoWindow.setContent(browserHasGeolocation ?
                     'Error: The Geolocation service failed.' :
                     'Error: Your browser doesn\'t support geolocation.');
         }
+
+
+
 
 
     </script>
