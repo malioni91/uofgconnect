@@ -67,7 +67,11 @@
         var map = new google.maps.Map(document.getElementById('map'), {
           // Initialize the map over the Uni
           center: {lat: 55.870351, lng: -4.28509},
-          zoom: 16
+          zoom: 16,
+          mapTypeControlOptions: {
+            style: google.maps.MapTypeControlStyle.DROPDOWN_MENU,
+            position: google.maps.ControlPosition.TOP_RIGHT
+           }
         });
         var infoWindow = new google.maps.InfoWindow({map: map});
 
