@@ -18,4 +18,14 @@ $(document).ready(function() {
         }).done(function(data){
         });
     });
+
+    $.ajax({
+            type: 'GET',
+            url: "/connect/all_users/",
+            dataType: "json",
+            success: function(response){
+                alert("response");
+            }
+        }).done(function(data){
+        });
 });

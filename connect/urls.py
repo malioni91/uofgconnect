@@ -13,4 +13,5 @@ urlpatterns = [
     url(r'^edit/$', views.user_edit, name='edit'),
     url(r'^users/$', views.users, name='users'),
     url(r'^pos_map/$', views.pos_map, name='pos_map'),
+    url(r'^all_users/$', views.all_users, name='all_users'),
 ]

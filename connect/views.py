@@ -252,3 +252,13 @@ def pos_map(request):
         userdetails.save()
 
     return HttpResponse(json.dumps(coordinates), content_type="application/json")
+
+def all_users(request):
+    users_dict = {}
+    users_records = []
+    users = User.objects.all()
+    for user in users:
+        record = {"first_name": user.first_name, "last_name": user.last_name}
+        users_records.append(record)
+    users_dict["users"] = users_records
+    return JsonResponse(users_dict)
