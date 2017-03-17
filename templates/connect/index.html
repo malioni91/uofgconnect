@@ -35,7 +35,6 @@
       </div>
         </div>
 
-
 <!-- Google Maps page -->
         <div id="map" style="height: 100%"></div>
     <script>
@@ -61,27 +60,26 @@
               lat: position.coords.latitude,
               lng: position.coords.longitude
             };
-
             infoWindow.setPosition(pos);
             infoWindow.setContent('Your Location');
             map.setCenter(pos);
+
             $.ajax({
                 type : "POST",
-                dataType : JSON,
                 url : "/connect/pos_map/",
                 data : {
-                    csrfmiddlewaretoken: '{{ csrf_token }}',
+                    "csrfmiddlewaretoken": '{{ csrf_token }}',
                     lat: position.coords.latitude,
                     lng: position.coords.longitude
                 },
-                success : function(){
-                    console.log("Sent to backend");
-                    // send to backened and print on console
+                success : function(json){
+                    console.log("Success:", json);
                 },
-                error : function(){
-                    console.log("There was an error sending coordinates");
+                error : function(xhr,errmsg,err) {
+                    console.log(xhr.status + ": " + xhr.responseText);
                 }
             })
+
           }, function() {
             handleLocationError(true, infoWindow, map.getCenter());
           });
@@ -104,5 +102,4 @@
     <script async defer
     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCwbSq-w82DHDdJhiMClA-WwPpQaGcecWI&callback=initMap">
     </script>
-
 {% endblock %}

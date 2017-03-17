@@ -15,6 +15,10 @@ from connect.models import UserProfile
 
 from django.http import JsonResponse
 
+from django.http import JsonResponse
+
+from .models import UserProfile, Map
+
 @login_required
 def index(request):
     request.session.set_test_cookie()
@@ -182,7 +186,7 @@ def user_edit(request):
     #print 'passs1',user_formpassword
 
     return render(request, 'connect/edit.html', {'user_form': user_form , 'profile_form': profile_form})
-    
+
 
 
  # A helper method
@@ -229,19 +233,22 @@ def users(request):
     }
     return JsonResponse(user)
 
-
+@login_required
 def pos_map(request):
-    try:
-        latitude = request.POST.get('lat')
-        longitude = request.POST.get('lng')
-
-    except:
-        latitude = ""
-        longitude = ""
-
+    latitude = request.POST.get('lat')
+    longitude = request.POST.get('lng')
     coordinates = {
-        'lat': latitude,
-        'lon': longitude
+        'latitude' : latitude,
+        'longitude' : longitude
     }
+    if request.is_ajax():
+        userdetails = UserProfile.objects.get()
+        if not userdetails.location:
+            Map.objects.create(**coordinates)
+        else:
+            Map.objects.filter(id=userdetails.user_id).update(**coordinates)
+        map_info = Map.objects.get(id=userdetails.user_id)
+        userdetails.location = map_info
+        userdetails.save()
 
     return HttpResponse(json.dumps(coordinates), content_type="application/json")
