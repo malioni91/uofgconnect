@@ -35,8 +35,26 @@
       </div>
         </div>
 
+<div id="wrapper" class="toggled">
+
+        <!-- Sidebar -->
+        <div id="sidebar-wrapper">
+            <ul class="sidebar-nav" id="users_list">
+                <li class="sidebar-brand">
+                    <a href="#">
+                        Available Users
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <!-- /#sidebar-wrapper -->
+
+
+    </div>
+    <!-- /#wrapper -->
+
 <!-- Google Maps page -->
-        <div id="map" style="height: 100%"></div>
+<div id="map" style="height: 100%"></div>
     <script>
       // Note: This example requires that you consent to location sharing when
       // prompted by your browser. If you see the error "The Geolocation service
@@ -49,7 +67,11 @@
         var map = new google.maps.Map(document.getElementById('map'), {
           // Initialize the map over the Uni
           center: {lat: 55.870351, lng: -4.28509},
-          zoom: 16
+          zoom: 16,
+          mapTypeControlOptions: {
+            style: google.maps.MapTypeControlStyle.DROPDOWN_MENU,
+            position: google.maps.ControlPosition.TOP_RIGHT
+           }
         });
         var infoWindow = new google.maps.InfoWindow({map: map});
 

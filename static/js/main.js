@@ -18,4 +18,23 @@ $(document).ready(function() {
         }).done(function(data){
         });
     });
+
+    $.ajax({
+            type: 'GET',
+            url: "/connect/all_users/",
+            dataType: "json",
+            success: function(response){
+                var ul = document.getElementById("users_list");
+                $.each(response.users, function(index,user) {
+                    var li = document.createElement("li");
+                    a = document.createElement('a');
+                    a.href =  '#';
+                    a.innerHTML = user.first_name + " " + user.last_name;
+                    li.appendChild(a);
+                    ul.appendChild(li);
+//                    document.body.appendChild(leftDiv);
+}               );
+            }
+        }).done(function(data){
+        });
 });
