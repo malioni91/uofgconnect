@@ -18,7 +18,7 @@ class Course(models.Model):
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     course = models.OneToOneField(Course)
-    location = models.OneToOneField(Map, null=True)
+    location = models.OneToOneField(Map, primary_key=True, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.user.username
