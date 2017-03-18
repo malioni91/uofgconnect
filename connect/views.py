@@ -14,8 +14,11 @@ from django.contrib.auth.models import User
 from connect.models import UserProfile
 
 from django.http import JsonResponse
-
+from django.core.cache import cache
 from django.http import JsonResponse
+
+from django.contrib.sessions.models import Session
+from django.utils import timezone
 
 from .models import UserProfile, Map
 
@@ -253,11 +256,27 @@ def pos_map(request):
     return HttpResponse(json.dumps(coordinates), content_type="application/json")
 
 def all_users(request):
+    # Query all non-expired sessions
+    # use timezone.now() instead of datetime.now() in latest versions of Django
+    sessions = Session.objects.filter(expire_date__gte=timezone.now())
+    uid_list = []
+
+    # Build a list of user ids from that query
+    for session in sessions:
+        data = session.get_decoded()
+        uid_list.append(data.get('_auth_user_id', None))
+
+    # Query all logged in users based on id list
+    users = User.objects.filter(id__in=uid_list)
+
     users_dict = {}
     users_records = []
-    users = User.objects.all()
+    # users = User.objects.all()
+    # print "------------------------ONLINE------------------------"
     for user in users:
-        record = {"first_name": user.first_name, "last_name": user.last_name}
-        users_records.append(record)
+        if user.username != request.user.username:
+            record = {"first_name": user.first_name, "last_name": user.last_name}
+            users_records.append(record)
     users_dict["users"] = users_records
     return JsonResponse(users_dict)
+
