@@ -274,8 +274,9 @@ def all_users(request):
     # users = User.objects.all()
     # print "------------------------ONLINE------------------------"
     for user in users:
-        record = {"first_name": user.first_name, "last_name": user.last_name}
-        users_records.append(record)
+        if user.username != request.user.username:
+            record = {"first_name": user.first_name, "last_name": user.last_name}
+            users_records.append(record)
     users_dict["users"] = users_records
     return JsonResponse(users_dict)
 
