@@ -41,6 +41,8 @@ class UserForm(forms.ModelForm):
             raise forms.ValidationError(mark_safe("Passwords do not match. Try again."))
         if "@student.gla.ac.uk" not in email and "@gla.ac.uk" not in email:
             raise forms.ValidationError("You email is not a valid UofG email address.")
+        if User.objects.filter(email=email).exists():
+            raise forms.ValidationError("This email is already used.")
         return self.cleaned_data
 
 class LoginForm(forms.ModelForm):
