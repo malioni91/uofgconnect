@@ -1,24 +1,4 @@
 $(document).ready(function() {
-    $("#btnSearch").click(function(){
-        document.getElementById("alert-not-found").style.display = "none";
-        var email = document.getElementById("inpEmail").value;
-        $.ajax({
-            type: 'GET',
-            url: "/connect/users/",
-            data: {email: email}, //passing some input here
-            dataType: "json",
-            success: function(response){
-                if (response.found) {
-                    document.getElementById("user_name").innerHTML = response.full_name;
-                }
-                else {
-                    document.getElementById("alert-not-found").style.display = "inherit";
-                }
-            }
-        }).done(function(data){
-        });
-    });
-
     $.ajax({
             type: 'GET',
             url: "/connect/all_users/",
@@ -28,9 +8,12 @@ $(document).ready(function() {
                 if (response.users.length > 0) {
                     $.each(response.users, function(index,user) {
                         var li = document.createElement("li");
+                        var userFullName = user.first_name + " " + user.last_name;
                         a = document.createElement('a');
+                        a.id = user.username;
+                        a.addEventListener("click", function() { createPushNotification(user.username, userFullName); }, false);
                         a.href =  '#';
-                        a.innerHTML = user.first_name + " " + user.last_name;
+                        a.innerHTML = userFullName;
                         li.appendChild(a);
                         ul.appendChild(li);
                     });
@@ -48,6 +31,12 @@ $(document).ready(function() {
         });
 });
 
+function createPushNotification(userID, userFullName) {
+    document.getElementById("user_name").innerHTML = userFullName;
+    $('#notificationModal').modal('show');
+}
+
+
 function refreshOnlineUsers() {
     $.ajax({
             type: 'GET',
@@ -59,9 +48,12 @@ function refreshOnlineUsers() {
                 if (response.users.length > 0) {
                     $.each(response.users, function(index,user) {
                         var li = document.createElement("li");
+                        var userFullName = user.first_name + " " + user.last_name;
                         a = document.createElement('a');
                         a.href =  '#';
-                        a.innerHTML = user.first_name + " " + user.last_name;
+                        a.id = user.username;
+                        a.addEventListener("click", function() { createPushNotification(user.username, userFullName); }, false);
+                        a.innerHTML = userFullName;
                         li.appendChild(a);
                         ul.appendChild(li);
                     });
@@ -78,3 +70,4 @@ function refreshOnlineUsers() {
         }).done(function(data){
         });
 }
+

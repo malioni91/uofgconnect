@@ -2,37 +2,31 @@
 
 {% block content %}
     <!-- Modal -->
-    <div id="myModal" class="modal fade" role="dialog">
-        <div class="modal-dialog">
-
+    <div id="notificationModal" tabindex="-1" class="modal fade" role="dialog" data-backdrop="false">
+        <div class="modal-dialog" role="document">
             <!-- Modal content-->
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title">Invite friends</h4>
+                    <h4 class="modal-title">Send Notification</h4>
                 </div>
                 <div class="modal-body">
                     <div class="input-group">
                         <span class="input-group-addon" id="basic-addon1"><i
-                                class="glyphicon glyphicon-user"></i></span>
-                        <input id="inpEmail" type="text" class="form-control" placeholder="Search with user's email"
+                                class="glyphicon glyphicon-envelope"></i></span>
+                        <input id="notificationMessage" type="text" class="form-control" placeholder="Write a short message"
                                aria-describedby="basic-addon1">
-                  <span class="input-group-btn">
-                      <button id="btnSearch" class="btn btn-primary" type="button">Go!</button>
-                 </span>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-block btn-success" data-dismiss="modal">Add
-                        <label id="user_name" class="form-control-label"></label> as a friend!
+                    <button id="btnSendNotification" type="button" class="btn btn-block btn-success" data-dismiss="modal">Send notification to
+                        <label id="user_name" class="form-control-label"></label> !
                     </button>
                     <div id="alert-not-found" style="display: none"
                          class="alert alert-danger alert-dismissable text-center">
                         <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
                         <strong>Sorry!</strong> Could not find anyone with the email provided.
                     </div>
-
-
                 </div>
             </div>
 
@@ -40,7 +34,7 @@
     </div>
 
 
-<div id="wrapper" class="toggled">
+    <div id="wrapper" class="toggled">
 
         <!-- Sidebar -->
         <div id="sidebar-wrapper">
@@ -261,6 +255,23 @@
                         'Error: The Geolocation service failed.' :
                         'Error: Your browser doesn\'t support geolocation.');
             }
+
+    $(document).ready(function() {
+            $("#btnSendNotification").click(function(){
+                var message = document.getElementById("notificationMessage").value;
+                $.ajax({
+                    type: 'POST',
+                    url: "/connect/notification/",
+                    data: {
+                        message: message,
+                        "csrfmiddlewaretoken": '{{ csrf_token }}',
+                        },
+                    success: function(response){
+                    }
+                }).done(function(data){
+                });
+            });
+    });
 
 
         }

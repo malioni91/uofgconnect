@@ -277,7 +277,7 @@ def all_users(request):
     # print "------------------------ONLINE------------------------"
     for user in users:
         if user.username != request.user.username:
-            record = {"first_name": user.first_name, "last_name": user.last_name}
+            record = {"first_name": user.first_name, "last_name": user.last_name, "username": user.username}
             users_records.append(record)
     users_dict["users"] = users_records
     return JsonResponse(users_dict)
@@ -287,3 +287,8 @@ def uni_news(request):
     feeds = feedparser.parse('http://www.gla.ac.uk/rss/news/index.xml')
     return render(request, 'connect/uni_news.html', {'feeds': feeds})
 
+def notification(request):
+    print "Hello"
+    # Just for testing - remove
+    response = render(request, 'connect/index.html')
+    return response
