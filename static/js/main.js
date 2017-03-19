@@ -7,6 +7,23 @@ $(document).ready(function() {
     refreshOnlineUsers(false);
 });
 
+function filterUsers() {
+    var input, filter, ul, li, a, i;
+    input = document.getElementById('filter');
+    filter = input.value.toUpperCase();
+    ul = document.getElementById("users_list");
+    li = $("#users_list li");
+    // Loop through all list items, and hide those who don't match the search query
+    for (i = 1; i < li.length; i++) {
+        a = li[i].getElementsByTagName("a")[0];
+        if (a.innerHTML.toUpperCase().indexOf(filter) > -1) {
+            li[i].style.display = "";
+        } else {
+            li[i].style.display = "none";
+        }
+    }
+}
+
 function createPushNotification(userID, userFullName) {
     document.getElementById("notificationMessage").value = "";
     document.getElementById("notificationPlace").value = "";
@@ -18,6 +35,7 @@ function createPushNotification(userID, userFullName) {
 
 
 function refreshOnlineUsers(refresh) {
+    document.getElementById("filter").value = "";
     $.ajax({
             type: 'GET',
             url: "/connect/all_users/",
