@@ -49,16 +49,15 @@
 
 
     <div id="wrapper" class="toggled">
-
         <!-- Sidebar -->
         <div id="sidebar-wrapper">
             <ul style="display: list-item" class="sidebar-nav" id="users_list">
-                <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                <input type="text" class="form-control" id="filter" onkeyup="filterUsers()" placeholder="Search by name...">
+                <i class="glyphicon glyphicon-user form-control-feedback"></i>
                 <li class="sidebar-brand">
                     <a title="Refresh" href="#" onclick="refreshOnlineUsers(true)">
                         Available Users<span title="Refresh"><i class="glyphicon glyphicon-refresh"></i></span>
                     </a>
-
                 </li>
             </ul>
         </div>
