@@ -43,8 +43,8 @@ html, body {
 .rounded-avatar {
 	line-height: 0;
 	display: inline-block;
-	margin-bottom: -14px;
-	margin-top: 4px;
+	margin-bottom: -21px;
+	margin-top: -24px;
 	border: 2px solid rgba(255,255,255,0.4);
 	border-radius: 50%;
 	transition: linear 0.25s;
