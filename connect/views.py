@@ -14,8 +14,11 @@ from django.contrib.auth.models import User
 from connect.models import UserProfile
 
 from django.http import JsonResponse
-
+from django.core.cache import cache
 from django.http import JsonResponse
+
+from django.contrib.sessions.models import Session
+from django.utils import timezone
 
 from .models import UserProfile, Map
 
@@ -261,28 +264,32 @@ def pos_map(request):
 
 
 def all_users(request):
+    # Query all non-expired sessions
+    # use timezone.now() instead of datetime.now() in latest versions of Django
+    sessions = Session.objects.filter(expire_date__gte=timezone.now())
+    uid_list = []
+
+    # Build a list of user ids from that query
+    for session in sessions:
+        data = session.get_decoded()
+        uid_list.append(data.get('_auth_user_id', None))
+
+    # Query all logged in users based on id list
+    users = User.objects.filter(id__in=uid_list)
+
     users_dict = {}
     users_records = []
-    users = User.objects.all()
+    # users = User.objects.all()
+    # print "------------------------ONLINE------------------------"
     for user in users:
-        record = {"first_name": user.first_name, "last_name": user.last_name}
-        users_records.append(record)
+        if user.username != request.user.username:
+            record = {"first_name": user.first_name, "last_name": user.last_name}
+            users_records.append(record)
     users_dict["users"] = users_records
     return JsonResponse(users_dict)
 
 
-def get_coordinates(request):
-    users_coordinates = []
-    users_c_dict = {}
-    map_coordinates = Map.objects.all()
-    #userdetails = UserProfile.objects.get(location__username=request.user.username)
-    for coordinate in map_coordinates:
-        pos = {"name": "student", "lat": coordinate.latitude, "lon": coordinate.longitude}
-        users_coordinates.append(pos)
-    #users_c_dict = users_coordinates
-    return HttpResponse(simplejson.dumps(users_coordinates), content_type="application/json")
-    #return JsonResponse(users_c_dict)
-
 def uni_news(request):
     feeds = feedparser.parse('http://www.gla.ac.uk/rss/news/index.xml')
     return render(request, 'connect/uni_news.html', {'feeds': feeds})
+
