@@ -52,16 +52,17 @@ function refreshOnlineUsers(refresh) {
                         a.id = user.username;
                         a.addEventListener("click", function() { createPushNotification(user.username, userFullName); }, false);
                         a.href =  '#';
-                        a.innerHTML = userFullName;
                         li.appendChild(a);
+                        i = document.createElement('i');
+                        i.className = "glyphicon glyphicon-map-marker";
                         sp = document.createElement('span');
-                        sp.className = "glyphicon glyphicon-map-marker";
+                        sp.innerHTML = userFullName;
                         if (user.online == "true")
-                            sp.style = "color:green; float: left; vertical-align:middle";
+                            i.style = "color:green; padding-right:25px";
                         else
-                            sp.style = "color:red; float: left; vertical-align:middle";
+                            i.style = "color:red; padding-right:25px";
                         ul.appendChild(li);
-                        $('#' + user.username).prepend(sp);
+                        $('#' + user.username).prepend(sp).prepend(i);
                     });
                 }
                 else {
