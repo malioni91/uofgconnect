@@ -1,1 +1,2 @@
 django-gravatar2
+feedparser
