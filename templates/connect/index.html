@@ -11,6 +11,10 @@
                     <h4 class="modal-title">Send Notification</h4>
                 </div>
                 <div class="modal-body">
+                    <div id="alert-empty-fields"style="display: none" class="alert alert-danger alert-dismissable text-center">
+                        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                        <strong>Please fill in all the fields.</strong>
+				    </div>
                     <div class="input-group">
                         <span class="input-group-addon" id="basic-addon1"><i
                                 class="glyphicon glyphicon-envelope"></i></span>
@@ -26,7 +30,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button id="btnSendNotification" type="button" class="btn btn-block btn-success" data-dismiss="modal">Send notification to
+                    <button id="btnSendNotification" type="button" class="btn btn-block btn-success">Send notification to
                         <label id="user_name" class="form-control-label"></label> !
                     </button>
                     <div id="alert-not-found" style="display: none"
@@ -265,20 +269,30 @@
 
     $(document).ready(function() {
             $("#btnSendNotification").click(function(){
+                document.getElementById("alert-empty-fields").style.display = "none";
                 var message = document.getElementById("notificationMessage").value;
                 var place = document.getElementById("notificationPlace").value;
-                $.ajax({
-                    type: 'POST',
-                    url: "/connect/notification/",
-                    data: {
-                        message: message,
-                        place: place,
-                        "csrfmiddlewaretoken": '{{ csrf_token }}',
-                        },
-                    success: function(response){
-                    }
-                }).done(function(data){
-                });
+                if (message == "" || place == "") {
+                    document.getElementById("alert-empty-fields").style.display = "inherit";
+                    $("#alert-empty-fields").fadeTo(1000, 500).slideUp(500, function(){
+                        $("#alert-empty-fields").slideUp(500);
+                    });
+                }
+                else {
+                    $('#notificationModal').modal('hide');
+                    $.ajax({
+                        type: 'POST',
+                        url: "/connect/notification/",
+                        data: {
+                            message: message,
+                            place: place,
+                            "csrfmiddlewaretoken": '{{ csrf_token }}',
+                            },
+                        success: function(response){
+                        }
+                    }).done(function(data){
+                    });
+                }
             });
     });
 

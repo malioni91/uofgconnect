@@ -34,6 +34,8 @@ $(document).ready(function() {
 
 function createPushNotification(userID, userFullName) {
     document.getElementById("notificationMessage").value = "";
+    document.getElementById("notificationPlace").value = "";
+    document.getElementById("alert-empty-fields").style.display = "none";
     document.getElementById("user_name").innerHTML = userFullName;
     $('#notificationModal').modal('show');
 }
