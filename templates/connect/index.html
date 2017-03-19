@@ -75,31 +75,6 @@
         function initMap() {
 
 
-            {#             $.ajax({#}
-            {#                type: 'GET',#}
-            {#                url: "/connect/get_coordinates/",#}
-            {#                dataType: "json",#}
-            {#                data: {#}
-            {#                    name: 'name', lat: 'lat', lon: 'lon'#}
-            {#                },#}
-            {#                success: function (data) {#}
-            {##}
-            {#                    for(var a in data){#}
-            {#                        locations.push(data[a]);#}
-            {#                    }#}
-            {##}
-            {#                }#}
-            {#            });#}
-
-
-            var locations1 = [
-                ['Student 1', 55.86447, -4.29649],
-                ['Student 2', 55.86447, -4.29644],
-                ['Student 3', 55.86448, -4.29643],
-                ['Student 4', 55.86446, -4.29649],
-            ];
-
-
             var map = new google.maps.Map(document.getElementById('map'), {
 
                 // Initialize the map over the Uni
@@ -213,42 +188,35 @@
 
 
             {
-
-
-
-
-
-                {#            for (i = 0; i < locations.length; i++) {#}
-                {#                marker = new google.maps.Marker({#}
-                {#                    position: new google.maps.LatLng(locations[i][1], locations[i][2]),#}
-                {#                    map: map#}
-                {#                });#}
-                {##}
-                {#                google.maps.event.addListener(marker, 'click', (function (marker, i) {#}
-                {#                    return function () {#}
-                {#                        infoWindow.setContent(locations[i][0]);#}
-                {#                        infoWindow.open(map, marker);#}
-                {#                    }#}
-                {#                })(marker, i));#}
-                {##}
-                {##}
-                {#            }#}
-
-
-
-
-
-                // Try HTML5 geolocation.
                 if (navigator.geolocation) {
                     navigator.geolocation.getCurrentPosition(function (position) {
                         var pos = {
                             lat: position.coords.latitude,
                             lng: position.coords.longitude
                         };
+                        // Customize marker showing current user
+                        var myIcon = {
+                            url: 'http://maps.google.com/mapfiles/ms/icons/green-dot.png', // url
+                            scaledSize: new google.maps.Size(45, 45), // scaled size
+                        };
 
-                        infoWindow.setPosition(pos);
-                        infoWindow.setContent('Your Location');
+                        marker = new google.maps.Marker({
+                            position: new google.maps.LatLng(pos),
+                            map: map,
+                            icon: myIcon
+                        });
+
+
+                        google.maps.event.addListener(marker, 'click', (function (marker) {
+                            return function () {
+                                infoWindow.setContent('<p style="color:black;">Your Location</p>');
+                                infoWindow.open(map, marker);
+                            }
+                        })(marker));
                         map.setCenter(pos);
+
+
+                        // Send user's current location to back-end
                         $.ajax({
                             type: "POST",
                             url: "/connect/pos_map/",
