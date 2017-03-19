@@ -1,0 +1,11 @@
+{% extends 'connect/base.html' %}
+{% load staticfiles %}
+
+{% block content %}
+    <ul>
+        {% for entry in feeds.entries %}
+            <li><a href="{{ entry.link }}">{{ entry.title }}</a></li>
+
+        {% endfor %}
+    </ul>
+{% endblock %}

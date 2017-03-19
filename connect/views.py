@@ -4,7 +4,7 @@ from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect, HttpResponse, Http404
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-import json
+import json, simplejson, feedparser
 from django.views.decorators.csrf import ensure_csrf_cookie
 
 from connect.forms import LoginForm, UserForm, UserProfileForm,EditForm,ContactForm
@@ -24,9 +24,14 @@ def index(request):
     request.session.set_test_cookie()
     context_dict = {}
 
+    coordinates = Map.objects.all()
+
+    context_dict = {'coordinates': coordinates}
+
     visitor_cookie_handler(request)
 
     context_dict['visits'] = request.session['visits']
+
 
     response = render(request, 'connect/index.html', context=context_dict)
     return response
@@ -218,6 +223,7 @@ def visitor_cookie_handler(request):
      # Update/set the visits cookie
      request.session['visits'] = visits
 
+
 def users(request):
     found = False
     try:
@@ -233,6 +239,7 @@ def users(request):
     }
     return JsonResponse(user)
 
+
 @login_required
 def pos_map(request):
     latitude = request.POST.get('lat')
@@ -243,7 +250,7 @@ def pos_map(request):
     }
     if request.is_ajax():
         userdetails = UserProfile.objects.get(user__username=request.user.username)
-        success =  Map.objects.filter(id=userdetails.user_id).update(**coordinates)
+        success = Map.objects.filter(id=userdetails.user_id).update(**coordinates)
         if not success:
             Map.objects.create(**coordinates)
         map_info = Map.objects.get(id=userdetails.user_id)
@@ -251,6 +258,7 @@ def pos_map(request):
         userdetails.save()
 
     return HttpResponse(json.dumps(coordinates), content_type="application/json")
+
 
 def all_users(request):
     users_dict = {}
@@ -261,3 +269,20 @@ def all_users(request):
         users_records.append(record)
     users_dict["users"] = users_records
     return JsonResponse(users_dict)
+
+
+def get_coordinates(request):
+    users_coordinates = []
+    users_c_dict = {}
+    map_coordinates = Map.objects.all()
+    #userdetails = UserProfile.objects.get(location__username=request.user.username)
+    for coordinate in map_coordinates:
+        pos = {"name": "student", "lat": coordinate.latitude, "lon": coordinate.longitude}
+        users_coordinates.append(pos)
+    #users_c_dict = users_coordinates
+    return HttpResponse(simplejson.dumps(users_coordinates), content_type="application/json")
+    #return JsonResponse(users_c_dict)
+
+def uni_news(request):
+    feeds = feedparser.parse('http://www.gla.ac.uk/rss/news/index.xml')
+    return render(request, 'connect/uni_news.html', {'feeds': feeds})
