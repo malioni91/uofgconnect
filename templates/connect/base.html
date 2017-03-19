@@ -49,24 +49,21 @@
           <a class="navbar-brand" href="/">UofG Connect</a>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
-        <ul class="nav navbar-nav">
+        <ul class="nav navbar-nav navbar-right">
             <li><a href="{% url 'about' %}">About us</a></li>
             <li><a href="{% url 'contact' %}">Contact us</a></li>
-        </ul>
-        <ul id="navbar" class="navbar-nav navbar-right">
             {% if user.is_authenticated %}
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle dropdown-user" data-toggle="dropdown">
-                        {{ user.first_name }}&nbsp;
                         <img class="rounded-avatar" src="{% gravatar_url user.email 150 %}" alt="{{user.name}} avatar" />
-                        <span class="caret"></span>
+                        {{ user.first_name }}<span class="caret"></span>
                     </a>
                     <ul class="dropdown-menu">
                         {% if user.is_superuser%}
-                        <li><a href="#">Admin Dashboard</a></li>
+                        <li><a href="#">Dashboard<span class="glyphicon glyphicon-stats pull-right"></span></a></li>
                         {% endif %}
-                        <li><a href="{% url 'edit' %}">Personal Settings </a></li>
-                        <li><a href="{% url 'logout' %}">Logout</a></li>
+                        <li><a href="{% url 'edit' %}">Edit Profile<span class="glyphicon glyphicon-cog pull-right"></span> </a></li>
+                        <li><a href="{% url 'logout' %}">Logout<span class="glyphicon glyphicon-log-out pull-right"></span></a></li>
                     </ul>
                 </li>
               {% else %}
