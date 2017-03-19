@@ -2,37 +2,45 @@
 
 {% block content %}
     <!-- Modal -->
-    <div id="myModal" class="modal fade" role="dialog">
-        <div class="modal-dialog">
-
+    <div id="notificationModal" tabindex="-1" class="modal fade" role="dialog" data-backdrop="false">
+        <div class="modal-dialog" role="document">
             <!-- Modal content-->
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title">Invite friends</h4>
+                    <h4 class="modal-title">Send Notification</h4>
                 </div>
                 <div class="modal-body">
+                    <div id="alert-empty-fields"style="display: none" class="alert alert-danger alert-dismissable text-center">
+                        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                        <strong>Please fill in all the fields.</strong>
+				    </div>
                     <div class="input-group">
                         <span class="input-group-addon" id="basic-addon1"><i
-                                class="glyphicon glyphicon-user"></i></span>
-                        <input id="inpEmail" type="text" class="form-control" placeholder="Search with user's email"
+                                class="glyphicon glyphicon-envelope"></i></span>
+                        <input id="notificationMessage" type="text" class="form-control" placeholder="Write a short message"
                                aria-describedby="basic-addon1">
-                  <span class="input-group-btn">
-                      <button id="btnSearch" class="btn btn-primary" type="button">Go!</button>
-                 </span>
+                    </div>
+                    <hr>
+                    <div class="input-group">
+                        <span class="input-group-addon" id="basic-addon2"><i
+                                class="glyphicon glyphicon-picture"></i></span>
+                        <input id="notificationPlace" type="text" class="form-control" placeholder="Enter the meeting place"
+                               aria-describedby="basic-addon1">
+                    </div>
+                    <hr>
+                    <div class="input-group input-append date form_datetime">
+                           <span class="input-group-addon" id="basic-addone"><i
+                                class="glyphicon glyphicon-time"></i></span>
+                            <input readonly id="notificationTime" value="" type="text" class="form-control" placeholder="Select meeting time"
+                                   aria-describedby="basic-addon1">
+                           <span class="add-on"><i class="icon-th"></i></span>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-block btn-success" data-dismiss="modal">Add
-                        <label id="user_name" class="form-control-label"></label> as a friend!
+                    <button id="btnSendNotification" type="button" class="btn btn-block btn-success">Send notification to
+                        <label id="user_name" class="form-control-label"></label> !
                     </button>
-                    <div id="alert-not-found" style="display: none"
-                         class="alert alert-danger alert-dismissable text-center">
-                        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                        <strong>Sorry!</strong> Could not find anyone with the email provided.
-                    </div>
-
-
                 </div>
             </div>
 
@@ -40,14 +48,14 @@
     </div>
 
 
-<div id="wrapper" class="toggled">
+    <div id="wrapper" class="toggled">
 
         <!-- Sidebar -->
         <div id="sidebar-wrapper">
-            <ul class="sidebar-nav" id="users_list">
+            <ul style="display: list-item" class="sidebar-nav" id="users_list">
                 <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
                 <li class="sidebar-brand">
-                    <a title="Refresh" href="#" onclick="refreshOnlineUsers()">
+                    <a title="Refresh" href="#" onclick="refreshOnlineUsers(true)">
                         Available Users<span title="Refresh"><i class="glyphicon glyphicon-refresh"></i></span>
                     </a>
 
@@ -61,16 +69,9 @@
     <!-- /#wrapper -->
 
 
-
-
-
-        </div>
-    </div>
-
-
-
     <!-- Google Maps page -->
     <div id="map" style="height: 100%"></div>
+
     <script>
         // Note: This example requires that you consent to location sharing when
         // prompted by your browser. If you see the error "The Geolocation service
@@ -261,6 +262,37 @@
                         'Error: The Geolocation service failed.' :
                         'Error: Your browser doesn\'t support geolocation.');
             }
+
+    $(document).ready(function() {
+            $("#btnSendNotification").click(function(){
+                document.getElementById("alert-empty-fields").style.display = "none";
+                var message = document.getElementById("notificationMessage").value;
+                var place = document.getElementById("notificationPlace").value;
+                var time = document.getElementById("notificationTime").value;
+                if (message == "" || place == "" || time == "") {
+                    document.getElementById("alert-empty-fields").style.display = "inherit";
+                    $("#alert-empty-fields").fadeTo(1000, 500).slideUp(500, function(){
+                        $("#alert-empty-fields").slideUp(500);
+                    });
+                }
+                else {
+                    $('#notificationModal').modal('hide');
+                    $.ajax({
+                        type: 'POST',
+                        url: "/connect/notification/",
+                        data: {
+                            message: message,
+                            place: place,
+                            time: time,
+                            "csrfmiddlewaretoken": '{{ csrf_token }}',
+                            },
+                        success: function(response){
+                        }
+                    }).done(function(data){
+                    });
+                }
+            });
+    });
 
 
         }
