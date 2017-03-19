@@ -173,13 +173,13 @@
 
 
                 marker = new google.maps.Marker({
-                    position: new google.maps.LatLng({{ coordinate.latitude }}, {{ coordinate.longitude }}),
+                    position: new google.maps.LatLng({{ coordinate.location.latitude }}, {{ coordinate.location.longitude }}),
                     map: map
                 });
 
                 google.maps.event.addListener(marker, 'click', (function (marker) {
                     return function () {
-                        infoWindow.setContent("location");
+                        infoWindow.setContent('<p style="color:black;">{{ coordinate.user.username }}</p>');
                         infoWindow.open(map, marker);
                     }
                 })(marker));
