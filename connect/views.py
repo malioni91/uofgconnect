@@ -4,7 +4,7 @@ from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect, HttpResponse, Http404
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-import json, simplejson, feedparser
+import json, feedparser
 from django.views.decorators.csrf import ensure_csrf_cookie
 
 from connect.forms import LoginForm, UserForm, UserProfileForm,EditForm,ContactForm
