@@ -17,6 +17,13 @@
                         <input id="notificationMessage" type="text" class="form-control" placeholder="Write a short message"
                                aria-describedby="basic-addon1">
                     </div>
+                    <hr>
+                    <div class="input-group">
+                        <span class="input-group-addon" id="basic-addon2"><i
+                                class="glyphicon glyphicon-picture"></i></span>
+                        <input id="notificationPlace" type="text" class="form-control" placeholder="Enter the meeting place"
+                               aria-describedby="basic-addon1">
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button id="btnSendNotification" type="button" class="btn btn-block btn-success" data-dismiss="modal">Send notification to
@@ -259,11 +266,13 @@
     $(document).ready(function() {
             $("#btnSendNotification").click(function(){
                 var message = document.getElementById("notificationMessage").value;
+                var place = document.getElementById("notificationPlace").value;
                 $.ajax({
                     type: 'POST',
                     url: "/connect/notification/",
                     data: {
                         message: message,
+                        place: place,
                         "csrfmiddlewaretoken": '{{ csrf_token }}',
                         },
                     success: function(response){

@@ -1,4 +1,5 @@
 $(document).ready(function() {
+
     $.ajax({
             type: 'GET',
             url: "/connect/all_users/",
@@ -32,6 +33,7 @@ $(document).ready(function() {
 });
 
 function createPushNotification(userID, userFullName) {
+    document.getElementById("notificationMessage").value = "";
     document.getElementById("user_name").innerHTML = userFullName;
     $('#notificationModal').modal('show');
 }
