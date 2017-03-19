@@ -28,6 +28,14 @@
                         <input id="notificationPlace" type="text" class="form-control" placeholder="Enter the meeting place"
                                aria-describedby="basic-addon1">
                     </div>
+                    <hr>
+                    <div class="input-group input-append date form_datetime">
+                           <span class="input-group-addon" id="basic-addone"><i
+                                class="glyphicon glyphicon-time"></i></span>
+                            <input readonly id="notificationTime" value="" type="text" class="form-control" placeholder="Select meeting time"
+                                   aria-describedby="basic-addon1">
+                           <span class="add-on"><i class="icon-th"></i></span>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button id="btnSendNotification" type="button" class="btn btn-block btn-success">Send notification to
@@ -76,6 +84,7 @@
 
     <!-- Google Maps page -->
     <div id="map" style="height: 100%"></div>
+
     <script>
         // Note: This example requires that you consent to location sharing when
         // prompted by your browser. If you see the error "The Geolocation service
@@ -272,7 +281,8 @@
                 document.getElementById("alert-empty-fields").style.display = "none";
                 var message = document.getElementById("notificationMessage").value;
                 var place = document.getElementById("notificationPlace").value;
-                if (message == "" || place == "") {
+                var time = document.getElementById("notificationTime").value;
+                if (message == "" || place == "" || time == "") {
                     document.getElementById("alert-empty-fields").style.display = "inherit";
                     $("#alert-empty-fields").fadeTo(1000, 500).slideUp(500, function(){
                         $("#alert-empty-fields").slideUp(500);
@@ -286,6 +296,7 @@
                         data: {
                             message: message,
                             place: place,
+                            time: time,
                             "csrfmiddlewaretoken": '{{ csrf_token }}',
                             },
                         success: function(response){
