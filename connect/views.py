@@ -25,20 +25,14 @@ from .models import UserProfile, Map
 @login_required
 def index(request):
     request.session.set_test_cookie()
-    context_dict = {}
-
-    coordinates = Map.objects.all()
-
-    context_dict = {'coordinates': coordinates}
-
+    user_coordinates = UserProfile.objects.all()
+    print(user_coordinates[0].location.latitude)
+    #mapInfo = Map.objects.get(userprofile=request.user.userprofile)
+    context_dict = {'coordinates': user_coordinates}
     visitor_cookie_handler(request)
-
     context_dict['visits'] = request.session['visits']
-
-
     response = render(request, 'connect/index.html', context=context_dict)
     return response
-
 
 
 def landing(request):
