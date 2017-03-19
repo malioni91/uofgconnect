@@ -269,15 +269,17 @@ def all_users(request):
         uid_list.append(data.get('_auth_user_id', None))
 
     # Query all logged in users based on id list
-    users = User.objects.filter(id__in=uid_list)
-
+    online_users = User.objects.filter(id__in=uid_list)
+    all_users_found = User.objects.all()
     users_dict = {}
     users_records = []
-    # users = User.objects.all()
-    # print "------------------------ONLINE------------------------"
-    for user in users:
+
+    for user in all_users_found:
         if user.username != request.user.username:
-            record = {"first_name": user.first_name, "last_name": user.last_name, "username": user.username}
+            if user in online_users:
+                record = {"first_name": user.first_name, "last_name": user.last_name, "username": user.username, "online": "true"}
+            else:
+                record = {"first_name": user.first_name, "last_name": user.last_name, "username": user.username, "online": "false"}
             users_records.append(record)
     users_dict["users"] = users_records
     return JsonResponse(users_dict)
