@@ -32,10 +32,10 @@
                       </div>
                       <hr>
                     <p style="text-align: center">
-                        <a href="#" class="btn btn-primary" onclick="readMessage({{ message.id }})" role="button">Accept
+                        <a href="#" class="btn btn-primary" onclick="readMessage({{ message.id }}, 'accept')" role="button">Accept
                             <span class="glyphicon glyphicon-ok pull-left"></span>
                         </a>
-                        <a href="#" class="btn btn-danger" onclick="readMessage({{ message.id }})" role="button">Reject
+                        <a href="#" class="btn btn-danger" onclick="readMessage({{ message.id }}, 'reject')" role="button">Reject
                             <span class="glyphicon glyphicon-remove pull-left"></span>
                         </a>
                     </p>
@@ -46,6 +46,26 @@
         </div>
 
 </div>
+
+<script>
+     function readMessage(messageID, choice) {
+            $("div[id^=" + messageID + "]").remove();
+
+            $.ajax({
+                    type: 'POST',
+                    url: "/connect/readMessage/",
+                    dataType: "json",
+                    data: {
+                        id: messageID,
+                        action: choice,
+                        "csrfmiddlewaretoken": '{{ csrf_token }}',
+                    },
+                    success: function(response){
+                    }
+                }).done(function(data){
+                });
+        }
+</script>
 
 
 
