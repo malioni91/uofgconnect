@@ -38,6 +38,7 @@ function createPushNotification(userID, userFullName, online) {
         document.getElementById("notificationTime").value = "";
         document.getElementById("alert-empty-fields").style.display = "none";
         document.getElementById("user_name").innerHTML = userFullName;
+        document.getElementById("userSelected").value = userID;
         $('#notificationModal').modal('show');
     }
     else {

@@ -68,13 +68,14 @@
         </div>
         <!-- /#sidebar-wrapper -->
 
-
     </div>
     <!-- /#wrapper -->
 
 
     <!-- Google Maps page -->
     <div id="map" style="height: 100%"></div>
+
+    <input id="userSelected" type="text" value="" style="display:none">
 
     <script>
         // Note: This example requires that you consent to location sharing when
@@ -273,6 +274,7 @@
                 var message = document.getElementById("notificationMessage").value;
                 var place = document.getElementById("notificationPlace").value;
                 var time = document.getElementById("notificationTime").value;
+                var username = document.getElementById("userSelected").value;
                 if (message == "" || place == "" || time == "") {
                     document.getElementById("alert-empty-fields").style.display = "inherit";
                     $("#alert-empty-fields").fadeTo(1000, 500).slideUp(500, function(){
@@ -288,6 +290,7 @@
                             message: message,
                             place: place,
                             time: time,
+                            username: username,
                             "csrfmiddlewaretoken": '{{ csrf_token }}',
                             },
                         success: function(response){
