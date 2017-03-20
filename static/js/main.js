@@ -1,5 +1,12 @@
 $(document).ready(function() {
 
+    $('#notificationMessage').maxlength({
+            alwaysShow: true,
+            threshold: 140,
+            warningClass: "label label-success",
+            limitReachedClass: "label label-danger"
+        });
+
     $(".form_datetime").datetimepicker({
         format: "dd MM yyyy - hh:ii"
     });
