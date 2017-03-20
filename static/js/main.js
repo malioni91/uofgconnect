@@ -1,5 +1,12 @@
 $(document).ready(function() {
-
+    $("#sidebar-toggle").click(function(e) {
+        e.preventDefault();
+        $("#wrapper").toggleClass("toggled");
+    });
+    $("#sidebar-toggle2").click(function(e) {
+        e.preventDefault();
+        $("#wrapper").toggleClass("toggled");
+    });
     $('#notificationMessage').maxlength({
             alwaysShow: true,
             threshold: 140,
@@ -13,6 +20,10 @@ $(document).ready(function() {
 
     refreshOnlineUsers(false);
 });
+
+function myfunction() {
+    alert("ADASD");
+}
 
 function filterUsers() {
     var input, filter, ul, li, a, i;

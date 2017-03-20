@@ -1,7 +1,6 @@
 {% extends 'connect/base.html' %}
 
 {% block content %}
-
     <div id="alert-offline-user"style="display: none" class="alert alert-danger alert-dismissable text-center">
         <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
         <strong>You cannot send a notification to an offline user.</strong>
@@ -57,8 +56,16 @@
         <!-- Sidebar -->
         <div id="sidebar-wrapper">
             <ul style="display: list-item" class="sidebar-nav" id="users_list">
-                <input type="text" class="form-control" id="filter" onkeyup="filterUsers()" placeholder="Search by name...">
-                <i class="glyphicon glyphicon-user form-control-feedback"></i>
+                <a style="float:right" href="#menu-toggle" class="btn btn-primary form-control" id="sidebar-toggle2">Close sidebar
+                    <i class="glyphicon glyphicon-chevron-left"></i>
+                </a>
+
+                <div class='input-group manualInput'>
+                   <input id='filter' type='text' onkeyup="filterUsers()" class='form-control' placeholder='Search by name...'/>
+                   <span class='input-group-addon'>
+                      <i class='glyphicon glyphicon-user'></i>
+                   </span>
+                </div>
                 <li class="sidebar-brand">
                     <a title="Refresh" href="#" onclick="refreshOnlineUsers(true)">
                         Available Users<span title="Refresh"><i class="glyphicon glyphicon-refresh"></i></span>
@@ -182,7 +189,7 @@
 
 
             var infoWindow = new google.maps.InfoWindow({map: map});
-        
+
             var marker;
 
             {# Dynamically fetch coordinates #}
