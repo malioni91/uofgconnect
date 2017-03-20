@@ -25,7 +25,7 @@ from .models import UserProfile, Map
 @login_required
 def index(request):
     request.session.set_test_cookie()
-    user_coordinates = UserProfile.objects.all()
+    user_coordinates = UserProfile.objects.all().exclude(user=request.user)
     print(user_coordinates[0].location.latitude)
     #mapInfo = Map.objects.get(userprofile=request.user.userprofile)
     context_dict = {'coordinates': user_coordinates}
