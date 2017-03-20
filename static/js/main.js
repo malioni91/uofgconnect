@@ -31,13 +31,21 @@ function filterUsers() {
     }
 }
 
-function createPushNotification(userID, userFullName) {
-    document.getElementById("notificationMessage").value = "";
-    document.getElementById("notificationPlace").value = "";
-    document.getElementById("notificationTime").value = "";
-    document.getElementById("alert-empty-fields").style.display = "none";
-    document.getElementById("user_name").innerHTML = userFullName;
-    $('#notificationModal').modal('show');
+function createPushNotification(userID, userFullName, online) {
+    if (online == "true") {
+        document.getElementById("notificationMessage").value = "";
+        document.getElementById("notificationPlace").value = "";
+        document.getElementById("notificationTime").value = "";
+        document.getElementById("alert-empty-fields").style.display = "none";
+        document.getElementById("user_name").innerHTML = userFullName;
+        $('#notificationModal').modal('show');
+    }
+    else {
+        document.getElementById("alert-offline-user").style.display = "inherit";
+        $("#alert-offline-user").fadeTo(2000, 500).slideUp(500, function(){
+            $("#alert-offline-user").slideUp(500);
+        });
+    }
 }
 
 
@@ -57,7 +65,7 @@ function refreshOnlineUsers(refresh) {
                         var userFullName = user.first_name + " " + user.last_name;
                         a = document.createElement('a');
                         a.id = user.username;
-                        a.addEventListener("click", function() { createPushNotification(user.username, userFullName); }, false);
+                        a.addEventListener("click", function() { createPushNotification(user.username, userFullName, user.online); }, false);
                         a.href =  '#';
                         li.appendChild(a);
                         i = document.createElement('i');
