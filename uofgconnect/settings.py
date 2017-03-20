@@ -133,3 +133,6 @@ MEDIA_URL = '/media/'
 # URL to redirect not logged in users
 
 LOGIN_URL = '/connect/landing/'
+
+# Seconds before automatically logged out
+SESSION_COOKIE_AGE = 900
