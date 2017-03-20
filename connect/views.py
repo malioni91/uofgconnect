@@ -7,7 +7,7 @@ from django.contrib.auth.decorators import login_required
 import json, feedparser
 from django.views.decorators.csrf import ensure_csrf_cookie
 
-from connect.forms import LoginForm, UserForm, UserProfileForm,EditForm,ContactForm
+from connect.forms import LoginForm, UserForm, UserProfileForm,EditForm
 
 from datetime import datetime
 from django.contrib.auth.models import User
@@ -91,13 +91,6 @@ def about(request):
 def faq(request):
     return render(request, 'connect/faq.html')
 
-
-def contact(request):
-    form_class = ContactForm
-
-    return render(request, 'connect/contact.html', {
-        'form': form_class,
-    })
 
 @login_required
 def user_logout(request):
