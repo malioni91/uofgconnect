@@ -17,7 +17,7 @@
         </div>
         <div class="row">
             {% for message in messages %}
-              <div class="col-sm-6 col-md-4">
+              <div id="{{ message.id }}" class="col-sm-6 col-md-4">
                 <div class="thumbnail">
                   <div class="caption" style="word-wrap: break-word;">
                       <div style="text-align: center">
@@ -25,7 +25,6 @@
                          {{message.actor.first_name}} {{message.actor.last_name}}
                       </div>
                       <hr>
-                          <!--<span><i class="glyphicon glyphicon-envelope"></i></span>-->
                           <p>{{message.verb}}</p>
                       <hr>
                       <div style="text-align: center;">
@@ -33,10 +32,10 @@
                       </div>
                       <hr>
                     <p style="text-align: center">
-                        <a href="#" class="btn btn-primary" role="button">Accept
+                        <a href="#" class="btn btn-primary" onclick="readMessage({{ message.id }})" role="button">Accept
                             <span class="glyphicon glyphicon-ok pull-left"></span>
                         </a>
-                        <a href="#" class="btn btn-danger" role="button">Reject
+                        <a href="#" class="btn btn-danger" onclick="readMessage({{ message.id }})" role="button">Reject
                             <span class="glyphicon glyphicon-remove pull-left"></span>
                         </a>
                     </p>
