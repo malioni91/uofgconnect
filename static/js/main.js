@@ -18,9 +18,6 @@ $(document).ready(function() {
     setInterval(function(){refreshOnlineUsers(true);}, 10000);
 });
 
-function readMessage(messageID) {
-    $("div[id^=" + messageID + "]").remove();
-}
 
 function filterUsers() {
     var input, filter, ul, li, a, i;

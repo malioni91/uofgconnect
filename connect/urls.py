@@ -18,4 +18,5 @@ urlpatterns = [
     url(r'^notifications/', include(notifications.urls, namespace='notifications')),
     url(r'^notification/$', views.notification, name='notification'),
     url(r'^messages/$', views.messages, name='messages'),
+    url(r'^readMessage/$', views.readMessage, name='readMessage'),
 ]

@@ -293,3 +293,6 @@ def notification(request):
         recipient = User.objects.get(username=username)
         notify.send(request.user, recipient=recipient, verb=message)
     return HttpResponseRedirect('/')
+
+def readMessage(request):
+    return HttpResponseRedirect('/')
