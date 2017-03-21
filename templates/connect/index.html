@@ -71,7 +71,11 @@
                         Available Users<span title="Refresh"><i class="glyphicon glyphicon-refresh"></i></span>
                     </a>
                 </li>
+
             </ul>
+           <div class="footer">
+                Victorian Code &copy {% now 'Y' %}
+           </div>
         </div>
         <!-- /#sidebar-wrapper -->
 
@@ -94,9 +98,6 @@
 
 
         function initMap() {
-
-
-
 
 
             var map = new google.maps.Map(document.getElementById('map'), {
@@ -192,24 +193,6 @@
 
             var marker;
 
-            {# Dynamically fetch coordinates #}
-            {% for  coordinate in coordinates %}
-
-
-                marker = new google.maps.Marker({
-                    position: new google.maps.LatLng({{ coordinate.location.latitude }}, {{ coordinate.location.longitude }}),
-                    map: map
-                });
-
-                google.maps.event.addListener(marker, 'click', (function (marker) {
-                    return function () {
-                        infoWindow.setContent('<p style="color:black;">{{ coordinate.user.username }}</p>');
-                        infoWindow.open(map, marker);
-                    }
-                })(marker));
-
-            {% endfor %}
-
 
             {
                 if (navigator.geolocation) {
@@ -240,6 +223,22 @@
                         map.setCenter(pos);
 
 
+                        {# Dynamically fetch coordinates #}
+                        {% for  coordinate in coordinates %}
+                            var marker = new google.maps.Marker({
+                                position: new google.maps.LatLng({{ coordinate.location.latitude }}, {{ coordinate.location.longitude }}),
+                                map: map
+                            });
+
+                            google.maps.event.addListener(marker, 'click', (function (marker) {
+                                return function () {
+                                    infoWindow.setContent('<p style="color:black;">{{ coordinate.user.username }}</p>');
+                                    infoWindow.open(map, marker);
+                                }
+                            })(marker));
+
+                        {% endfor %}
+
                         // Send user's current location to back-end
                         $.ajax({
                             type: "POST",
@@ -266,6 +265,9 @@
                 }
 
             }
+        }
+
+
 
 
             function handleLocationError(browserHasGeolocation, infoWindow, pos) {
@@ -309,7 +311,7 @@
     });
 
 
-        }
+
 
     </script>
     <script async defer

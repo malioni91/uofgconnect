@@ -130,3 +130,12 @@
         margin-right: 0;
     }
 }
+
+.footer{
+    position: absolute;
+    display: inline-block;
+    bottom: 0;
+    left: 20px;
+    color: #999999;
+    font-size: 0.9em;
+}

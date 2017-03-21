@@ -69,3 +69,7 @@ html, body {
 	transform: rotate(90deg);
 	color: #454444;
 }
+
+#about_text {
+	text-align: justify;
+}
