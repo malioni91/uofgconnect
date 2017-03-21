@@ -311,3 +311,6 @@ def readMessage(request):
         recipient = User.objects.get(username=recipient_username)
         notify.send(request.user, recipient=recipient, description=meeting, verb=invitation_status)
     return HttpResponseRedirect('/')
+
+def dismissAlert(request):
+    return HttpResponseRedirect('/')
