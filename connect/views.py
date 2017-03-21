@@ -21,6 +21,8 @@ from django.contrib.sessions.models import Session
 from django.utils import timezone
 
 from .models import UserProfile, Map
+from notifications.signals import notify
+from django.db.models.signals import post_save
 
 @login_required
 def index(request):
@@ -30,15 +32,18 @@ def index(request):
     context_dict = {'coordinates': user_coordinates, 'feeds': feeds}
     visitor_cookie_handler(request)
     context_dict['visits'] = request.session['visits']
-    response = render(request, 'connect/index.html', context=context_dict)
-    return response
-
+    return render(request, 'connect/index.html', context=context_dict)
 
 def landing(request):
     feeds = feedparser.parse('http://www.gla.ac.uk/rss/news/index.xml')
     context_dict = {'feeds': feeds}
     return render(request, "connect/landing.html", context=context_dict)
 
+@login_required
+def messages(request):
+    user = User.objects.get(username=request.user.username)
+    messages = user.notifications.unread()
+    return render(request, "connect/messages.html", {'messages': messages})
 
 def register(request):
     registered = False
@@ -280,7 +285,11 @@ def all_users(request):
     return JsonResponse(users_dict)
 
 def notification(request):
-    print "Hello"
-    # Just for testing - remove
-    response = render(request, 'connect/index.html')
-    return response
+    message = request.POST.get('message')
+    place = request.POST.get('place')
+    time = request.POST.get('time')
+    username = request.POST.get('username')
+    if request.is_ajax():
+        recipient = User.objects.get(username=username)
+        notify.send(request.user, recipient=recipient, verb=message)
+    return HttpResponseRedirect('/')
