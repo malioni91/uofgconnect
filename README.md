@@ -43,8 +43,7 @@ Clone the repository:
 
 Install all python prerequisites:
 
-    pip install -r /requirements.txt.
-
+    pip install -r requirements.txt
 
 Navigate to the folder uofgconnect, and once there run:
 
