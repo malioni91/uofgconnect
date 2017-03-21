@@ -26,7 +26,8 @@ from .models import UserProfile, Map
 def index(request):
     request.session.set_test_cookie()
     user_coordinates = UserProfile.objects.all().exclude(user=request.user)
-    context_dict = {'coordinates': user_coordinates}
+    feeds = feedparser.parse('http://www.gla.ac.uk/rss/news/index.xml')
+    context_dict = {'coordinates': user_coordinates, 'feeds': feeds}
     visitor_cookie_handler(request)
     context_dict['visits'] = request.session['visits']
     response = render(request, 'connect/index.html', context=context_dict)
