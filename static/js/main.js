@@ -1,5 +1,15 @@
 $(document).ready(function() {
 
+    updateNotificationsBadge(null);
+
+    $(document).on('click', '.dropdown-menu', function (e) {
+        e.stopPropagation();
+    });
+
+    $('#notificationsDropdown').on('show.bs.dropdown', function () {
+
+    });
+
     $("#btnSendNotification").click(function(){
                 document.getElementById("alert-empty-fields").style.display = "none";
                 var message = document.getElementById("notificationMessage").value;
@@ -49,7 +59,36 @@ $(document).ready(function() {
     setInterval(function(){refreshOnlineUsers(true);}, 10000);
 });
 
+function updateNotificationsBadge(messageID) {
+        if (messageID == null) {
+                var messages = document.getElementById("test").name;
+                var counter = 0;
+                var accepted = (messages.match(/accepted/g) || []).length;
+                var rejected = (messages.match(/rejected/g) || []).length;
+                var total = accepted + rejected;
+                document.getElementById("badgeLabelNotifications").innerHTML = total;
+        }
+        else {
+            $("li[id^=" + messageID + "]").remove();
+            var messagesLeft = $('#dropdownULNotifications li').size();
+            document.getElementById("badgeLabelNotifications").innerHTML = messagesLeft;
+        }
+}
 
+function dismissAlert(messageID) {
+        $.ajax({
+            type: 'POST',
+            url: "/connect/dismissAlert/",
+            data: {
+                id: messageID,
+                "csrfmiddlewaretoken": document.getElementById("token").value
+            },
+            success: function(response){
+            }
+            }).done(function(data){
+                updateNotificationsBadge(messageID);
+            });
+}
 function filterUsers() {
     var input, filter, ul, li, a, i;
     input = document.getElementById('filter');
