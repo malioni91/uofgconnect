@@ -88,8 +88,10 @@
             $("div[id^=" + messageID + "]").remove();
             var messagesLeft = $('.thumbnail').length
             if (messagesLeft == 0) {
+                document.getElementById("badgeLabel").innerHTML = 0;
                 document.getElementById("alert-messages").innerHTML = "You have no available invitations";
             }
+            document.getElementById("badgeLabel").innerHTML = messagesLeft;
             $.ajax({
                     type: 'POST',
                     url: "/connect/readMessage/",
