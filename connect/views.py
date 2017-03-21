@@ -1,4 +1,4 @@
-from django.shortcuts import render, render_to_response
+from django.shortcuts import render, render_to_response, redirect
 from django.template import RequestContext
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect, HttpResponse, Http404
@@ -35,7 +35,9 @@ def index(request):
 
 
 def landing(request):
-    return render(request, "connect/landing.html")
+    feeds = feedparser.parse('http://www.gla.ac.uk/rss/news/index.xml')
+    context_dict = {'feeds': feeds}
+    return render(request, "connect/landing.html", context=context_dict)
 
 
 def register(request):
@@ -72,8 +74,9 @@ def user_login(request):
             if user.is_active:
                 login(request, user)
                 authenticated = True
-                return render(request, 'connect/index.html',
-                              {'login_form': login_form, 'authenticated': authenticated})
+                # return render(request, 'connect/index.html',
+                #               {'login_form': login_form, 'authenticated': authenticated})
+                return redirect('index')
             else:
                 print(login_form.errors)
         else:
