@@ -24,6 +24,8 @@ from .models import UserProfile, Map
 from notifications.signals import notify
 from django.db.models.signals import post_save
 
+from notifications.models import Notification
+
 @login_required
 def index(request):
     request.session.set_test_cookie()
@@ -313,4 +315,17 @@ def notification(request):
     return HttpResponseRedirect('/')
 
 def readMessage(request):
+    message_id = request.POST.get('id')
+    action = request.POST.get('action')
+    recipient_username = request.POST.get('recipient')
+    meeting = request.POST.get('meeting')
+    if request.is_ajax():
+        obj =  Notification.objects.get(id=int(message_id))
+        obj.mark_as_read()
+        obj.save()
+        invitation_status = "rejected" # rejected until proven otherwise
+        if action == "accept":
+            invitation_status = "accepted"
+        recipient = User.objects.get(username=recipient_username)
+        notify.send(request.user, recipient=recipient, description=meeting, verb=invitation_status)
     return HttpResponseRedirect('/')

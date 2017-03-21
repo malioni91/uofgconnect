@@ -22,6 +22,11 @@
         </div>
         <div class="row">
             {% for message in messages %}
+                {% if message.verb == "accepted"  %}
+                <h3>{{ message.actor.first_name}} {{message.actor.last_name}} accepted your invitation to meet {{message.description}}</h3>
+                {% elif message.verb == "rejected" %}
+                <h3>{{ message.actor.first_name}} {{message.actor.last_name}} rejected your invitation to meet {{message.description}}</h3>
+                {% else %}
               <div id="{{ message.id }}" class="col-sm-6 col-md-4">
                 <div style="background-color: #ffff80"  class="thumbnail">
                   <div class="caption" style="word-wrap: break-word;">
@@ -30,31 +35,31 @@
                           <p style="color:black">{{message.actor.first_name}} {{message.actor.last_name}}</p>
                       </div>
                       <hr>
-                          <p style="color:black">{{message.verb}}</p>
+                      <p style="color:black">{{message.verb}} <br /> Meeting: {{message.description}} </p>
                       <hr>
                       <div style="text-align: center;">
                         <label style="text-align: center; font-size:12px; color:black">Sent {{message.timesince}} minutes ago</label>
                       </div>
                       <hr>
                     <p style="text-align: center">
-                        <a href="#" class="btn btn-primary" onclick="readMessage({{ message.id }}, 'accept')" role="button">Accept
+                    <a href="#" class="btn btn-primary" onclick="readMessage('{{ message.id }}', 'accept', '{{message.actor.username}}', '{{message.description}}')" role="button">Accept
                             <span class="glyphicon glyphicon-ok pull-left"></span>
                         </a>
-                        <a href="#" class="btn btn-danger" onclick="readMessage({{ message.id }}, 'reject')" role="button">Reject
+                        <a href="#" class="btn btn-danger" onclick="readMessage('{{ message.id }}', 'reject', '{{message.actor.username}}', '{{message.description}}')" role="button">Reject
                             <span class="glyphicon glyphicon-remove pull-left"></span>
                         </a>
                     </p>
                   </div>
               </div>
                 </div>
+            {% endif %}
             {% endfor %}
         </div>
 
 </div>
 
 <script>
-
-     function readMessage(messageID, choice) {
+     function readMessage(messageID, choice, recipient, meeting) {
             $("div[id^=" + messageID + "]").remove();
             var messagesLeft = $('.thumbnail').length
             if (messagesLeft == 0) {
@@ -63,10 +68,11 @@
             $.ajax({
                     type: 'POST',
                     url: "/connect/readMessage/",
-                    dataType: "json",
                     data: {
                         id: messageID,
                         action: choice,
+                        recipient: recipient,
+                        meeting: meeting,
                         "csrfmiddlewaretoken": '{{ csrf_token }}',
                     },
                     success: function(response){
