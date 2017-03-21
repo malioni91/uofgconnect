@@ -85,6 +85,34 @@
                         <label id="badgeLabel">{% notifications_unread %}</label></span>
                 </a>
             </li>
+            <li id="notificationsDropdown"  class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" title="Notifications">
+                    <span class="badge">
+                        <span style="font-size:1.2em;" class="glyphicon glyphicon-globe"></span>
+                        <label id="badgeLabelNotifications">
+
+                        </label></span>
+                </a>
+                <ul id="dropdownULNotifications" class="dropdown-menu" style="width: 600px !important;">
+                {% for message in messages %}
+                {% if message.verb == "accepted"  %}
+                    <li id="{{ message.id }}">
+                        <div class="alert alert-info alert-dismissable">
+                        <a onclick="dismissAlert('{{ message.id }}')" href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                            <strong>{{ message.actor.first_name}} {{message.actor.last_name}} accepted your invitation to meet {{message.description}}!</strong>
+                        </div>
+                    </li>
+                {% elif message.verb == "rejected" %}
+                    <li id="{{ message.id }}">
+                        <div class="alert alert-danger alert-dismissable">
+                        <a onclick="dismissAlert('{{ message.id }}')" href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                            <strong>{{ message.actor.first_name}} {{message.actor.last_name}} rejected your invitation to meet {{message.description}}!</strong>
+                        </div>
+                    </li>
+                {% endif %}
+                {% endfor %}
+              </ul>
+            </li>
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle dropdown-user" data-toggle="dropdown">
                         <span class="glyphicon glyphicon-user"></span>
@@ -97,7 +125,7 @@
                         <li><a href="{% url 'edit' %}">Edit Profile<span class="glyphicon glyphicon-cog pull-right"></span> </a></li>
                         <li><a href="{% url 'logout' %}">Logout<span class="glyphicon glyphicon-log-out pull-right"></span></a></li>
                     </ul>
-            </li>
+                </li>
               {% else %}
             <form class="navbar-form navbar-right" role="form" method="post" action="{% url 'login' %}">
                 <a class="btn btn-success" href="{% url 'login' %}"><span class="glyphicon glyphicon-log-in"></span> Sign in</a>
@@ -106,6 +134,10 @@
             {% endif %}
         </ul>
         </div><!--/.navbar-collapse -->
+            <input id="token" type="text" value="{{ csrf_token }}" style="display:none">
+          {% if user.is_authenticated %}
+            <input id="test" style="display: none" name="{{ messages }}">
+          {% endif %}
       </div>
 </nav>
 
