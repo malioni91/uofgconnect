@@ -1,13 +1,9 @@
 $(document).ready(function() {
 
-    updateNotificationsBadge(null);
+    updateNotificationsBadge(-1, false);
 
     $(document).on('click', '.dropdown-menu', function (e) {
         e.stopPropagation();
-    });
-
-    $('#notificationsDropdown').on('show.bs.dropdown', function () {
-
     });
 
     $("#btnSendNotification").click(function(){
@@ -59,15 +55,16 @@ $(document).ready(function() {
     setInterval(function(){refreshOnlineUsers(true);}, 10000);
 });
 
-function updateNotificationsBadge(messageID) {
-            if (messageID != null)
+function updateNotificationsBadge(messageID, remove) {
+            var messages = document.getElementById("test").name;
+            if (remove == true)
                 $("li[id^=" + messageID + "]").remove();
             var messagesLeft = $('#dropdownULNotifications li').size();
             document.getElementById("badgeLabelNotifications").innerHTML = messagesLeft;
 }
 
 function dismissAlert(messageID) {
-        updateNotificationsBadge(messageID);
+        updateNotificationsBadge(messageID, true);
         $.ajax({
             type: 'POST',
             url: "/connect/dismissAlert/",
