@@ -30,13 +30,12 @@ from notifications.models import Notification
 def index(request):
     request.session.set_test_cookie()
     user_coordinates = UserProfile.objects.all().exclude(user=request.user)
-    feeds = feedparser.parse('http://www.gla.ac.uk/rss/news/index.xml')
-    context_dict = {'coordinates': user_coordinates, 'feeds': feeds}
-    visitor_cookie_handler(request)
-    context_dict['visits'] = request.session['visits']
     user = User.objects.get(username=request.user.username)
     messages = user.notifications.unread()
-    context_dict['messages'] = messages
+    feeds = feedparser.parse('http://www.gla.ac.uk/rss/news/index.xml')
+    context_dict = {'coordinates': user_coordinates, 'feeds': feeds, 'messages': messages}
+    visitor_cookie_handler(request)
+    context_dict['visits'] = request.session['visits']
     return render(request, 'connect/index.html', context=context_dict)
 
 def landing(request):
