@@ -60,22 +60,14 @@ $(document).ready(function() {
 });
 
 function updateNotificationsBadge(messageID) {
-        if (messageID == null) {
-                var messages = document.getElementById("test").name;
-                var counter = 0;
-                var accepted = (messages.match(/accepted/g) || []).length;
-                var rejected = (messages.match(/rejected/g) || []).length;
-                var total = accepted + rejected;
-                document.getElementById("badgeLabelNotifications").innerHTML = total;
-        }
-        else {
-            $("li[id^=" + messageID + "]").remove();
+            if (messageID != null)
+                $("li[id^=" + messageID + "]").remove();
             var messagesLeft = $('#dropdownULNotifications li').size();
             document.getElementById("badgeLabelNotifications").innerHTML = messagesLeft;
-        }
 }
 
 function dismissAlert(messageID) {
+        updateNotificationsBadge(messageID);
         $.ajax({
             type: 'POST',
             url: "/connect/dismissAlert/",
@@ -86,7 +78,7 @@ function dismissAlert(messageID) {
             success: function(response){
             }
             }).done(function(data){
-                updateNotificationsBadge(messageID);
+
             });
 }
 function filterUsers() {
