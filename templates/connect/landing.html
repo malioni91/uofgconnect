@@ -2,6 +2,13 @@
 {% load staticfiles %}
 
 {% block content %}
-<img src="{% static "images/GlasgowUni.jpg" %}" id="bg" alt="Picture of UofG"/>
+
+    <div class="container-fluid landing_image">
+        <div class="row">
+            <div class="col-md-12">
+                <img src="{% static "images/logowhite.png" %}" class="img-responsive center-block"/>
+            </div>
+        </div>
+    </div>
 
 {% endblock %}
