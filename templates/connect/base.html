@@ -67,9 +67,11 @@
             <li><a href="{% url 'about' %}">About</a></li>
 
             <li><a href="{% url 'faq' %}">FAQ</a></li>
+
             {% block uni_feed %}
 
             {% endblock %}
+
             {% if user.is_authenticated %}
             <li>
                 <a href="{% url 'messages'%}" title="Pings">
