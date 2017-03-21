@@ -71,7 +71,13 @@
 
             {% endblock %}
             {% if user.is_authenticated %}
-			<li><a href="{% url 'messages'%}">Pings <span class="badge">{% notifications_unread %}</span></a></li>
+            <li>
+                <a href="{% url 'messages'%}" title="Pings">
+                    <span class="badge">
+                        <span style="font-size:1.2em;" class="glyphicon glyphicon-envelope"></span>
+                        {% notifications_unread %}</span>
+                </a>
+            </li>
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle dropdown-user" data-toggle="dropdown">
                         <span class="glyphicon glyphicon-user"></span>
@@ -84,7 +90,7 @@
                         <li><a href="{% url 'edit' %}"><span class="glyphicon glyphicon-cog pull-right"></span>Edit Profile </a></li>
                         <li><a href="{% url 'logout' %}"><span class="glyphicon glyphicon-log-out pull-right"></span>Logout </a></li>
                     </ul>
-                </li>
+            </li>
               {% else %}
             <form class="navbar-form navbar-right" role="form" method="post" action="{% url 'login' %}">
                 <a class="btn btn-success" href="{% url 'login' %}"><span class="glyphicon glyphicon-log-in"></span> Sign in</a>
