@@ -17,10 +17,6 @@ $(document).ready(function() {
     refreshOnlineUsers(false);
 });
 
-function myfunction() {
-    alert("ADASD");
-}
-
 function filterUsers() {
     var input, filter, ul, li, a, i;
     input = document.getElementById('filter');
