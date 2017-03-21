@@ -45,11 +45,13 @@
     <nav class="navbar navbar-inverse navbar-default navbar-static-top" id="mainNav" role="navigation">
       <div class="container">
         <div class="navbar-header">
+            {% if user.is_authenticated %}
           <button title="Show/hide sidebar" type="button" data-toggle="#sidebar" id="sidebar-toggle" class="navbar-left navbar-toggle pull-left">
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
+              <span class="glyphicon glyphicon-list"></span>
+              <!--<span class="glyphicon glyphicon-list"></span>-->
+              <!--<span class="glyphicon glyphicon-list"></span>-->
           </button>
+            {% endif %}
           <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
             <span class="sr-only">Toggle navigation</span>
             <span class="icon-bar"></span>
