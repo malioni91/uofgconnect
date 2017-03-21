@@ -27,18 +27,18 @@ def populate():
         "password": "pbkdf2_sha256$30000$V5fTmm30eA25$UsNd22UTI2YYBpbHnPbcorOworBH95Ly8WWb6pTDG4k=",
         "last_login": "2017-03-20T20:07:48.329Z",
         "is_superuser": True,
-        "username": "pavlos",
-        "first_name": "TAKI",
-        "last_name": "TSAN",
+        "username": "anakin",
+        "first_name": "Darth",
+        "last_name": "Vader",
         "email": "2286121R@student.gla.ac.uk",
         }, {
         "password": "pbkdf2_sha256$30000$NTXfemSRMy53$H66xl+MUNA2562P3LY6GjdYlJAgDkr6qH7pus9Y2TQg=",
         "last_login": "2017-03-20T20:06:27.666Z",
         "is_superuser": False,
-        "username": "dastergon",
-        "first_name": "PAVLOS",
-        "last_name": "RATIS",
-        "email": "2286121R@student.gla.ac.uk",
+        "username": "rick",
+        "first_name": "Rick",
+        "last_name": "Grimes",
+        "email": "2272891T@student.gla.ac.uk",
 	}]
 
     for index, user_data in enumerate(users):
