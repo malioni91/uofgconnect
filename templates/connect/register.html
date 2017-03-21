@@ -21,11 +21,11 @@
                                 {{ profile_form.non_field_errors|striptags }}
                             </div>
                         {% endif %}
-                    <div class="panel-body text-center col-md-offset-4">
+                    <div class="panel-body text-center ">
                         <form class="form_horizontal" id="user_form" method="post" action="{% url 'register' %}"
                               enctype="multipart/form-data">
                             {% csrf_token %}
-                            <div class="col-lg-6">
+                            <div class="col-md-8 col-md-offset-2 col-sm-10 col-sm-offset-1" >
                                 {% for field in user_form %}
                                     {% if field.label == "Password" %}
                                     <div class="form-group">
