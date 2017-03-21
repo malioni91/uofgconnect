@@ -9,9 +9,15 @@
                 <h1 class="page-header">Pings
 
                 </h1>
+                {% if messages %}
                 <div id="alert-messages" class="alert alert-info text-center">
                     You can see the pending invitations to accept or reject
                 </div>
+                {% else %}
+                <div id="alert-nomessages" class="alert alert-info text-center">
+                    You have no available invitations
+                </div>
+                {% endif %}
             </div>
         </div>
         <div class="row">
@@ -47,9 +53,13 @@
 </div>
 
 <script>
+
      function readMessage(messageID, choice) {
             $("div[id^=" + messageID + "]").remove();
-
+            var messagesLeft = $('.thumbnail').length
+            if (messagesLeft == 0) {
+                document.getElementById("alert-messages").innerHTML = "You have no available invitations";
+            }
             $.ajax({
                     type: 'POST',
                     url: "/connect/readMessage/",
