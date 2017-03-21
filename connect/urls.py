@@ -13,6 +13,5 @@ urlpatterns = [
     url(r'^users/$', views.users, name='users'),
     url(r'^pos_map/$', views.pos_map, name='pos_map'),
     url(r'^all_users/$', views.all_users, name='all_users'),
-    url(r'^uni_news/$', views.uni_news, name='uni_news'),
     url(r'^notification/$', views.notification, name='notification'),
 ]
