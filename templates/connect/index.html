@@ -1,5 +1,13 @@
 {% extends 'connect/base.html' %}
 
+{% block navbar %}
+<button style="float:left" title="Show/hide sidebar" type="button" data-toggle="#sidebar" id="sidebar-toggle" class="navbar-left navbar-toggle pull-left">
+              <span class="glyphicon glyphicon-list"></span>
+              <!--<span class="glyphicon glyphicon-list"></span>-->
+              <!--<span class="glyphicon glyphicon-list"></span>-->
+</button>
+{% endblock %}
+
 {% block content %}
     <div id="alert-offline-user"style="display: none" class="alert alert-danger alert-dismissable text-center">
         <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
