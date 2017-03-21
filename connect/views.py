@@ -311,7 +311,7 @@ def notification(request):
     username = request.POST.get('username')
     if request.is_ajax():
         recipient = User.objects.get(username=username)
-        notify.send(request.user, recipient=recipient, verb=message)
+        notify.send(request.user, recipient=recipient, description='%s | %s' % (place, time), verb=message)
     return HttpResponseRedirect('/')
 
 def readMessage(request):
