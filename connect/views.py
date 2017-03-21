@@ -279,11 +279,6 @@ def all_users(request):
     users_dict["users"] = users_records
     return JsonResponse(users_dict)
 
-
-def uni_news(request):
-    feeds = feedparser.parse('http://www.gla.ac.uk/rss/news/index.xml')
-    return render(request, 'connect/uni_news.html', {'feeds': feeds})
-
 def notification(request):
     print "Hello"
     # Just for testing - remove
