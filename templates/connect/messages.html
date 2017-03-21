@@ -6,29 +6,28 @@
         <!-- Introduction Row -->
         <div class="row">
             <div class="col-lg-12">
-                <h1 class="page-header">Messages
+                <h1 class="page-header">Pings
 
                 </h1>
-                <div id="alert-messages" class="alert alert-danger alert-dismissable text-center">
-                    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                    <strong>you have X unread messages and Y read messages</strong>
+                <div id="alert-messages" class="alert alert-info text-center">
+                    You can see the pending invitations to accept or reject
                 </div>
             </div>
         </div>
         <div class="row">
             {% for message in messages %}
               <div id="{{ message.id }}" class="col-sm-6 col-md-4">
-                <div class="thumbnail">
+                <div style="background-color: #ffff80"  class="thumbnail">
                   <div class="caption" style="word-wrap: break-word;">
                       <div style="text-align: center">
-                         <span><i class="glyphicon glyphicon-user"></i></span>
-                         {{message.actor.first_name}} {{message.actor.last_name}}
+                         <span><i style="color: black" class="glyphicon glyphicon-user"></i></span>
+                          <p style="color:black">{{message.actor.first_name}} {{message.actor.last_name}}</p>
                       </div>
                       <hr>
-                          <p>{{message.verb}}</p>
+                          <p style="color:black">{{message.verb}}</p>
                       <hr>
                       <div style="text-align: center;">
-                        <label style="text-align: center; font-size:12px">Sent {{message.timesince}} minutes ago</label>
+                        <label style="text-align: center; font-size:12px; color:black">Sent {{message.timesince}} minutes ago</label>
                       </div>
                       <hr>
                     <p style="text-align: center">
