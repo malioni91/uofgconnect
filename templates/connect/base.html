@@ -78,8 +78,8 @@
                         {% if user.is_superuser%}
                         <li><a href="#">Dashboard<span class="glyphicon glyphicon-stats pull-right"></span></a></li>
                         {% endif %}
-                        <li><a href="{% url 'edit' %}">Edit Profile<span class="glyphicon glyphicon-cog pull-right"></span> </a></li>
-                        <li><a href="{% url 'logout' %}">Logout<span class="glyphicon glyphicon-log-out pull-right"></span></a></li>
+                        <li><a href="{% url 'edit' %}"><span class="glyphicon glyphicon-cog pull-right"></span>Edit Profile </a></li>
+                        <li><a href="{% url 'logout' %}"><span class="glyphicon glyphicon-log-out pull-right"></span>Logout </a></li>
                     </ul>
                 </li>
               {% else %}
