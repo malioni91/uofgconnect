@@ -72,15 +72,6 @@ class UserProfileForm(forms.ModelForm):
         fields = ('course',)
 
 
-
-class ContactForm(forms.Form):
-    contact_name = forms.CharField(required=True)
-    contact_email = forms.EmailField(required=True)
-    content = forms.CharField(
-        required=True,
-        widget=forms.Textarea
-    )
-
 class EditForm(forms.ModelForm):
     name = forms.CharField(label='Full Name', widget=forms.TextInput(attrs={'class': 'form-control'}))
     username = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}))
