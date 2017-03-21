@@ -52,6 +52,9 @@ def index(request):
 
     visitor_cookie_handler(request)
     context_dict['visits'] = request.session['visits']
+    user = User.objects.get(username=request.user.username)
+    messages = user.notifications.unread()
+    context_dict['messages'] = messages
     return render(request, 'connect/index.html', context=context_dict)
 
 def landing(request):
@@ -114,11 +117,19 @@ def user_login(request):
 
 
 def about(request):
-    return render(request, 'connect/about.html')
+    messages = []
+    if request.user.is_authenticated():
+        user = User.objects.get(username=request.user.username)
+        messages = user.notifications.unread()
+    return render(request, "connect/about.html", {'messages': messages})
 
 
 def faq(request):
-    return render(request, 'connect/faq.html')
+    messages = []
+    if request.user.is_authenticated():
+        user = User.objects.get(username=request.user.username)
+        messages = user.notifications.unread()
+    return render(request, 'connect/faq.html', {'messages': messages})
 
 
 @login_required
@@ -159,6 +170,7 @@ def visitor_cookie_handler(request):
 @login_required
 def user_edit(request):
     userdetails = User.objects.get(username=request.user.username)
+    messages = userdetails.notifications.unread()
     usercourse = UserProfile.objects.get(user=request.user)
     #print usercourse.course
     user_form = EditForm(request.POST,  instance=request.user)
@@ -188,7 +200,7 @@ def user_edit(request):
                 user_form = EditForm(initial={'name': " ".join([userdetails.first_name, userdetails.last_name]),'username':userdetails.username, 'email':userdetails.email})
                 profile_form = UserProfileForm(initial={'course' : usercourse.course})
                 print(user_form.errors, profile_form.errors)
-                return render(request, 'connect/edit.html', {'user_form': user_form , 'profile_form': profile_form})
+                return render(request, 'connect/edit.html', {'user_form': user_form , 'profile_form': profile_form, 'messages': messages})
                 print 'paqss0',password
 
                 #print 'passs1',user_formpassword
@@ -201,13 +213,13 @@ def user_edit(request):
     else:
         user_form = EditForm(initial={'name': " ".join([userdetails.first_name, userdetails.last_name]),'username':userdetails.username, 'email':userdetails.email})
         profile_form = UserProfileForm(initial={'course' : usercourse.course})
-        return render(request, 'connect/edit.html', {'user_form': user_form , 'profile_form': profile_form})
+        return render(request, 'connect/edit.html', {'user_form': user_form , 'profile_form': profile_form, 'messages': messages})
         print 'paqss0',password
 
     #user_formpassword=userdetails.password
     #print 'passs1',user_formpassword
 
-    return render(request, 'connect/edit.html', {'user_form': user_form , 'profile_form': profile_form})
+    return render(request, 'connect/edit.html', {'user_form': user_form , 'profile_form': profile_form, 'messages': messages})
 
 
 

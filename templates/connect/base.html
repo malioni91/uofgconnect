@@ -130,7 +130,9 @@
         </ul>
         </div><!--/.navbar-collapse -->
             <input id="token" type="text" value="{{ csrf_token }}" style="display:none">
-          <input id="test" style="display: none" name="{{ messages }}">
+          {% if user.is_authenticated %}
+            <input id="test" style="display: none" name="{{ messages }}">
+          {% endif %}
       </div>
 </nav>
 
