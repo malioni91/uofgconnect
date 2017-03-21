@@ -313,4 +313,9 @@ def readMessage(request):
     return HttpResponseRedirect('/')
 
 def dismissAlert(request):
+    message_id = request.POST.get('id')
+    if request.is_ajax():
+        obj =  Notification.objects.get(id=int(message_id))
+        obj.mark_as_read()
+        obj.save()
     return HttpResponseRedirect('/')
