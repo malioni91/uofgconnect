@@ -44,7 +44,7 @@ def index(request):
 
 
     for user_o in online_users:
-        user_coordinates = UserProfile.objects.filter(user=user_o)
+        user_coordinates = UserProfile.objects.filter(user=user_o).exclude(user=request.user)
         print(user_coordinates)
         context_dict = {'coordinates': user_coordinates, 'feeds': feeds}
     #context_dict = {'feeds': feeds}
