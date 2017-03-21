@@ -87,16 +87,19 @@
     <div id="map" style="height: 100%"></div>
 
     <input id="userSelected" type="text" value="" style="display:none">
-
+    <input id="token" type="text" value="{{ csrf_token }}" style="display:none">
     <script>
+
+    $(document).ready(function() {
+
+    });
+
 
 
         // Note: This example requires that you consent to location sharing when
         // prompted by your browser. If you see the error "The Geolocation service
         // failed.", it means you probably did not give permission for the browser to
         // locate you.
-
-
 
 
         function initMap() {
@@ -283,38 +286,6 @@
                         'Error: Your browser doesn\'t support geolocation.');
             }
 
-    $(document).ready(function() {
-            $("#btnSendNotification").click(function(){
-                document.getElementById("alert-empty-fields").style.display = "none";
-                var message = document.getElementById("notificationMessage").value;
-                var place = document.getElementById("notificationPlace").value;
-                var time = document.getElementById("notificationTime").value;
-                var username = document.getElementById("userSelected").value;
-                if (message == "" || place == "" || time == "") {
-                    document.getElementById("alert-empty-fields").style.display = "inherit";
-                    $("#alert-empty-fields").fadeTo(1000, 500).slideUp(500, function(){
-                        $("#alert-empty-fields").slideUp(500);
-                    });
-                }
-                else {
-                    $('#notificationModal').modal('hide');
-                    $.ajax({
-                        type: 'POST',
-                        url: "/connect/notification/",
-                        data: {
-                            message: message,
-                            place: place,
-                            time: time,
-                            username: username,
-                            "csrfmiddlewaretoken": '{{ csrf_token }}',
-                            },
-                        success: function(response){
-                        }
-                    }).done(function(data){
-                    });
-                }
-            });
-    });
 
     </script>
     <script async defer
