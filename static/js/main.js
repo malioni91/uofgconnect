@@ -1,9 +1,5 @@
 $(document).ready(function() {
-    $("#sidebar-toggle").click(function(e) {
-        e.preventDefault();
-        $("#wrapper").toggleClass("toggled");
-    });
-    $("#sidebar-toggle2").click(function(e) {
+    $("#sidebar-toggle #sidebar-toggle2").click(function(e) {
         e.preventDefault();
         $("#wrapper").toggleClass("toggled");
     });
