@@ -20,19 +20,6 @@
                     You have no available invitations
                 </div>
                 {% endif %}
-                {% for message in messages %}
-                {% if message.verb == "accepted"  %}
-                <div id="alert-accepted" class="alert alert-success alert-dismissable text-center">
-                    <a onclick="dismissAlert('{{ message.id }}')" href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                    {{ message.actor.first_name}} {{message.actor.last_name}} accepted your invitation to meet {{message.description}}
-                </div>
-                {% elif message.verb == "rejected" %}
-                <div id="alert-rejected" class="alert alert-danger alert-dismissable text-center">
-                    <a onclick="dismissAlert('{{ message.id }}')" href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                    {{ message.actor.first_name}} {{message.actor.last_name}} rejected your invitation to meet {{message.description}}
-                </div>
-                {% endif %}
-                {% endfor %}
             </div>
         </div>
         <div class="row">
@@ -69,20 +56,6 @@
 
 <script>
 
-
-    function dismissAlert(messageID) {
-    $.ajax({
-        type: 'POST',
-        url: "/connect/dismissAlert/",
-        data: {
-            id: messageID,
-            "csrfmiddlewaretoken": '{{ csrf_token }}',
-        },
-        success: function(response){
-        }
-        }).done(function(data){
-        });
-}
 
      function readMessage(messageID, choice, recipient, meeting) {
             $("div[id^=" + messageID + "]").remove();
