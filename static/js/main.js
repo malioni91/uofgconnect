@@ -1,5 +1,36 @@
 $(document).ready(function() {
 
+    $("#btnSendNotification").click(function(){
+                document.getElementById("alert-empty-fields").style.display = "none";
+                var message = document.getElementById("notificationMessage").value;
+                var place = document.getElementById("notificationPlace").value;
+                var time = document.getElementById("notificationTime").value;
+                var username = document.getElementById("userSelected").value;
+                if (message == "" || place == "" || time == "") {
+                    document.getElementById("alert-empty-fields").style.display = "inherit";
+                    $("#alert-empty-fields").fadeTo(1000, 500).slideUp(500, function(){
+                        $("#alert-empty-fields").slideUp(500);
+                    });
+                }
+                else {
+                    $('#notificationModal').modal('hide');
+                    $.ajax({
+                        type: 'POST',
+                        url: "/connect/notification/",
+                        data: {
+                            message: message,
+                            place: place,
+                            time: time,
+                            username: username,
+                            "csrfmiddlewaretoken": document.getElementById("token").value
+                            },
+                        success: function(response){
+                        }
+                    }).done(function(data){
+                    });
+                }
+            });
+
     $("#sidebar-toggle, #sidebar-toggle2").click(function(e) {
         e.preventDefault();
         $("#wrapper").toggleClass("toggled");
