@@ -1,4 +1,5 @@
 $(document).ready(function() {
+
     $("#sidebar-toggle #sidebar-toggle2").click(function(e) {
         e.preventDefault();
         $("#wrapper").toggleClass("toggled");
@@ -13,8 +14,9 @@ $(document).ready(function() {
     $(".form_datetime").datetimepicker({
         format: "dd MM yyyy - hh:ii"
     });
-
     refreshOnlineUsers(false);
+    setInterval(function(){refreshOnlineUsers(true);}, 10000);
+
 });
 
 function filterUsers() {
@@ -94,7 +96,8 @@ function refreshOnlineUsers(refresh) {
                 }
             }
         }).done(function(data){
-        });
+
+        })
 }
 
 
