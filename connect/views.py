@@ -282,8 +282,8 @@ def all_users(request):
         uid_list.append(data.get('_auth_user_id', None))
 
     # Query all logged in users based on id list
-    online_users = User.objects.filter(id__in=uid_list)
-    all_users_found = User.objects.all()
+    online_users = User.objects.filter(id__in=uid_list, is_superuser=False)
+    all_users_found = User.objects.filter(is_superuser=False)
     users_dict = {}
     users_records = []
 
