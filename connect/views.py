@@ -1,30 +1,26 @@
-from django.shortcuts import render, render_to_response, redirect
-from django.template import RequestContext
-from django.core.urlresolvers import reverse
-from django.http import HttpResponseRedirect, HttpResponse, Http404
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-import json, feedparser
+from django.contrib.auth.models import User
+from django.contrib.sessions.models import Session
+from django.core.urlresolvers import reverse
+from django.core.cache import cache
+from django.db.models.signals import post_save
+from django.shortcuts import render, render_to_response, redirect
+from django.template import RequestContext
+from django.http import HttpResponseRedirect, HttpResponse, Http404
+from django.http import JsonResponse
+from django.http import JsonResponse
+from django.utils import timezone
 from django.views.decorators.csrf import ensure_csrf_cookie
 
 from connect.forms import LoginForm, UserForm, UserProfileForm,EditForm
+from connect.models import UserProfile, Map
 
 from datetime import datetime
-from django.contrib.auth.models import User
-from connect.models import UserProfile
-
-from django.http import JsonResponse
-from django.core.cache import cache
-from django.http import JsonResponse
-
-from django.contrib.sessions.models import Session
-from django.utils import timezone
-
-from .models import UserProfile, Map
 from notifications.signals import notify
-from django.db.models.signals import post_save
-
 from notifications.models import Notification
+
+import json, feedparser
 
 @login_required
 def index(request):
