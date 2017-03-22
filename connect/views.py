@@ -21,42 +21,33 @@ from django.contrib.sessions.models import Session
 from django.utils import timezone
 
 from .models import UserProfile, Map
+from notifications.signals import notify
+from django.db.models.signals import post_save
+
+from notifications.models import Notification
 
 @login_required
 def index(request):
     request.session.set_test_cookie()
-    #user_coordinates = UserProfile.objects.all().exclude(user=request.user)
+    user_coordinates = UserProfile.objects.all().exclude(user=request.user)
+    user = User.objects.get(username=request.user.username)
+    messages = user.notifications.unread()
     feeds = feedparser.parse('http://www.gla.ac.uk/rss/news/index.xml')
-
-    # Get online users
-    sessions = Session.objects.filter(expire_date__gte=timezone.now())
-    uid_list = []
-
-    # Build a list of user ids from that query
-    for session in sessions:
-        data = session.get_decoded()
-        uid_list.append(data.get('_auth_user_id', None))
-
-    # Query all logged in users based on id list
-    online_users = User.objects.filter(id__in=uid_list)
-    context_dict = {}
-
-
-    for user_o in online_users:
-        user_coordinates = UserProfile.objects.filter(user=user_o).exclude(user=request.user)
-        context_dict = {'coordinates': user_coordinates, 'feeds': feeds}
-
+    context_dict = {'coordinates': user_coordinates, 'feeds': feeds, 'messages': messages}
     visitor_cookie_handler(request)
     context_dict['visits'] = request.session['visits']
-    response = render(request, 'connect/index.html', context=context_dict)
-    return response
-
+    return render(request, 'connect/index.html', context=context_dict)
 
 def landing(request):
     feeds = feedparser.parse('http://www.gla.ac.uk/rss/news/index.xml')
     context_dict = {'feeds': feeds}
     return render(request, "connect/landing.html", context=context_dict)
 
+@login_required
+def messages(request):
+    user = User.objects.get(username=request.user.username)
+    messages = user.notifications.unread()
+    return render(request, "connect/messages.html", {'messages': messages})
 
 def register(request):
     registered = False
@@ -107,11 +98,19 @@ def user_login(request):
 
 
 def about(request):
-    return render(request, 'connect/about.html')
+    messages = []
+    if request.user.is_authenticated():
+        user = User.objects.get(username=request.user.username)
+        messages = user.notifications.unread()
+    return render(request, "connect/about.html", {'messages': messages})
 
 
 def faq(request):
-    return render(request, 'connect/faq.html')
+    messages = []
+    if request.user.is_authenticated():
+        user = User.objects.get(username=request.user.username)
+        messages = user.notifications.unread()
+    return render(request, 'connect/faq.html', {'messages': messages})
 
 
 @login_required
@@ -152,6 +151,7 @@ def visitor_cookie_handler(request):
 @login_required
 def user_edit(request):
     userdetails = User.objects.get(username=request.user.username)
+    messages = userdetails.notifications.unread()
     usercourse = UserProfile.objects.get(user=request.user)
     #print usercourse.course
     user_form = EditForm(request.POST,  instance=request.user)
@@ -181,7 +181,7 @@ def user_edit(request):
                 user_form = EditForm(initial={'name': " ".join([userdetails.first_name, userdetails.last_name]),'username':userdetails.username, 'email':userdetails.email})
                 profile_form = UserProfileForm(initial={'course' : usercourse.course})
                 print(user_form.errors, profile_form.errors)
-                return render(request, 'connect/edit.html', {'user_form': user_form , 'profile_form': profile_form})
+                return render(request, 'connect/edit.html', {'user_form': user_form , 'profile_form': profile_form, 'messages': messages})
                 print 'paqss0',password
 
                 #print 'passs1',user_formpassword
@@ -194,13 +194,13 @@ def user_edit(request):
     else:
         user_form = EditForm(initial={'name': " ".join([userdetails.first_name, userdetails.last_name]),'username':userdetails.username, 'email':userdetails.email})
         profile_form = UserProfileForm(initial={'course' : usercourse.course})
-        return render(request, 'connect/edit.html', {'user_form': user_form , 'profile_form': profile_form})
+        return render(request, 'connect/edit.html', {'user_form': user_form , 'profile_form': profile_form, 'messages': messages})
         print 'paqss0',password
 
     #user_formpassword=userdetails.password
     #print 'passs1',user_formpassword
 
-    return render(request, 'connect/edit.html', {'user_form': user_form , 'profile_form': profile_form})
+    return render(request, 'connect/edit.html', {'user_form': user_form , 'profile_form': profile_form, 'messages': messages})
 
 
 
@@ -298,7 +298,35 @@ def all_users(request):
     return JsonResponse(users_dict)
 
 def notification(request):
-    print "Hello"
-    # Just for testing - remove
-    response = render(request, 'connect/index.html')
-    return response
+    message = request.POST.get('message')
+    place = request.POST.get('place')
+    time = request.POST.get('time')
+    username = request.POST.get('username')
+    if request.is_ajax():
+        recipient = User.objects.get(username=username)
+        notify.send(request.user, recipient=recipient, description='%s | %s' % (place, time), verb=message)
+    return HttpResponseRedirect('/')
+
+def readMessage(request):
+    message_id = request.POST.get('id')
+    action = request.POST.get('action')
+    recipient_username = request.POST.get('recipient')
+    meeting = request.POST.get('meeting')
+    if request.is_ajax():
+        obj =  Notification.objects.get(id=int(message_id))
+        obj.mark_as_read()
+        obj.save()
+        invitation_status = "rejected" # rejected until proven otherwise
+        if action == "accept":
+            invitation_status = "accepted"
+        recipient = User.objects.get(username=recipient_username)
+        notify.send(request.user, recipient=recipient, description=meeting, verb=invitation_status)
+    return HttpResponseRedirect('/')
+
+def dismissAlert(request):
+    message_id = request.POST.get('id')
+    if request.is_ajax():
+        obj =  Notification.objects.get(id=int(message_id))
+        obj.mark_as_read()
+        obj.save()
+    return HttpResponseRedirect('/')

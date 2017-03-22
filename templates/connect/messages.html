@@ -1,0 +1,91 @@
+{% extends 'connect/base.html' %}
+
+{% block content %}
+<div class="container">
+
+        <!-- Introduction Row -->
+
+
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="page-header">Pings
+
+                </h1>
+                {% if messages %}
+                <div id="alert-messages" class="alert alert-info text-center">
+                    You can see the pending invitations to accept or reject
+                </div>
+                {% else %}
+                <div id="alert-nomessages" class="alert alert-info text-center">
+                    You have no available invitations
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        <div class="row">
+            {% for message in messages %}
+            {% if message.verb == "accepted" or message.verb == "rejected"  %}
+            {% else %}
+              <div id="{{ message.id }}" class="col-sm-6 col-md-4">
+                <div style="background-color: #ffff80"  class="thumbnail">
+                  <div class="caption" style="word-wrap: break-word;">
+                      <div style="text-align: center">
+                         <span><i style="color: black" class="glyphicon glyphicon-user"></i></span>
+                          <p style="color:black ;text-align: center;">{{message.actor.first_name}} {{message.actor.last_name}}</p>
+                      </div>
+                      <hr>
+                      <p style="color:black">{{message.verb}} <br /> Meeting: {{message.description}} </p>
+                      <hr>
+                      <div style="text-align: center;">
+                        <label style="text-align: center; font-size:12px; color:black">Sent {{message.timesince}} minutes ago</label>
+                      </div>
+                      <hr>
+                    <p style="text-align: center">
+                    <a href="#" class="btn btn-primary" onclick="readMessage('{{ message.id }}', 'accept', '{{message.actor.username}}', '{{message.description}}')" role="button">Accept
+                            <span class="glyphicon glyphicon-ok pull-left"></span>
+                        </a>
+                        <a href="#" class="btn btn-danger" onclick="readMessage('{{ message.id }}', 'reject', '{{message.actor.username}}', '{{message.description}}')" role="button">Reject
+                            <span class="glyphicon glyphicon-remove pull-left"></span>
+                        </a>
+                    </p>
+                  </div>
+              </div>
+                </div>
+            {% endif %}
+            {% endfor %}
+        </div>
+
+</div>
+
+<script>
+
+
+     function readMessage(messageID, choice, recipient, meeting) {
+            updateMessagesBadge(true);
+            $("div[id^=" + messageID + "]").remove();
+            var messagesLeft = $('.thumbnail').length
+            if (messagesLeft == 0) {
+                document.getElementById("badgeLabel").innerHTML = 0;
+                document.getElementById("alert-messages").innerHTML = "You have no available invitations";
+            }
+            document.getElementById("badgeLabel").innerHTML = messagesLeft;
+            $.ajax({
+                    type: 'POST',
+                    url: "/connect/readMessage/",
+                    data: {
+                        id: messageID,
+                        action: choice,
+                        recipient: recipient,
+                        meeting: meeting,
+                        "csrfmiddlewaretoken": '{{ csrf_token }}',
+                    },
+                    success: function(response){
+                    }
+                }).done(function(data){
+                });
+        }
+</script>
+
+
+
+{% endblock %}

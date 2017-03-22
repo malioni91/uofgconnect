@@ -1,6 +1,45 @@
 $(document).ready(function() {
 
-    $("#sidebar-toggle #sidebar-toggle2").click(function(e) {
+    updateNotificationsBadge(-1, false);
+    updateMessagesBadge(false);
+
+    $('#dropdownULNotifications').on("click.bs.dropdown", function (e) {
+        e.stopPropagation();
+        e.preventDefault();
+    });
+
+    $("#btnSendNotification").click(function(){
+                document.getElementById("alert-empty-fields").style.display = "none";
+                var message = document.getElementById("notificationMessage").value;
+                var place = document.getElementById("notificationPlace").value;
+                var time = document.getElementById("notificationTime").value;
+                var username = document.getElementById("userSelected").value;
+                if (message == "" || place == "" || time == "") {
+                    document.getElementById("alert-empty-fields").style.display = "inherit";
+                    $("#alert-empty-fields").fadeTo(1000, 500).slideUp(500, function(){
+                        $("#alert-empty-fields").slideUp(500);
+                    });
+                }
+                else {
+                    $('#notificationModal').modal('hide');
+                    $.ajax({
+                        type: 'POST',
+                        url: "/connect/notification/",
+                        data: {
+                            message: message,
+                            place: place,
+                            time: time,
+                            username: username,
+                            "csrfmiddlewaretoken": document.getElementById("token").value
+                            },
+                        success: function(response){
+                        }
+                    }).done(function(data){
+                    });
+                }
+            });
+
+    $("#sidebar-toggle, #sidebar-toggle2").click(function(e) {
         e.preventDefault();
         $("#wrapper").toggleClass("toggled");
     });
@@ -16,9 +55,57 @@ $(document).ready(function() {
     });
     refreshOnlineUsers(false);
     setInterval(function(){refreshOnlineUsers(true);}, 10000);
-
 });
 
+function updateNotificationsBadge(messageID, remove) {
+            var messages = document.getElementById("messages").name;
+            var accepted = (messages.match(/accepted/g) || []).length;
+            var rejected = (messages.match(/rejected/g) || []).length;
+            var notifications = accepted + rejected;
+            if (remove == true) {
+                $("li[id^=" + messageID + "]").remove();
+                var badgeNumber = document.getElementById("badgeLabelNotifications").innerHTML;
+                var remaining = parseInt(badgeNumber) - 1;
+                document.getElementById("badgeLabelNotifications").innerHTML = remaining
+            }
+            else {
+                 document.getElementById("badgeLabelNotifications").innerHTML = notifications;
+            }
+}
+
+function updateMessagesBadge(remove) {
+    var messages = document.getElementById("messages").name;
+    var total = (messages.match(/Notification/g) || []).length;
+    if (remove == false) {
+        var accepted = (messages.match(/accepted/g) || []).length;
+        var rejected = (messages.match(/rejected/g) || []).length;
+        var discard = parseInt(accepted) + parseInt(rejected);
+        document.getElementById("badgeLabel").innerHTML = parseInt(total) - parseInt(discard);
+    }
+    else {
+        var badgeNumber = document.getElementById("badgeLabel").innerHTML;
+        document.getElementById("badgeLabel").innerHTML = parseInt(badgeNumber) - 1;
+    }
+
+    var badgeNumber = document.getElementById("badgeLabel").innerHTML;
+}
+
+
+function dismissAlert(messageID) {
+        updateNotificationsBadge(messageID, true);
+        $.ajax({
+            type: 'POST',
+            url: "/connect/dismissAlert/",
+            data: {
+                id: messageID,
+                "csrfmiddlewaretoken": document.getElementById("token").value
+            },
+            success: function(response){
+            }
+            }).done(function(data){
+
+            });
+}
 function filterUsers() {
     var input, filter, ul, li, a, i;
     input = document.getElementById('filter');

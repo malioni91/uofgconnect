@@ -1,5 +1,7 @@
 <!doctype html>
 {% load staticfiles %}
+{% load notifications_tags %}
+
 <!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8" lang=""> <![endif]-->
 <!--[if IE 8]>         <html class="no-js lt-ie9" lang=""> <![endif]-->
 <!--[if gt IE 8]><!--> <html class="no-js" lang="en"> <!--<![endif]-->
@@ -33,7 +35,6 @@
             .navbar-collapse.collapse #sidebar-toggle{
                 display: none !important;
             }
-
         </style>
         <link rel="stylesheet" href="{% static "css/main.css" %}">
     </head>
@@ -65,10 +66,47 @@
             <li><a href="{% url 'about' %}">About</a></li>
 
             <li><a href="{% url 'faq' %}">FAQ</a></li>
+
             {% block uni_feed %}
 
             {% endblock %}
+
             {% if user.is_authenticated %}
+            <li>
+                <a href="{% url 'messages'%}" title="Pings">
+                    <span class="badge">
+                        <span style="font-size:1.2em;" class="glyphicon glyphicon-envelope"></span>
+                        <label id="badgeLabel">{% notifications_unread %}</label></span>
+                </a>
+            </li>
+            <li id="notificationsDropdown"  class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" title="Notifications">
+                    <span class="badge">
+                        <span style="font-size:1.2em;" class="glyphicon glyphicon-globe"></span>
+                        <label id="badgeLabelNotifications">
+
+                        </label></span>
+                </a>
+                <ul id="dropdownULNotifications" class="dropdown-menu" style="width: 600px !important;">
+                {% for message in messages %}
+                {% if message.verb == "accepted"  %}
+                    <li id="{{ message.id }}">
+                        <div class="alert alert-info alert-dismissable">
+                        <a onclick="dismissAlert('{{ message.id }}')" href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                            <strong>{{ message.actor.first_name}} {{message.actor.last_name}} accepted your invitation to meet {{message.description}}!</strong>
+                        </div>
+                    </li>
+                {% elif message.verb == "rejected" %}
+                    <li id="{{ message.id }}">
+                        <div class="alert alert-danger alert-dismissable">
+                        <a onclick="dismissAlert('{{ message.id }}')" href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                            <strong>{{ message.actor.first_name}} {{message.actor.last_name}} rejected your invitation to meet {{message.description}}!</strong>
+                        </div>
+                    </li>
+                {% endif %}
+                {% endfor %}
+              </ul>
+            </li>
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle dropdown-user" data-toggle="dropdown">
                         <span class="glyphicon glyphicon-user"></span>
@@ -90,6 +128,10 @@
             {% endif %}
         </ul>
         </div><!--/.navbar-collapse -->
+            <input id="token" type="text" value="{{ csrf_token }}" style="display:none">
+          {% if user.is_authenticated %}
+            <input id="messages" style="display: none" name="{{ messages }}">
+          {% endif %}
       </div>
 </nav>
 
