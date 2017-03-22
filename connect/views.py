@@ -291,7 +291,7 @@ def dismissAlert(request):
     """Dismiss alert view that marks the alerts as read """
     message_id = request.POST.get('id')
     if request.is_ajax():
-        obj =  Notification.objects.get(id=int(message_id))
-        obj.mark_as_read()
-        obj.save()
+        alert =  Notification.objects.get(id=int(message_id))
+        alert.mark_as_read()
+        alert.save()
     return HttpResponseRedirect('/')
