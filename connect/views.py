@@ -64,9 +64,9 @@ def landing(request):
 
 @login_required
 def messages(request):
-    """The meessages view that shows all the received messages from other peers """
+    """The messages view that shows all the received messages from other peers """
     user = User.objects.get(username=request.user.username)
-    messages = user.notifications.unread()
+    messages = user.notifications.unread() # get the unread messages
     return render(request, "connect/messages.html", {'messages': messages})
 
 def register(request):
@@ -100,7 +100,7 @@ def user_login(request):
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
-        user = authenticate(username=username, password=password)
+        user = authenticate(username=username, password=password) # authenticate user
         if user:
             if user.is_active:
                 login(request, user)
@@ -286,13 +286,12 @@ def pos_map(request):
     }
     if request.is_ajax():
         userdetails = UserProfile.objects.get(user__username=request.user.username)
-        success = Map.objects.filter(id=userdetails.user_id).update(**coordinates)
+        success = Map.objects.filter(id=userdetails.user_id).update(**coordinates) # update the coordinates of the user
         if not success:
-            Map.objects.create(**coordinates)
+            Map.objects.create(**coordinates) # create user entry if the user does not have any coordinates
         map_info = Map.objects.get(id=userdetails.user_id)
         userdetails.location = map_info
         userdetails.save()
-
     return HttpResponse(json.dumps(coordinates), content_type="application/json")
 
 
@@ -332,6 +331,7 @@ def notification(request):
     username = request.POST.get('username')
     if request.is_ajax():
         recipient = User.objects.get(username=username)
+        # send message(message,place,time) to the peer
         notify.send(request.user, recipient=recipient, description='%s | %s' % (place, time), verb=message)
     return HttpResponseRedirect('/')
 
@@ -342,13 +342,14 @@ def readMessage(request):
     recipient_username = request.POST.get('recipient')
     meeting = request.POST.get('meeting')
     if request.is_ajax():
-        obj =  Notification.objects.get(id=int(message_id))
-        obj.mark_as_read()
-        obj.save()
-        invitation_status = "rejected" # rejected until proven otherwise
+        message =  Notification.objects.get(id=int(message_id))
+        message.mark_as_read() # since there's an action, mark the message as read
+        message.save()
+        invitation_status = "rejected" # mark invitation rejected until proven otherwise
         if action == "accept":
             invitation_status = "accepted"
         recipient = User.objects.get(username=recipient_username)
+        # send alert about your decision to the peer that invited you
         notify.send(request.user, recipient=recipient, description=meeting, verb=invitation_status)
     return HttpResponseRedirect('/')
 
