@@ -28,6 +28,7 @@ from notifications.models import Notification
 
 @login_required
 def index(request):
+    """The index page view"""
     request.session.set_test_cookie()
 
     user_coordinates = UserProfile.objects.all().exclude(user=request.user)
@@ -55,17 +56,21 @@ def index(request):
     return render(request, 'connect/index.html', context=context_dict)
 
 def landing(request):
+    """The landing page view that anonymous users see
+    when they arrive to the webiste"""
     feeds = feedparser.parse('http://www.gla.ac.uk/rss/news/index.xml')
     context_dict = {'feeds': feeds}
     return render(request, "connect/landing.html", context=context_dict)
 
 @login_required
 def messages(request):
+    """The meessages view that shows all the received messages from other peers """
     user = User.objects.get(username=request.user.username)
     messages = user.notifications.unread()
     return render(request, "connect/messages.html", {'messages': messages})
 
 def register(request):
+    """The registration view that enables the users to register """
     registered = False
     if request.method == 'POST':
         user_form = UserForm(request.POST)
@@ -89,6 +94,7 @@ def register(request):
 
 
 def user_login(request):
+    """The login view that enables users to login to the platform """
     authenticated = False
     login_form = LoginForm(request.POST)
     if request.method == 'POST':
@@ -114,6 +120,7 @@ def user_login(request):
 
 
 def about(request):
+    """The about page view that shows general infromation about the authors """
     messages = []
     if request.user.is_authenticated():
         user = User.objects.get(username=request.user.username)
@@ -122,6 +129,7 @@ def about(request):
 
 
 def faq(request):
+    """The faq page that shows general infromation about frequent questions """
     messages = []
     if request.user.is_authenticated():
         user = User.objects.get(username=request.user.username)
@@ -131,30 +139,30 @@ def faq(request):
 
 @login_required
 def user_logout(request):
+    """The user logout view"""
     logout(request)
     return HttpResponseRedirect('/connect/')
 
-
 # A helper method
 def get_server_side_cookie(request, cookie, default_val=None):
+    """Function to retrieve the server side cookie"""
     val = request.session.get(cookie)
     if not val:
         val = default_val
     return val
 
-# Updated the function definition
 def visitor_cookie_handler(request):
+    """The cookie handler view"""
     visits = int(get_server_side_cookie(request, 'visits', '1'))
     last_visit_cookie = get_server_side_cookie(request,
                                                'last_visit',
                                                 str(datetime.now()))
-
     last_visit_time = datetime.strptime(last_visit_cookie[:-7],
                                         '%Y-%m-%d %H:%M:%S')
-# If it's been more than a day since the last visit...
+    # If it's been more than a day since the last visit
+    # update the last visit cookie now that we have updated the count
     if (datetime.now() - last_visit_time).days > 0:
         visits = visits + 1
-        #update the last visit cookie now that we have updated the count
         request.session['last_visit'] = str(datetime.now())
     else:
         visits = 1
@@ -166,6 +174,7 @@ def visitor_cookie_handler(request):
 
 @login_required
 def user_edit(request):
+    """The user profile edit view where users update their information"""
     userdetails = User.objects.get(username=request.user.username)
     messages = userdetails.notifications.unread()
     usercourse = UserProfile.objects.get(user=request.user)
@@ -268,6 +277,7 @@ def users(request):
 
 @login_required
 def pos_map(request):
+    """View that is used to set the coordinates to the users"""
     latitude = request.POST.get('lat')
     longitude = request.POST.get('lng')
     coordinates = {
@@ -287,6 +297,7 @@ def pos_map(request):
 
 
 def all_users(request):
+    """Get only the online users from the sessions"""
     # Query all non-expired sessions
     # use timezone.now() instead of datetime.now() in latest versions of Django
     sessions = Session.objects.filter(expire_date__gte=timezone.now())
@@ -314,6 +325,7 @@ def all_users(request):
     return JsonResponse(users_dict)
 
 def notification(request):
+    """Notification view used to send messages to the users"""
     message = request.POST.get('message')
     place = request.POST.get('place')
     time = request.POST.get('time')
@@ -324,6 +336,7 @@ def notification(request):
     return HttpResponseRedirect('/')
 
 def readMessage(request):
+    """View that sends back the action of the user"""
     message_id = request.POST.get('id')
     action = request.POST.get('action')
     recipient_username = request.POST.get('recipient')
@@ -340,6 +353,7 @@ def readMessage(request):
     return HttpResponseRedirect('/')
 
 def dismissAlert(request):
+    """Dismiss alert view that marks the alerts as read """
     message_id = request.POST.get('id')
     if request.is_ajax():
         obj =  Notification.objects.get(id=int(message_id))
