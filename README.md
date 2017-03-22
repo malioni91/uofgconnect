@@ -1,6 +1,6 @@
 # UofG Connect
 UofG Connect’s primary objective is to help students find their friends’ location around the campus and provide an intuitive interface to keep them in touch. Students can register only through their university e-mail address and once logged in,
-they can search for their friends that are UofG users. The app will then display the friends’ locations on the map 
+they can search for their friends that are UofG users. The application will then display the friends’ locations on the map 
 and allow the user to send a message to their friends.
 
 ### Authors
@@ -23,7 +23,7 @@ UofG Connect at Python Anywhere: [http://victoriancode.pythonanywhere.com/](http
 The Google Map Geolocation API does not work from Google Chrome if the app is not hosted on a secure site.
 For more information on the issue, please consult the [link](https://sites.google.com/a/chromium.org/dev/Home/chromium-security/deprecating-powerful-features-on-insecure-origins)
 
-### Demo Credentials
+#### Demo Credentials
 
 Please enter the following credentials if you want to take a quick look into the app without registering:
 
@@ -31,7 +31,6 @@ Please enter the following credentials if you want to take a quick look into the
     password: smith
 
 This project template creates a Django 1.9/1.10 project with a base set of applications.
-
 
 ### Installation Process
 In order to install and test the application locally, you need to execute the following sequence of commands.
@@ -59,6 +58,9 @@ In order to load all the course titles into the database, execute the following 
 To populate the database with a set of new users run: 
 
     python populate_script.py
+    
+The script will create a superuser named `anakin` along with another user named `rick`.
+The password for the two accounts is the same: `itech`
     
 To run the test suite you need to execute:
 
