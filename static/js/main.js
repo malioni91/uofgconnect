@@ -1,5 +1,11 @@
 $(document).ready(function() {
 
+    updateNotificationsBadge(-1, false);
+
+    $(document).on('click', '.dropdown-menu', function (e) {
+        e.stopPropagation();
+    });
+
     $("#btnSendNotification").click(function(){
                 document.getElementById("alert-empty-fields").style.display = "none";
                 var message = document.getElementById("notificationMessage").value;
@@ -49,7 +55,29 @@ $(document).ready(function() {
     setInterval(function(){refreshOnlineUsers(true);}, 10000);
 });
 
+function updateNotificationsBadge(messageID, remove) {
+            var messages = document.getElementById("test").name;
+            if (remove == true)
+                $("li[id^=" + messageID + "]").remove();
+            var messagesLeft = $('#dropdownULNotifications li').size();
+            document.getElementById("badgeLabelNotifications").innerHTML = messagesLeft;
+}
 
+function dismissAlert(messageID) {
+        updateNotificationsBadge(messageID, true);
+        $.ajax({
+            type: 'POST',
+            url: "/connect/dismissAlert/",
+            data: {
+                id: messageID,
+                "csrfmiddlewaretoken": document.getElementById("token").value
+            },
+            success: function(response){
+            }
+            }).done(function(data){
+
+            });
+}
 function filterUsers() {
     var input, filter, ul, li, a, i;
     input = document.getElementById('filter');
