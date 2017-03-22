@@ -17,7 +17,7 @@ class MessagesPageTests(TestCase):
 
            print('Something went wrong in the populate() function')
        # login is required
-       self.client.login(username='anakin', password='pavlos')
+       self.client.login(username='anakin', password='itech')
 
    def test_messages_using_template(self):
         response = self.client.get(reverse('messages'))

@@ -22,5 +22,5 @@ class LoginTests(TestCase):
         self.assertTemplateUsed(response, 'connect/login.html')
 
    def test_login(self):
-        login = self.client.login(username='anakin', password='pavlos')
+        login = self.client.login(username='anakin', password='itech')
         self.assertTrue(login)
