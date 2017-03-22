@@ -1,8 +1,11 @@
 $(document).ready(function() {
 
+    /** Update of the notifications badge on page load **/
     updateNotificationsBadge(-1, false);
+    /** Update of the messages badge on page load **/
     updateMessagesBadge(false);
 
+    /** Avoid closing dropdown on clicking inside **/
     $('#dropdownULNotifications').on("click.bs.dropdown", function (e) {
         e.stopPropagation();
         e.preventDefault();
@@ -16,6 +19,8 @@ $(document).ready(function() {
     });
 
 
+    /** Sends message to selected user **/
+    /** All fields are required **/
     $("#btnSendNotification").click(function(){
                 document.getElementById("alert-empty-fields").style.display = "none";
                 var message = document.getElementById("notificationMessage").value;
@@ -47,25 +52,32 @@ $(document).ready(function() {
                 }
             });
 
+    /** Clicking one of the two buttons, toggles the sidebar **/
     $("#sidebar-toggle, #sidebar-toggle2").click(function(e) {
         e.preventDefault();
         $("#wrapper").toggleClass("toggled");
     });
+    /** Message text maxlength plugin initialization **/
     $('#notificationMessage').maxlength({
             alwaysShow: true,
             threshold: 140,
             warningClass: "label label-success",
             limitReachedClass: "label label-danger"
         });
-
+    /** Datetime field picker plugin initialized **/
     $(".form_datetime").datetimepicker({
         format: "dd MM yyyy - hh:ii"
     });
+
+    /** Load online users in sidebar on page load **/
     refreshOnlineUsers(false);
+    /** Update the list of users every 10 secs **/
     setInterval(function(){refreshOnlineUsers(true);}, 10000);
 
 });
 
+/** Notification badge gets updated on page load **/
+/** and when a notification is dismissed by the user **/
 function updateNotificationsBadge(messageID, remove) {
             var messages = document.getElementById("messages").name;
             var accepted = (messages.match(/accepted/g) || []).length;
@@ -86,6 +98,8 @@ function updateNotificationsBadge(messageID, remove) {
             }
 }
 
+/** Message badge gets updated on page load **/
+/** and when a message is accepted or rejected by the user **/
 function updateMessagesBadge(remove) {
     var messages = document.getElementById("messages").name;
     var total = (messages.match(/Notification/g) || []).length;
@@ -103,7 +117,7 @@ function updateMessagesBadge(remove) {
     var badgeNumber = document.getElementById("badgeLabel").innerHTML;
 }
 
-
+/** Dismiss notification and mark it as read **/
 function dismissAlert(messageID) {
         updateNotificationsBadge(messageID, true);
         $.ajax({
@@ -119,6 +133,8 @@ function dismissAlert(messageID) {
 
             });
 }
+
+/** User filtering in the sidebar based on the name provided **/
 function filterUsers() {
     var input, filter, ul, li, a, i;
     input = document.getElementById('filter');
@@ -136,6 +152,7 @@ function filterUsers() {
     }
 }
 
+/** Initialize modal to send a message **/
 function createPushNotification(userID, userFullName, online) {
     if (online == "true") {
         document.getElementById("notificationMessage").value = "";
@@ -154,7 +171,7 @@ function createPushNotification(userID, userFullName, online) {
     }
 }
 
-
+/** Refresh sidebar with online users **/
 function refreshOnlineUsers(refresh) {
     document.getElementById("filter").value = "";
     $.ajax({
@@ -200,6 +217,8 @@ function refreshOnlineUsers(refresh) {
         })
 }
 
+/** Function is called when a message is **/
+/** accepted/rejected to mark it as read in the backend **/
 function readMessage(messageID, choice, recipient, meeting) {
             updateMessagesBadge(true);
             $("div[id^=" + messageID + "]").remove();
