@@ -11,11 +11,11 @@ class LoginTests(TestCase):
        try:
            populate()
        except ImportError:
-           print('The module populate_rango does not exist')
+           print('The module populate_connect does not exist')
        except NameError:
            print('The function populate() does not exist or is not correct')
        except Exception as e :
-           print('Something went wrong in the populate() function :-(')
+           print('Something went wrong in the populate() function')
 
    def test_login_using_template(self):
         response = self.client.get(reverse('login'))
