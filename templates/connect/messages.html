@@ -24,6 +24,8 @@
         </div>
         <div class="row">
             {% for message in messages %}
+            {% if message.verb == "accepted" or message.verb == "rejected"  %}
+            {% else %}
               <div id="{{ message.id }}" class="col-sm-6 col-md-4">
                 <div style="background-color: #ffff80"  class="thumbnail">
                   <div class="caption" style="word-wrap: break-word;">
@@ -49,6 +51,7 @@
                   </div>
               </div>
                 </div>
+            {% endif %}
             {% endfor %}
         </div>
 
