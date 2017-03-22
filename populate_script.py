@@ -24,7 +24,7 @@ def populate():
 
 
     users = [{
-        "password": "pbkdf2_sha256$30000$V5fTmm30eA25$UsNd22UTI2YYBpbHnPbcorOworBH95Ly8WWb6pTDG4k=",
+        "password": "pbkdf2_sha256$30000$18RYI0bN6Bma$9kmpioFuPKuS40Fh/jV32xJYM8aBa6OIB+o/CyhcRNM=",
         "last_login": "2017-03-20T20:07:48.329Z",
         "is_superuser": True,
         "username": "anakin",
@@ -32,7 +32,7 @@ def populate():
         "last_name": "Vader",
         "email": "2286121R@student.gla.ac.uk",
         }, {
-        "password": "pbkdf2_sha256$30000$NTXfemSRMy53$H66xl+MUNA2562P3LY6GjdYlJAgDkr6qH7pus9Y2TQg=",
+        "password": "pbkdf2_sha256$30000$18RYI0bN6Bma$9kmpioFuPKuS40Fh/jV32xJYM8aBa6OIB+o/CyhcRNM=",
         "last_login": "2017-03-20T20:06:27.666Z",
         "is_superuser": False,
         "username": "rick",
