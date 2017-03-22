@@ -29,11 +29,31 @@ from notifications.models import Notification
 @login_required
 def index(request):
     request.session.set_test_cookie()
+
     user_coordinates = UserProfile.objects.all().exclude(user=request.user)
     user = User.objects.get(username=request.user.username)
+
+    sessions = Session.objects.filter(expire_date__gte=timezone.now())
+    uid_list = []
+
+    for session in sessions:
+        data = session.get_decoded()
+        uid_list.append(data.get('_auth_user_id', None))
+
+    online_users = User.objects.filter(id__in=uid_list, is_staff=False)
+    users_dict = {}
+    users_records = []
+
+    for user in online_users:
+        if user.username != request.user.username:
+            users_records.append(user)
+
+
     messages = user.notifications.unread()
     feeds = feedparser.parse('http://www.gla.ac.uk/rss/news/index.xml')
-    context_dict = {'coordinates': user_coordinates, 'feeds': feeds, 'messages': messages}
+
+
+    context_dict = {'coordinates': users_records, 'feeds': feeds, 'messages': messages}
     visitor_cookie_handler(request)
     context_dict['visits'] = request.session['visits']
     return render(request, 'connect/index.html', context=context_dict)

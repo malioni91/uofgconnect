@@ -247,15 +247,15 @@
 
 
                         {# Dynamically fetch coordinates #}
-                        {% for  coordinate in coordinates %}
+                        {% for  user in coordinates %}
                             var marker = new google.maps.Marker({
-                                position: new google.maps.LatLng({{ coordinate.location.latitude }}, {{ coordinate.location.longitude }}),
+                                position: new google.maps.LatLng({{ user.userprofile.location.latitude }}, {{ user.userprofile.location.longitude }}),
                                 map: map
                             });
 
                             google.maps.event.addListener(marker, 'click', (function (marker) {
                                 return function () {
-                                    infoWindow.setContent('<p style="color:black;">{{ coordinate.user.first_name }} {{ coordinate.user.last_name }}</p>');
+                                    infoWindow.setContent('<p style="color:black;">{{ user.first_name }} {{ user.last_name }}</p>');
                                     infoWindow.open(map, marker);
                                 }
                             })(marker));
