@@ -1,111 +1,115 @@
 {% extends 'connect/base.html' %}
 
 {% block navbar %}
-<button id="sidebar-toggle" title="Show/hide sidebar" type="button" data-toggle="#sidebar" class="navbar-left navbar-toggle pull-left">
-              <span class="glyphicon glyphicon-list"></span>
+<button id="sidebar-toggle" title="Show/hide sidebar" type="button" data-toggle="#sidebar"
+        class="navbar-left navbar-toggle pull-left">
+    <span class="glyphicon glyphicon-list"></span>
 </button>
 {% endblock %}
 
 {% block uni_feed %}
 <li class="dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Uni News</a>
-              <ul class="dropdown-menu">
-                {% for entry in feeds.entries|slice:":5" %}
-                    <li><a href="{{ entry.link }}" target="_blank">{{ entry.title }}</a></li>
-                {% endfor %}
-              </ul>
-            </li>
+    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Uni News</a>
+    <ul class="dropdown-menu">
+        {% for entry in feeds.entries|slice:":5" %}
+        <li><a href="{{ entry.link }}" target="_blank">{{ entry.title }}</a></li>
+        {% endfor %}
+    </ul>
+</li>
 {% endblock %}
 
 {% block content %}
-    <div id="alert-offline-user" class="alert alert-danger alert-dismissable text-center">
-        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-        <strong>You cannot send a notification to an offline user.</strong>
-    </div>
-    <!-- Modal -->
-    <div id="notificationModal" tabindex="-1" class="modal fade" role="dialog" data-backdrop="false">
-        <div class="modal-dialog" role="document">
-            <!-- Modal content-->
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title">Send Notification</h4>
+<div id="alert-offline-user" class="alert alert-danger alert-dismissable text-center">
+    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+    <strong>You cannot send a notification to an offline user.</strong>
+</div>
+<!-- Modal -->
+<div id="notificationModal" tabindex="-1" class="modal fade" role="dialog" data-backdrop="false">
+    <div class="modal-dialog" role="document">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Send Notification</h4>
+            </div>
+            <div class="modal-body">
+                <div id="alert-empty-fields" class="alert alert-danger alert-dismissable text-center">
+                    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                    <strong>Please fill in all the fields.</strong>
                 </div>
-                <div class="modal-body">
-                    <div id="alert-empty-fields" class="alert alert-danger alert-dismissable text-center">
-                        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                        <strong>Please fill in all the fields.</strong>
-				    </div>
-                    <div class="input-group">
+                <div class="input-group">
                         <span class="input-group-addon" id="basic-addon1"><i
                                 class="glyphicon glyphicon-envelope"></i></span>
-                        <input id="notificationMessage" maxlength="140" type="text" class="form-control" placeholder="Write a short message"
-                               aria-describedby="basic-addon1">
-                    </div>
-                    <hr>
-                    <div class="input-group">
+                    <input id="notificationMessage" maxlength="140" type="text" class="form-control"
+                           placeholder="Write a short message"
+                           aria-describedby="basic-addon1">
+                </div>
+                <hr>
+                <div class="input-group">
                         <span class="input-group-addon" id="basic-addon2"><i
                                 class="glyphicon glyphicon-picture"></i></span>
-                        <input id="notificationPlace" type="text" class="form-control" placeholder="Enter the meeting place"
-                               aria-describedby="basic-addon1">
-                    </div>
-                    <hr>
-                    <div class="input-group input-append date form_datetime">
-                           <span class="input-group-addon" id="basic-addone"><i
-                                class="glyphicon glyphicon-time"></i></span>
-                            <input readonly id="notificationTime" value="" type="text" class="form-control" placeholder="Select meeting time"
-                                   aria-describedby="basic-addon1">
-                           <span class="add-on"><i class="icon-th"></i></span>
-                    </div>
+                    <input id="notificationPlace" type="text" class="form-control" placeholder="Enter the meeting place"
+                           aria-describedby="basic-addon1">
                 </div>
-                <div class="modal-footer">
-                    <button id="btnSendNotification" type="button" class="btn btn-block btn-success">Send notification to
-                        <label id="user_name" class="form-control-label"></label> !
-                    </button>
+                <hr>
+                <div class="input-group input-append date form_datetime">
+                           <span class="input-group-addon" id="basic-addone"><i
+                                   class="glyphicon glyphicon-time"></i></span>
+                    <input readonly id="notificationTime" value="" type="text" class="form-control"
+                           placeholder="Select meeting time"
+                           aria-describedby="basic-addon1">
+                    <span class="add-on"><i class="icon-th"></i></span>
                 </div>
             </div>
-
+            <div class="modal-footer">
+                <button id="btnSendNotification" type="button" class="btn btn-block btn-success">Send notification to
+                    <label id="user_name" class="form-control-label"></label> !
+                </button>
+            </div>
         </div>
+
     </div>
+</div>
 
 
-    <div id="wrapper" class="toggled">
-        <!-- Sidebar -->
-        <div id="sidebar-wrapper">
-            <ul class="sidebar-nav" id="users_list">
-                <a href="#menu-toggle" class="btn btn-primary form-control" id="sidebar-toggle2">Close sidebar
-                    <i class="glyphicon glyphicon-chevron-left"></i>
-                </a>
+<div id="wrapper" class="toggled">
+    <!-- Sidebar -->
+    <div id="sidebar-wrapper">
+        <ul class="sidebar-nav" id="users_list">
+            <a href="#menu-toggle" class="btn btn-primary form-control" id="sidebar-toggle2">Close sidebar
+                <i class="glyphicon glyphicon-chevron-left"></i>
+            </a>
 
-                <div class='input-group manualInput'>
-                   <input id='filter' type='text' onkeyup="filterUsers()" class='form-control' placeholder='Search by name...'/>
-                   <span class='input-group-addon'>
+            <div class='input-group manualInput'>
+                <input id='filter' type='text' onkeyup="filterUsers()" class='form-control'
+                       placeholder='Search by name...'/>
+                <span class='input-group-addon'>
                       <i class='glyphicon glyphicon-user'></i>
                    </span>
-                </div>
-                <li class="sidebar-brand">
-                    <a title="Refresh" href="#" onclick="refreshOnlineUsers(true)">
-                        Available Users<span title="Refresh"><i class="glyphicon glyphicon-refresh"></i></span>
-                    </a>
-                </li>
+            </div>
+            <li class="sidebar-brand">
+                <a title="Refresh" href="#" onclick="refreshOnlineUsers(true)">
+                    Available Users<span title="Refresh"><i class="glyphicon glyphicon-refresh"></i></span>
+                </a>
+            </li>
 
-            </ul>
-           <div class="footer">
-                Victorian Code &copy {% now 'Y' %}
-           </div>
+        </ul>
+        <div class="footer">
+            Victorian Code &copy {% now 'Y' %}
         </div>
-        <!-- /#sidebar-wrapper -->
-
     </div>
-    <!-- /#wrapper -->
+    <!-- /#sidebar-wrapper -->
+
+</div>
+<!-- /#wrapper -->
 
 
-    <!-- Google Maps page -->
-    <div id="map"></div>
+<!-- Google Maps page -->
+<div id="map"></div>
 
-    <input id="userSelected" type="text" value="">
-    <input id="token" type="text" value="{{ csrf_token }}">
-    <script>
+<input id="userSelected" type="text" value="">
+<input id="token" type="text" value="{{ csrf_token }}">
+<script>
         // Note: This example requires that you consent to location sharing when
         // prompted by your browser. If you see the error "The Geolocation service
         // failed.", it means you probably did not give permission for the browser to
@@ -282,8 +286,9 @@
         }
 
 
-    </script>
-    <script async defer
-            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCwbSq-w82DHDdJhiMClA-WwPpQaGcecWI&callback=initMap">
-    </script>
+
+</script>
+<script async defer
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCwbSq-w82DHDdJhiMClA-WwPpQaGcecWI&callback=initMap">
+</script>
 {% endblock %}

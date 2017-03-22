@@ -3,57 +3,61 @@
 {% block content %}
 <div class="container">
 
-        <!-- Introduction Row -->
+    <!-- Introduction Row -->
 
 
-        <div class="row">
-            <div class="col-lg-12">
-                <h1 class="page-header">Pings
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header">Pings
 
-                </h1>
-                {% if messages %}
-                <div id="alert-messages" class="alert alert-info text-center">
-                    You can see the pending invitations to accept or reject
-                </div>
-                {% else %}
-                <div id="alert-nomessages" class="alert alert-info text-center">
-                    You have no available invitations
-                </div>
-                {% endif %}
+            </h1>
+            {% if messages %}
+            <div id="alert-messages" class="alert alert-info text-center">
+                You can see the pending invitations to accept or reject
             </div>
-        </div>
-        <div class="row">
-            {% for message in messages %}
-            {% if message.verb == "accepted" or message.verb == "rejected"  %}
             {% else %}
-              <div id="{{ message.id }}" class="col-sm-6 col-md-4">
-                <div class="thumbnail">
-                  <div class="caption">
-                      <div id="senderName">
-                         <span><i id="glyphMessageSender" class="glyphicon glyphicon-user"></i></span>
-                          <p id="messageReceived">{{message.actor.first_name}} {{message.actor.last_name}}</p>
-                      </div>
-                      <hr>
-                      <p id="messageText">{{message.verb}} <br /> Meeting: {{message.description}} </p>
-                      <hr>
-                      <div id="timestampDiv">
+            <div id="alert-nomessages" class="alert alert-info text-center">
+                You have no available invitations
+            </div>
+            {% endif %}
+        </div>
+    </div>
+    <div class="row">
+        {% for message in messages %}
+        {% if message.verb == "accepted" or message.verb == "rejected" %}
+        {% else %}
+        <div id="{{ message.id }}" class="col-sm-6 col-md-4">
+            <div class="thumbnail">
+                <div class="caption">
+                    <div id="senderName">
+                        <span><i id="glyphMessageSender" class="glyphicon glyphicon-user"></i></span>
+                        <p id="messageReceived">{{message.actor.first_name}} {{message.actor.last_name}}</p>
+                    </div>
+                    <hr>
+                    <p id="messageText">{{message.verb}} <br/> Meeting: {{message.description}} </p>
+                    <hr>
+                    <div id="timestampDiv">
                         <label id="timestamp">Sent {{message.timesince}} minutes ago</label>
-                      </div>
-                      <hr>
+                    </div>
+                    <hr>
                     <p id="messageButtons">
-                    <a href="#" class="btn btn-primary" onclick="readMessage('{{ message.id }}', 'accept', '{{message.actor.username}}', '{{message.description}}')" role="button">Accept
+                        <a href="#" class="btn btn-primary"
+                           onclick="readMessage('{{ message.id }}', 'accept', '{{message.actor.username}}', '{{message.description}}')"
+                           role="button">Accept
                             <span class="glyphicon glyphicon-ok pull-left"></span>
                         </a>
-                        <a href="#" class="btn btn-danger" onclick="readMessage('{{ message.id }}', 'reject', '{{message.actor.username}}', '{{message.description}}')" role="button">Reject
+                        <a href="#" class="btn btn-danger"
+                           onclick="readMessage('{{ message.id }}', 'reject', '{{message.actor.username}}', '{{message.description}}')"
+                           role="button">Reject
                             <span class="glyphicon glyphicon-remove pull-left"></span>
                         </a>
                     </p>
-                  </div>
-              </div>
                 </div>
-            {% endif %}
-            {% endfor %}
+            </div>
         </div>
+        {% endif %}
+        {% endfor %}
+    </div>
 
 </div>
 
