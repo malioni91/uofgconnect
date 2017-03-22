@@ -59,7 +59,8 @@ In order to load all the course titles please run:
     python manage.py loaddata Courses
 
 In order to run the tests:
-    python manage.py test connect.test
+
+    python manage.py test connect.tests
 
 In order to populate new users: 
 
