@@ -1,53 +1,37 @@
-from django.shortcuts import render, render_to_response, redirect
-from django.template import RequestContext
-from django.core.urlresolvers import reverse
-from django.http import HttpResponseRedirect, HttpResponse, Http404
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-import json, feedparser
-from django.views.decorators.csrf import ensure_csrf_cookie
-
-from connect.forms import LoginForm, UserForm, UserProfileForm,EditForm
-
-from datetime import datetime
 from django.contrib.auth.models import User
-from connect.models import UserProfile
-
-from django.http import JsonResponse
-from django.core.cache import cache
-from django.http import JsonResponse
-
 from django.contrib.sessions.models import Session
+from django.shortcuts import render, redirect
+from django.http import HttpResponseRedirect, HttpResponse
+from django.http import JsonResponse
 from django.utils import timezone
 
-from .models import UserProfile, Map
-from notifications.signals import notify
-from django.db.models.signals import post_save
+from connect.forms import LoginForm, UserForm, UserProfileForm,EditForm
+from connect.models import UserProfile, Map
 
+from datetime import datetime
+from notifications.signals import notify
 from notifications.models import Notification
+
+import json, feedparser
 
 @login_required
 def index(request):
+    """The index page view"""
     request.session.set_test_cookie()
-
-    user_coordinates = UserProfile.objects.all().exclude(user=request.user)
     user = User.objects.get(username=request.user.username)
     messages = user.notifications.unread()
     sessions = Session.objects.filter(expire_date__gte=timezone.now())
     uid_list = []
-
     for session in sessions:
         data = session.get_decoded()
         uid_list.append(data.get('_auth_user_id', None))
-
     online_users = User.objects.filter(id__in=uid_list, is_superuser=False)
-    users_dict = {}
     users_records = []
-
     for user in online_users:
         if user.username != request.user.username:
             users_records.append(user)
-
     feeds = feedparser.parse('http://www.gla.ac.uk/rss/news/index.xml')
     context_dict = {'coordinates': users_records, 'feeds': feeds, 'messages': messages}
     visitor_cookie_handler(request)
@@ -55,17 +39,19 @@ def index(request):
     return render(request, 'connect/index.html', context=context_dict)
 
 def landing(request):
-    feeds = feedparser.parse('http://www.gla.ac.uk/rss/news/index.xml')
-    context_dict = {'feeds': feeds}
-    return render(request, "connect/landing.html", context=context_dict)
+    """The landing page view that anonymous users see
+    when they arrive to the website"""
+    return render(request, "connect/landing.html")
 
 @login_required
 def messages(request):
+    """The messages view that shows all the received messages from other peers """
     user = User.objects.get(username=request.user.username)
-    messages = user.notifications.unread()
+    messages = user.notifications.unread() # get the unread messages
     return render(request, "connect/messages.html", {'messages': messages})
 
 def register(request):
+    """The registration view that enables the users to register """
     registered = False
     if request.method == 'POST':
         user_form = UserForm(request.POST)
@@ -74,7 +60,6 @@ def register(request):
             user = user_form.save()
             user.set_password(user.password) # Hash the password
             user.save()
-
             profile = profile_form.save(commit=False)
             profile.user = user
             profile.save()
@@ -89,18 +74,17 @@ def register(request):
 
 
 def user_login(request):
+    """The login view that enables users to login to the platform """
     authenticated = False
     login_form = LoginForm(request.POST)
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
-        user = authenticate(username=username, password=password)
+        user = authenticate(username=username, password=password) # authenticate user
         if user:
             if user.is_active:
                 login(request, user)
                 authenticated = True
-                # return render(request, 'connect/index.html',
-                #               {'login_form': login_form, 'authenticated': authenticated})
                 return redirect('index')
             else:
                 print(login_form.errors)
@@ -114,6 +98,7 @@ def user_login(request):
 
 
 def about(request):
+    """The about page view that shows general infromation about the authors """
     messages = []
     if request.user.is_authenticated():
         user = User.objects.get(username=request.user.username)
@@ -122,6 +107,7 @@ def about(request):
 
 
 def faq(request):
+    """The faq page that shows general infromation about frequent questions """
     messages = []
     if request.user.is_authenticated():
         user = User.objects.get(username=request.user.username)
@@ -131,30 +117,30 @@ def faq(request):
 
 @login_required
 def user_logout(request):
+    """The user logout view"""
     logout(request)
     return HttpResponseRedirect('/connect/')
 
-
 # A helper method
 def get_server_side_cookie(request, cookie, default_val=None):
+    """Function to retrieve the server side cookie"""
     val = request.session.get(cookie)
     if not val:
         val = default_val
     return val
 
-# Updated the function definition
 def visitor_cookie_handler(request):
+    """The cookie handler view"""
     visits = int(get_server_side_cookie(request, 'visits', '1'))
     last_visit_cookie = get_server_side_cookie(request,
                                                'last_visit',
                                                 str(datetime.now()))
-
     last_visit_time = datetime.strptime(last_visit_cookie[:-7],
                                         '%Y-%m-%d %H:%M:%S')
-# If it's been more than a day since the last visit...
+    # If it's been more than a day since the last visit
+    # update the last visit cookie now that we have updated the count
     if (datetime.now() - last_visit_time).days > 0:
         visits = visits + 1
-        #update the last visit cookie now that we have updated the count
         request.session['last_visit'] = str(datetime.now())
     else:
         visits = 1
@@ -166,18 +152,16 @@ def visitor_cookie_handler(request):
 
 @login_required
 def user_edit(request):
+    """The user profile edit view where users update their information"""
     userdetails = User.objects.get(username=request.user.username)
     messages = userdetails.notifications.unread()
     usercourse = UserProfile.objects.get(user=request.user)
-    #print usercourse.course
     user_form = EditForm(request.POST,  instance=request.user)
     profile_form = UserProfileForm(request.POST, instance=request.user.userprofile)
     if request.method == 'POST':
         if user_form.is_valid() and profile_form.is_valid():
-            print '***********1',user_form
             usereditor = user_form.save(commit=False)
             if userdetails.check_password(usereditor.password):
-                print 'password should be correct *********************************'
                 username = request.POST.get('username')
                 passwordnew = request.POST.get('new_password')
                 usereditor.set_password(passwordnew)
@@ -187,68 +171,18 @@ def user_edit(request):
                 profile.save()
                 user = authenticate(username=username, password=passwordnew)
                 login(request,user)
-
-
             else:
-
-                print 'worng password *******************'
-                #user_formpassword=userdetails.password
-                print 'password:', userdetails.password
                 user_form = EditForm(initial={'name': " ".join([userdetails.first_name, userdetails.last_name]),'username':userdetails.username, 'email':userdetails.email})
                 profile_form = UserProfileForm(initial={'course' : usercourse.course})
-                print(user_form.errors, profile_form.errors)
                 return render(request, 'connect/edit.html', {'user_form': user_form , 'profile_form': profile_form, 'messages': messages})
-                print 'paqss0',password
-
-                #print 'passs1',user_formpassword
-                #usereditor.set_password(passwordnew)
-                #usereditor.save()
         else:
-            #form not valid
-            print 'form not valid'
             print(user_form.errors, profile_form.errors)
     else:
         user_form = EditForm(initial={'name': " ".join([userdetails.first_name, userdetails.last_name]),'username':userdetails.username, 'email':userdetails.email})
         profile_form = UserProfileForm(initial={'course' : usercourse.course})
         return render(request, 'connect/edit.html', {'user_form': user_form , 'profile_form': profile_form, 'messages': messages})
-        print 'paqss0',password
-
-    #user_formpassword=userdetails.password
-    #print 'passs1',user_formpassword
 
     return render(request, 'connect/edit.html', {'user_form': user_form , 'profile_form': profile_form, 'messages': messages})
-
-
-
- # A helper method
-def get_server_side_cookie(request, cookie, default_val=None):
-     val = request.session.get(cookie)
-     if not val:
-         val = default_val
-     return val
-
- # Updated the function definition
-def visitor_cookie_handler(request):
-     visits = int(get_server_side_cookie(request, 'visits', '1'))
-     last_visit_cookie = get_server_side_cookie(request,
-                                                'last_visit',
-                                                 str(datetime.now()))
-
-     last_visit_time = datetime.strptime(last_visit_cookie[:-7],
-                                         '%Y-%m-%d %H:%M:%S')
- # If it's been more than a day since the last visit...
-     if (datetime.now() - last_visit_time).days > 0:
-         visits = visits + 1
-         #update the last visit cookie now that we have updated the count
-         request.session['last_visit'] = str(datetime.now())
-     else:
-         visits = 1
-         # set the last visit cookie
-         request.session['last_visit'] = last_visit_cookie
-
-     # Update/set the visits cookie
-     request.session['visits'] = visits
-
 
 def users(request):
     found = False
@@ -268,6 +202,7 @@ def users(request):
 
 @login_required
 def pos_map(request):
+    """View that is used to set the coordinates to the users"""
     latitude = request.POST.get('lat')
     longitude = request.POST.get('lng')
     coordinates = {
@@ -276,33 +211,30 @@ def pos_map(request):
     }
     if request.is_ajax():
         userdetails = UserProfile.objects.get(user__username=request.user.username)
-        success = Map.objects.filter(id=userdetails.user_id).update(**coordinates)
+        success = Map.objects.filter(id=userdetails.user_id).update(**coordinates) # update the coordinates of the user
         if not success:
-            Map.objects.create(**coordinates)
+            Map.objects.create(**coordinates) # create user entry if the user does not have any coordinates
         map_info = Map.objects.get(id=userdetails.user_id)
         userdetails.location = map_info
         userdetails.save()
-
     return HttpResponse(json.dumps(coordinates), content_type="application/json")
 
 
 def all_users(request):
+    """Get only the online users from the sessions"""
     # Query all non-expired sessions
     # use timezone.now() instead of datetime.now() in latest versions of Django
     sessions = Session.objects.filter(expire_date__gte=timezone.now())
     uid_list = []
-
     # Build a list of user ids from that query
     for session in sessions:
         data = session.get_decoded()
         uid_list.append(data.get('_auth_user_id', None))
-
     # Query all logged in users based on id list
     online_users = User.objects.filter(id__in=uid_list, is_superuser=False)
     all_users_found = User.objects.filter(is_superuser=False)
     users_dict = {}
     users_records = []
-
     for user in all_users_found:
         if user.username != request.user.username:
             if user in online_users:
@@ -314,35 +246,40 @@ def all_users(request):
     return JsonResponse(users_dict)
 
 def notification(request):
+    """Notification view used to send messages to the users"""
     message = request.POST.get('message')
     place = request.POST.get('place')
     time = request.POST.get('time')
     username = request.POST.get('username')
     if request.is_ajax():
         recipient = User.objects.get(username=username)
+        # send message(message,place,time) to the peer
         notify.send(request.user, recipient=recipient, description='%s | %s' % (place, time), verb=message)
     return HttpResponseRedirect('/')
 
 def readMessage(request):
+    """View that sends back the action of the user"""
     message_id = request.POST.get('id')
     action = request.POST.get('action')
     recipient_username = request.POST.get('recipient')
     meeting = request.POST.get('meeting')
     if request.is_ajax():
-        obj =  Notification.objects.get(id=int(message_id))
-        obj.mark_as_read()
-        obj.save()
-        invitation_status = "rejected" # rejected until proven otherwise
+        message =  Notification.objects.get(id=int(message_id))
+        message.mark_as_read() # since there's an action, mark the message as read
+        message.save()
+        invitation_status = "rejected" # mark invitation rejected until proven otherwise
         if action == "accept":
             invitation_status = "accepted"
         recipient = User.objects.get(username=recipient_username)
+        # send alert about your decision to the peer that invited you
         notify.send(request.user, recipient=recipient, description=meeting, verb=invitation_status)
     return HttpResponseRedirect('/')
 
 def dismissAlert(request):
+    """Dismiss alert view that marks the alerts as read """
     message_id = request.POST.get('id')
     if request.is_ajax():
-        obj =  Notification.objects.get(id=int(message_id))
-        obj.mark_as_read()
-        obj.save()
+        alert =  Notification.objects.get(id=int(message_id))
+        alert.mark_as_read()
+        alert.save()
     return HttpResponseRedirect('/')

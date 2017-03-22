@@ -1,9 +1,6 @@
 from django.test import TestCase
-from django.contrib.auth.models import User
-from django.contrib.staticfiles import finders
 from django.core.urlresolvers import reverse
 
-from connect.models import UserProfile, Map
 from populate_script import populate
 
 class IndexPageTests(TestCase):

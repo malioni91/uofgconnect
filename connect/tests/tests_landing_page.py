@@ -1,9 +1,5 @@
 from django.test import TestCase
-from django.contrib.auth.models import User
-from django.contrib.staticfiles import finders
 from django.core.urlresolvers import reverse
-
-from connect.models import UserProfile, Map
 
 class LandingPageTests(TestCase):
     """Landing page test cases"""
@@ -17,6 +13,6 @@ class LandingPageTests(TestCase):
         self.assertTemplateUsed(response, 'connect/landing.html')
 
     def test_landing_page_has_title(self):
-	response = self.client.get(reverse('landing'))
+        response = self.client.get(reverse('landing'))
         self.assertIn(b'<title>UofG Connect</title>', response.content)
 

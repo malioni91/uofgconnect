@@ -85,7 +85,6 @@ class EditForm(forms.ModelForm):
         fields = ('name', 'username', 'email', 'password', 'new_password', 'confirm_password')
 
     def clean_name(self):
-        print 'invalid12'
         full_name = self.cleaned_data.get('name').split()
         if len(full_name) == 1:
             self.instance.first_name = full_name[0]
