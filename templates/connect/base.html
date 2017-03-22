@@ -35,7 +35,6 @@
             .navbar-collapse.collapse #sidebar-toggle{
                 display: none !important;
             }
-
         </style>
         <link rel="stylesheet" href="{% static "css/main.css" %}">
     </head>
@@ -136,7 +135,7 @@
         </div><!--/.navbar-collapse -->
             <input id="token" type="text" value="{{ csrf_token }}" style="display:none">
           {% if user.is_authenticated %}
-            <input id="test" style="display: none" name="{{ messages }}">
+            <input id="messages" style="display: none" name="{{ messages }}">
           {% endif %}
       </div>
 </nav>

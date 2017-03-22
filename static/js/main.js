@@ -2,6 +2,8 @@ $(document).ready(function() {
 
     updateNotificationsBadge(-1, false);
 
+   // updateMessagesBadge();
+
     $(document).on('click', '.dropdown-menu', function (e) {
         e.stopPropagation();
     });
@@ -56,12 +58,26 @@ $(document).ready(function() {
 });
 
 function updateNotificationsBadge(messageID, remove) {
-            var messages = document.getElementById("test").name;
-            if (remove == true)
+            var messages = document.getElementById("messages").name;
+            var accepted = (messages.match(/accepted/g) || []).length;
+            var rejected = (messages.match(/rejected/g) || []).length;
+            var notifications = accepted + rejected;
+            if (remove == true) {
                 $("li[id^=" + messageID + "]").remove();
-            var messagesLeft = $('#dropdownULNotifications li').size();
-            document.getElementById("badgeLabelNotifications").innerHTML = messagesLeft;
+                var badgeNumber = document.getElementById("badgeLabelNotifications").innerHTML;
+                var remaining = parseInt(badgeNumber) - 1;
+                document.getElementById("badgeLabelNotifications").innerHTML = remaining
+            }
+            else {
+                 document.getElementById("badgeLabelNotifications").innerHTML = notifications;
+            }
 }
+
+function updateMessagesBadge() {
+
+
+}
+
 
 function dismissAlert(messageID) {
         updateNotificationsBadge(messageID, true);
