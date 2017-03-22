@@ -1,10 +1,8 @@
 {% extends 'connect/base.html' %}
 
 {% block navbar %}
-<button style="float:left" title="Show/hide sidebar" type="button" data-toggle="#sidebar" id="sidebar-toggle" class="navbar-left navbar-toggle pull-left">
+<button id="sidebar-toggle" title="Show/hide sidebar" type="button" data-toggle="#sidebar" class="navbar-left navbar-toggle pull-left">
               <span class="glyphicon glyphicon-list"></span>
-              <!--<span class="glyphicon glyphicon-list"></span>-->
-              <!--<span class="glyphicon glyphicon-list"></span>-->
 </button>
 {% endblock %}
 
@@ -20,7 +18,7 @@
 {% endblock %}
 
 {% block content %}
-    <div id="alert-offline-user"style="display: none" class="alert alert-danger alert-dismissable text-center">
+    <div id="alert-offline-user" class="alert alert-danger alert-dismissable text-center">
         <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
         <strong>You cannot send a notification to an offline user.</strong>
     </div>
@@ -34,7 +32,7 @@
                     <h4 class="modal-title">Send Notification</h4>
                 </div>
                 <div class="modal-body">
-                    <div id="alert-empty-fields"style="display: none" class="alert alert-danger alert-dismissable text-center">
+                    <div id="alert-empty-fields" class="alert alert-danger alert-dismissable text-center">
                         <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
                         <strong>Please fill in all the fields.</strong>
 				    </div>
@@ -74,8 +72,8 @@
     <div id="wrapper" class="toggled">
         <!-- Sidebar -->
         <div id="sidebar-wrapper">
-            <ul style="display: list-item" class="sidebar-nav" id="users_list">
-                <a style="float:right" href="#menu-toggle" class="btn btn-primary form-control" id="sidebar-toggle2">Close sidebar
+            <ul class="sidebar-nav" id="users_list">
+                <a href="#menu-toggle" class="btn btn-primary form-control" id="sidebar-toggle2">Close sidebar
                     <i class="glyphicon glyphicon-chevron-left"></i>
                 </a>
 
@@ -103,10 +101,10 @@
 
 
     <!-- Google Maps page -->
-    <div id="map" style="height: 100%"></div>
+    <div id="map"></div>
 
-    <input id="userSelected" type="text" value="" style="display:none">
-    <input id="token" type="text" value="{{ csrf_token }}" style="display:none">
+    <input id="userSelected" type="text" value="">
+    <input id="token" type="text" value="{{ csrf_token }}">
     <script>
 
 
