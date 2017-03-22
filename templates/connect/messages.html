@@ -58,6 +58,7 @@
 
 
      function readMessage(messageID, choice, recipient, meeting) {
+            updateMessagesBadge(true);
             $("div[id^=" + messageID + "]").remove();
             var messagesLeft = $('.thumbnail').length
             if (messagesLeft == 0) {

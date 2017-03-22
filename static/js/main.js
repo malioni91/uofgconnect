@@ -2,7 +2,7 @@ $(document).ready(function() {
 
     updateNotificationsBadge(-1, false);
 
-   // updateMessagesBadge();
+    updateMessagesBadge(false);
 
     $(document).on('click', '.dropdown-menu', function (e) {
         e.stopPropagation();
@@ -73,9 +73,21 @@ function updateNotificationsBadge(messageID, remove) {
             }
 }
 
-function updateMessagesBadge() {
+function updateMessagesBadge(remove) {
+    var messages = document.getElementById("messages").name;
+    var total = (messages.match(/Notification/g) || []).length;
+    if (remove == false) {
+        var accepted = (messages.match(/accepted/g) || []).length;
+        var rejected = (messages.match(/rejected/g) || []).length;
+        var discard = parseInt(accepted) + parseInt(rejected);
+        document.getElementById("badgeLabel").innerHTML = parseInt(total) - parseInt(discard);
+    }
+    else {
+        var badgeNumber = document.getElementById("badgeLabel").innerHTML;
+        document.getElementById("badgeLabel").innerHTML = parseInt(badgeNumber) - 1;
+    }
 
-
+    var badgeNumber = document.getElementById("badgeLabel").innerHTML;
 }
 
 
