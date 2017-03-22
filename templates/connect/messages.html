@@ -57,35 +57,4 @@
 
 </div>
 
-<script>
-
-
-     function readMessage(messageID, choice, recipient, meeting) {
-            updateMessagesBadge(true);
-            $("div[id^=" + messageID + "]").remove();
-            var messagesLeft = $('.thumbnail').length
-            if (messagesLeft == 0) {
-                document.getElementById("badgeLabel").innerHTML = 0;
-                document.getElementById("alert-messages").innerHTML = "You have no available invitations";
-            }
-            document.getElementById("badgeLabel").innerHTML = messagesLeft;
-            $.ajax({
-                    type: 'POST',
-                    url: "/connect/readMessage/",
-                    data: {
-                        id: messageID,
-                        action: choice,
-                        recipient: recipient,
-                        meeting: meeting,
-                        "csrfmiddlewaretoken": '{{ csrf_token }}',
-                    },
-                    success: function(response){
-                    }
-                }).done(function(data){
-                });
-        }
-</script>
-
-
-
 {% endblock %}

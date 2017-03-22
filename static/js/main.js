@@ -55,6 +55,7 @@ $(document).ready(function() {
     });
     refreshOnlineUsers(false);
     setInterval(function(){refreshOnlineUsers(true);}, 10000);
+
 });
 
 function updateNotificationsBadge(messageID, remove) {
@@ -185,6 +186,31 @@ function refreshOnlineUsers(refresh) {
         }).done(function(data){
 
         })
+}
+
+function readMessage(messageID, choice, recipient, meeting) {
+            updateMessagesBadge(true);
+            $("div[id^=" + messageID + "]").remove();
+            var messagesLeft = $('.thumbnail').length
+            if (messagesLeft == 0) {
+                document.getElementById("badgeLabel").innerHTML = 0;
+                document.getElementById("alert-messages").innerHTML = "You have no available invitations";
+            }
+            document.getElementById("badgeLabel").innerHTML = messagesLeft;
+            $.ajax({
+                    type: 'POST',
+                    url: "/connect/readMessage/",
+                    data: {
+                        id: messageID,
+                        action: choice,
+                        recipient: recipient,
+                        meeting: meeting,
+                        "csrfmiddlewaretoken": document.getElementById("token").value,
+                    },
+                    success: function(response){
+                    }
+                }).done(function(data){
+                });
 }
 
 

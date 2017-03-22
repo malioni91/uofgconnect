@@ -106,17 +106,12 @@
     <input id="userSelected" type="text" value="">
     <input id="token" type="text" value="{{ csrf_token }}">
     <script>
-
-
         // Note: This example requires that you consent to location sharing when
         // prompted by your browser. If you see the error "The Geolocation service
         // failed.", it means you probably did not give permission for the browser to
         // locate you.
 
-
         function initMap() {
-
-
             var map = new google.maps.Map(document.getElementById('map'), {
 
                 // Initialize the map over the Uni
@@ -206,15 +201,9 @@
                         stylers: [{color: '#17263c'}]
                     }
                 ]
-
             });
-
-
             var infoWindow = new google.maps.InfoWindow({map: map});
-
             var marker;
-
-
             {
                 if (navigator.geolocation) {
                     navigator.geolocation.getCurrentPosition(function (position) {
@@ -233,8 +222,6 @@
                             map: map,
                             icon: myIcon
                         });
-
-
                         google.maps.event.addListener(marker, 'click', (function (marker) {
                             return function () {
                                 infoWindow.setContent('<p style="color:black;">Your Location</p>');
@@ -287,16 +274,12 @@
 
             }
         }
-
-
-
-
-            function handleLocationError(browserHasGeolocation, infoWindow, pos) {
+        function handleLocationError(browserHasGeolocation, infoWindow, pos) {
                 infoWindow.setPosition(pos);
                 infoWindow.setContent(browserHasGeolocation ?
                         'Error: The Geolocation service failed.' :
                         'Error: Your browser doesn\'t support geolocation.');
-            }
+        }
 
 
     </script>
