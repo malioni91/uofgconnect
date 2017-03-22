@@ -4,8 +4,9 @@ $(document).ready(function() {
 
     updateMessagesBadge(false);
 
-    $(document).on('click', '.dropdown-menu', function (e) {
+    $('#dropdownULNotifications').on("click.bs.dropdown", function (e) {
         e.stopPropagation();
+        e.preventDefault();
     });
 
     $("#btnSendNotification").click(function(){
