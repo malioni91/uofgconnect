@@ -32,7 +32,7 @@ def index(request):
 
     user_coordinates = UserProfile.objects.all().exclude(user=request.user)
     user = User.objects.get(username=request.user.username)
-
+    messages = user.notifications.unread()
     sessions = Session.objects.filter(expire_date__gte=timezone.now())
     uid_list = []
 
@@ -48,11 +48,7 @@ def index(request):
         if user.username != request.user.username:
             users_records.append(user)
 
-
-    messages = user.notifications.unread()
     feeds = feedparser.parse('http://www.gla.ac.uk/rss/news/index.xml')
-
-
     context_dict = {'coordinates': users_records, 'feeds': feeds, 'messages': messages}
     visitor_cookie_handler(request)
     context_dict['visits'] = request.session['visits']
