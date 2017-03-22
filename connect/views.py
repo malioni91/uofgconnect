@@ -2,16 +2,10 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib.sessions.models import Session
-from django.core.urlresolvers import reverse
-from django.core.cache import cache
-from django.db.models.signals import post_save
-from django.shortcuts import render, render_to_response, redirect
-from django.template import RequestContext
-from django.http import HttpResponseRedirect, HttpResponse, Http404
-from django.http import JsonResponse
+from django.shortcuts import render, redirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.http import JsonResponse
 from django.utils import timezone
-from django.views.decorators.csrf import ensure_csrf_cookie
 
 from connect.forms import LoginForm, UserForm, UserProfileForm,EditForm
 from connect.models import UserProfile, Map
