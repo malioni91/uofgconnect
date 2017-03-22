@@ -40,7 +40,7 @@ def index(request):
         data = session.get_decoded()
         uid_list.append(data.get('_auth_user_id', None))
 
-    online_users = User.objects.filter(id__in=uid_list, is_staff=False)
+    online_users = User.objects.filter(id__in=uid_list, is_superuser=False)
     users_dict = {}
     users_records = []
 
