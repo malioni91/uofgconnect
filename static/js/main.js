@@ -7,6 +7,14 @@ $(document).ready(function() {
         e.stopPropagation();
         e.preventDefault();
     });
+    $('#notificationsToggle').on("click", function (e) {
+       var badgeNumber = document.getElementById("badgeLabelNotifications").innerHTML;
+       if (badgeNumber == 0) {
+           e.stopPropagation();
+           e.preventDefault();
+       }
+    });
+
 
     $("#btnSendNotification").click(function(){
                 document.getElementById("alert-empty-fields").style.display = "none";
@@ -68,9 +76,13 @@ function updateNotificationsBadge(messageID, remove) {
                 var badgeNumber = document.getElementById("badgeLabelNotifications").innerHTML;
                 var remaining = parseInt(badgeNumber) - 1;
                 document.getElementById("badgeLabelNotifications").innerHTML = remaining
+                if (remaining == 0)
+                    $('.dropdown.open').removeClass('open');
             }
             else {
                  document.getElementById("badgeLabelNotifications").innerHTML = notifications;
+                 if (notifications == 0)
+                    $('.dropdown.open').removeClass('open');
             }
 }
 
