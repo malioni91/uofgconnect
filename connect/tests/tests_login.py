@@ -1,7 +1,7 @@
 from django.test import TestCase
 from django.core.urlresolvers import reverse
 
-from populate_connect import populate
+from populate_script import populate
 
 class LoginTests(TestCase):
    """Login page test cases"""
@@ -11,7 +11,7 @@ class LoginTests(TestCase):
        try:
            populate()
        except ImportError:
-           print('The module populate_connect does not exist')
+           print('The module populate_script does not exist')
        except NameError:
            print('The function populate() does not exist or is not correct')
        except Exception as e :

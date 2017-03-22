@@ -4,7 +4,7 @@ from django.contrib.staticfiles import finders
 from django.core.urlresolvers import reverse
 
 from connect.models import UserProfile, Map
-from populate_connect import populate
+from populate_script import populate
 
 class IndexPageTests(TestCase):
     """Index page test cases"""
@@ -14,7 +14,7 @@ class IndexPageTests(TestCase):
        try:
            populate()
        except ImportError:
-           print('The module populate_connect does not exist')
+           print('The module populate_script does not exist')
        except NameError:
            print('The function populate() does not exist or is not correct')
 

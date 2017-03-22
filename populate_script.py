@@ -14,19 +14,12 @@ def populate():
         "longitude": "-4.28885"
         }, {
         "latitude": "55.87252",
-        "longitude": "-4.28153"} ,
-         {
-        "latitude": "55.8721",
-        "longitude": "-4.2882"} ,
-         {
-        "latitude": "55.8722",
-        "longitude": "-4.282"} , ]
+        "longitude": "-4.28153"} ]
 
     courses = [{
         "course": Course.objects.get(id=7)
         }, {
         "course":  Course.objects.get(id=15)
-        },{"course":  Course.objects.get(id=12)
         }]
 
 
@@ -46,15 +39,7 @@ def populate():
         "first_name": "Rick",
         "last_name": "Grimes",
         "email": "2272891T@student.gla.ac.uk",
-	    },{
-        "password": "pbkdf2_sha256$30000$NTXfemSRMy53$H66xl+MUNA2562P3LY6GjdYlJAgDkr6qH7pus9Y2TQg=",
-        "last_login": "2017-03-20T20:06:27.666Z",
-        "is_superuser": False,
-        "username": "Tas",
-        "first_name": "Tasos",
-        "last_name": "Agathokleous",
-        "email": "2272891A@student.gla.ac.uk",
-        }]
+	}]
 
     for index, user_data in enumerate(users):
         user = add_user(user_data)
