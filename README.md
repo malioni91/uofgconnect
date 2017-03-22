@@ -61,5 +61,6 @@ In order to load all the course titles please run:
 In order to run the tests:
     python manage.py test connect.test
 
-In order to populate new users:  
-    python populate_connect.py
+In order to populate new users: 
+
+    python populate_script.py
