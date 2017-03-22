@@ -20,7 +20,6 @@ import json, feedparser
 def index(request):
     """The index page view"""
     request.session.set_test_cookie()
-    user_coordinates = UserProfile.objects.all().exclude(user=request.user)
     user = User.objects.get(username=request.user.username)
     messages = user.notifications.unread()
     sessions = Session.objects.filter(expire_date__gte=timezone.now())
