@@ -255,7 +255,7 @@
 
                             google.maps.event.addListener(marker, 'click', (function (marker) {
                                 return function () {
-                                    infoWindow.setContent('<p style="color:black;">{{ coordinate.user.username }}</p>');
+                                    infoWindow.setContent('<p style="color:black;">{{ coordinate.user.first_name }}</p>');
                                     infoWindow.open(map, marker);
                                 }
                             })(marker));

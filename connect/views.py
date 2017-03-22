@@ -39,15 +39,12 @@ def index(request):
 
     # Query all logged in users based on id list
     online_users = User.objects.filter(id__in=uid_list)
-    print(online_users)
     context_dict = {}
 
 
     for user_o in online_users:
         user_coordinates = UserProfile.objects.filter(user=user_o).exclude(user=request.user)
-        print(user_coordinates)
         context_dict = {'coordinates': user_coordinates, 'feeds': feeds}
-    #context_dict = {'feeds': feeds}
 
     visitor_cookie_handler(request)
     context_dict['visits'] = request.session['visits']
