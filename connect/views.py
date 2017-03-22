@@ -40,7 +40,7 @@ def index(request):
 
 def landing(request):
     """The landing page view that anonymous users see
-    when they arrive to the webiste"""
+    when they arrive to the website"""
     return render(request, "connect/landing.html")
 
 @login_required
