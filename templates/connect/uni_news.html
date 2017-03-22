@@ -2,10 +2,10 @@
 {% load staticfiles %}
 
 {% block content %}
-    <ul>
-        {% for entry in feeds.entries %}
-            <li><a href="{{ entry.link }}">{{ entry.title }}</a></li>
+<ul>
+    {% for entry in feeds.entries %}
+    <li><a href="{{ entry.link }}">{{ entry.title }}</a></li>
 
-        {% endfor %}
-    </ul>
+    {% endfor %}
+</ul>
 {% endblock %}
