@@ -22,6 +22,7 @@ UofG Connect’s primary objective is to help students find their friends’ loc
 [http://victoriancode.pythonanywhere.com/](http://victoriancode.pythonanywhere.com/)
 
 Please browse the above link from **Mozilla Firefox**. The Google Map Geolocation API does not work from Google Chrome if the app is not hosted on a secure site.
+For more information on the issue, please consult the [link](https://sites.google.com/a/chromium.org/dev/Home/chromium-security/deprecating-powerful-features-on-insecure-origins)
 
 ### Demo Credentials
 
