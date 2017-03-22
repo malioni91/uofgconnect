@@ -1,9 +1,11 @@
 $(document).ready(function() {
 
     updateNotificationsBadge(-1, false);
+    updateMessagesBadge(false);
 
-    $(document).on('click', '.dropdown-menu', function (e) {
+    $('#dropdownULNotifications').on("click.bs.dropdown", function (e) {
         e.stopPropagation();
+        e.preventDefault();
     });
 
     $("#btnSendNotification").click(function(){
@@ -56,12 +58,38 @@ $(document).ready(function() {
 });
 
 function updateNotificationsBadge(messageID, remove) {
-            var messages = document.getElementById("test").name;
-            if (remove == true)
+            var messages = document.getElementById("messages").name;
+            var accepted = (messages.match(/accepted/g) || []).length;
+            var rejected = (messages.match(/rejected/g) || []).length;
+            var notifications = accepted + rejected;
+            if (remove == true) {
                 $("li[id^=" + messageID + "]").remove();
-            var messagesLeft = $('#dropdownULNotifications li').size();
-            document.getElementById("badgeLabelNotifications").innerHTML = messagesLeft;
+                var badgeNumber = document.getElementById("badgeLabelNotifications").innerHTML;
+                var remaining = parseInt(badgeNumber) - 1;
+                document.getElementById("badgeLabelNotifications").innerHTML = remaining
+            }
+            else {
+                 document.getElementById("badgeLabelNotifications").innerHTML = notifications;
+            }
 }
+
+function updateMessagesBadge(remove) {
+    var messages = document.getElementById("messages").name;
+    var total = (messages.match(/Notification/g) || []).length;
+    if (remove == false) {
+        var accepted = (messages.match(/accepted/g) || []).length;
+        var rejected = (messages.match(/rejected/g) || []).length;
+        var discard = parseInt(accepted) + parseInt(rejected);
+        document.getElementById("badgeLabel").innerHTML = parseInt(total) - parseInt(discard);
+    }
+    else {
+        var badgeNumber = document.getElementById("badgeLabel").innerHTML;
+        document.getElementById("badgeLabel").innerHTML = parseInt(badgeNumber) - 1;
+    }
+
+    var badgeNumber = document.getElementById("badgeLabel").innerHTML;
+}
+
 
 function dismissAlert(messageID) {
         updateNotificationsBadge(messageID, true);
