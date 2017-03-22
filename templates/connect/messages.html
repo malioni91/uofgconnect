@@ -27,20 +27,20 @@
             {% if message.verb == "accepted" or message.verb == "rejected"  %}
             {% else %}
               <div id="{{ message.id }}" class="col-sm-6 col-md-4">
-                <div style="background-color: #ffff80"  class="thumbnail">
-                  <div class="caption" style="word-wrap: break-word;">
-                      <div style="text-align: center">
-                         <span><i style="color: black" class="glyphicon glyphicon-user"></i></span>
-                          <p style="color:black ;text-align: center;">{{message.actor.first_name}} {{message.actor.last_name}}</p>
+                <div class="thumbnail">
+                  <div class="caption">
+                      <div id="senderName">
+                         <span><i id="glyphMessageSender" class="glyphicon glyphicon-user"></i></span>
+                          <p id="messageReceived">{{message.actor.first_name}} {{message.actor.last_name}}</p>
                       </div>
                       <hr>
-                      <p style="color:black">{{message.verb}} <br /> Meeting: {{message.description}} </p>
+                      <p id="messageText">{{message.verb}} <br /> Meeting: {{message.description}} </p>
                       <hr>
-                      <div style="text-align: center;">
-                        <label style="text-align: center; font-size:12px; color:black">Sent {{message.timesince}} minutes ago</label>
+                      <div id="timestampDiv">
+                        <label id="timestamp">Sent {{message.timesince}} minutes ago</label>
                       </div>
                       <hr>
-                    <p style="text-align: center">
+                    <p id="messageButtons">
                     <a href="#" class="btn btn-primary" onclick="readMessage('{{ message.id }}', 'accept', '{{message.actor.username}}', '{{message.description}}')" role="button">Accept
                             <span class="glyphicon glyphicon-ok pull-left"></span>
                         </a>

@@ -3,6 +3,26 @@
 /* ==========================================================================
    Author's custom styles
    ========================================================================== */
+body {
+    padding-top: 0px;
+    padding-bottom: 0px;
+}
+.navbar-header{
+    margin-left:150px !important
+}
+.navbar {
+    margin-bottom: 0;
+}
+.modal-header {
+    background-color: #0480be;
+}
+#sidebar-toggle {
+    display: block;
+}
+.navbar-collapse.collapse #sidebar-toggle{
+    display: none !important;
+}
+
 
 #map {
 	margin: 0;
@@ -42,9 +62,6 @@ html, body {
 		height:30%;
 }
 
-#mainNav {
-
-}
 
 .faqHeader {
 	font-size: 27px;
@@ -78,4 +95,63 @@ html, body {
 
 p {
 	text-align: justify;
+}
+
+#token {
+    display:none
+}
+
+#messages {
+    display:none
+}
+
+#glyphEnvelope {
+    font-size:1.2em;
+}
+
+#glyphGlobe {
+    font-size:1.2em;
+}
+
+#dropdownULNotifications {
+    width: 600px !important;
+}
+
+#sidebar-toggle {
+    float:left
+}
+
+#alert-offline-user, #alert-empty-fields, #userSelected, #token{
+    display: none
+}
+
+#map {
+    height: 100%
+}
+
+.thumbnail {
+    background-color: #ffff80
+}
+
+.caption {
+    word-wrap: break-word;
+}
+
+#senderName, #timestampDiv, #messageButtons {
+    text-align: center
+}
+
+#glyphMessageSender, #messageText {
+    color: black
+}
+
+#messageReceived {
+    color: black;
+    text-align: center;
+}
+
+#timestamp {
+    text-align: center;
+    font-size:12px;
+    color:black
 }
