@@ -13,6 +13,6 @@ class LandingPageTests(TestCase):
         self.assertTemplateUsed(response, 'connect/landing.html')
 
     def test_landing_page_has_title(self):
-	response = self.client.get(reverse('landing'))
+        response = self.client.get(reverse('landing'))
         self.assertIn(b'<title>UofG Connect</title>', response.content)
 

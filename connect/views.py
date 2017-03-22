@@ -29,7 +29,6 @@ def index(request):
         data = session.get_decoded()
         uid_list.append(data.get('_auth_user_id', None))
     online_users = User.objects.filter(id__in=uid_list, is_superuser=False)
-    users_dict = {}
     users_records = []
     for user in online_users:
         if user.username != request.user.username:
@@ -43,7 +42,7 @@ def index(request):
 def landing(request):
     """The landing page view that anonymous users see
     when they arrive to the webiste"""
-    return render(request, "connect/landing.html", context=context_dict)
+    return render(request, "connect/landing.html")
 
 @login_required
 def messages(request):
